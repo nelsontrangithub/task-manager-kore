@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'contactList.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,7 +21,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      
+      initialRoute: '/',
+  routes: {
+    // When we navigate to the "/" route, build the FirstScreen Widget
+    '/': (context) => MyHomePage(),
+    '/ContactList': (context) => ContactList(),
+  },
     );
   }
 }
@@ -70,6 +77,9 @@ class _MyHomePageState extends State<MyHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+        actions: <Widget>[      // Add 3 lines from here...
+          IconButton(icon: Icon(Icons.list), onPressed: _loadContracList),
+        ],
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -108,4 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+  void _loadContracList() {
+  Navigator.pushNamed(context, '/contactList');
+}
 }
