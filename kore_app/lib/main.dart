@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'contactList.dart';
+import 'contractList.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,8 +26,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
   routes: {
     // When we navigate to the "/" route, build the FirstScreen Widget
-    '/': (context) => MyHomePage(),
-    '/ContactList': (context) => ContractList(),
+    '/': (context) => MyHomePage(title: 'Flutter Demo Home Page'),
+    '/contractList': (context) => ContractList(),
   },
     );
   }
@@ -79,7 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         // Here is coming the funcion to login
-        onPressed: () {Navigator.pushNamed(context, '/contactList');},
+        onPressed: () {Navigator.pushNamed(context, '/contractList');},
         child: Text(
           'Login',
           textAlign: TextAlign.center,

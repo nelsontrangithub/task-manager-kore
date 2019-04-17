@@ -1,6 +1,6 @@
 class Contract {
-  final String title;
-  final bool isCompleted;
+  String title;
+  bool isCompleted;
 
   Contract(this.title, this.isCompleted);
 }
