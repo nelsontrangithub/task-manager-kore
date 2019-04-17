@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kore_app/theme.dart';
 
+
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -12,7 +13,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // This is the theme of your application.
     
-        primarySwatch: Colors.blue,
       ),
       home: MyHomePage(title: 'Flutter Login'),
     );
@@ -36,6 +36,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+
     // Email Field
     final emailField = TextField(
       obscureText: false,
@@ -48,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // Password Field
     final passwordField = TextField(
+      autofocus: true,
       obscureText: true,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -75,27 +77,29 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: Center(
         child: Container(
             color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(36.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: ListView(
+                // Using Listview instead of Column, problem with keyboard.
+                //crossAxisAlignment: CrossAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(
-                    height: 155.0,
+                    height: 150.0,
                     child: Image.asset(
                       "assets/KORE-Logo.png",
                       fit: BoxFit.contain,
                     ),
                   ),
-                  SizedBox(height: 45.0),
+                  SizedBox(height: 35.0),
                   emailField,
                   SizedBox(height: 25.0),
                   passwordField,
-                  SizedBox(height: 35.0),
+                  SizedBox(height: 25.0),
                   loginButton,
                   SizedBox(height: 15.0),
                 ],
