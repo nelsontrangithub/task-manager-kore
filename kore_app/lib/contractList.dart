@@ -51,7 +51,10 @@ class ContractListState extends State<ContractList> {
     );
   }
   
-  Widget _buildList() {
+  @override
+initState() {
+  super.initState();
+
     /*dummy data*/
     _contracts.add(Contract("Contract 1", false));
     _contracts.add(Contract("Contract 2", false));
@@ -65,6 +68,9 @@ class ContractListState extends State<ContractList> {
     _contracts.add(Contract("Contract 10", false));
     _contracts.add(Contract("Contract 11", true));
     _contracts.add(Contract("Contract 12", false));
+}
+
+  Widget _buildList() {
   return Flexible(
     child: ListView.builder(
       padding: const EdgeInsets.all(25.0),
