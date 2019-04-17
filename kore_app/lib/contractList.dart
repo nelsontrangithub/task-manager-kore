@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'contract.dart';
+import 'data/user.dart';
 
 class ContractListState extends State<ContractList> {
   final _contractStates = <ContractList>[];
+  final _user = User("Tina", "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   final _contracts = <Contract>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
   // final Set<ContractInfo> _saved = Set<ContractInfo>();
@@ -16,14 +19,38 @@ class ContractListState extends State<ContractList> {
       //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
       //   ],
     ),
-    body: _buildList(),
+    body: new Column(children:<Widget>[_profileRow(), _buildList()]),
   );
   }
-  Widget _buildProfileRow() {
+  Widget _profileRow() { 
     return Container(
-      
+      margin: const EdgeInsets.symmetric(vertical: 10.0),
+      child: new Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          new Container(
+            margin: const EdgeInsets.only(right: 16.0),
+            child: new CachedNetworkImage(
+        imageUrl: _user.iconUrl,
+        placeholder: (context, url) => new CircularProgressIndicator(),
+        errorWidget: (context, url, error) => new Icon(Icons.error),
+     ),
+          ),
+          new Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              new Text(_user.name, style: Theme.of(context).textTheme.subhead),
+              new Container(
+                margin: const EdgeInsets.only(top: 5.0),
+                child: new Text(_user.status),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
+  
   Widget _buildList() {
     /*dummy data*/
     _contracts.add(Contract("Contract 1", false));
@@ -38,15 +65,18 @@ class ContractListState extends State<ContractList> {
     _contracts.add(Contract("Contract 10", false));
     _contracts.add(Contract("Contract 11", true));
     _contracts.add(Contract("Contract 12", false));
-  return ListView.builder(
+  return Flexible(
+    child: ListView.builder(
       padding: const EdgeInsets.all(25.0),
       itemBuilder: (context, i) {
         if (i.isOdd) return Divider(); 
 
         final index = i ~/ 2; 
-        
+        if(_contracts.length>index){
         return _buildRow(_contracts[index]);
-      });
+      }
+      return null;
+      }));
 }
 
 Widget _buildRow(Contract contract) {
