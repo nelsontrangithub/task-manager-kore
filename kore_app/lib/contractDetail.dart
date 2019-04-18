@@ -61,7 +61,7 @@ class ContractDetailState extends State<ContractDetail> {
                       new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
                 ),
                 footer: new Text(
-                  "Sales this week",
+                  "Progress",
                   style:
                       new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
                 ),
@@ -102,18 +102,6 @@ class ContractDetailState extends State<ContractDetail> {
       subtitle: new Text('subtitle'),
     ),
   ),
-  // actions: <Widget>[
-  //   new IconSlideAction(
-  //     caption: 'Archive',
-  //     color: Colors.blue,
-  //     icon: Icons.archive,
-  //   ),
-  //   new IconSlideAction(
-  //     caption: 'Share',
-  //     color: Colors.indigo,
-  //     icon: Icons.share,
-  //   ),
-  // ],
   secondaryActions: <Widget>[
     new IconSlideAction(
       caption: 'Upload',
@@ -124,9 +112,15 @@ class ContractDetailState extends State<ContractDetail> {
       caption: 'Complete',
       color: Colors.green[800],
       icon: Icons.done,
+      onTap: ()=> markComplete(task),
     ),
   ],
 );
+  }
+
+  markComplete(Task task){
+    task.isCompleted = !task.isCompleted;
+    print(task.isCompleted);
   }
 }
 
