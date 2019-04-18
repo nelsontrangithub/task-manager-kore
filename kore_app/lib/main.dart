@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kore_app/theme.dart';
-
+import 'contractList.dart';
+import 'contractDetail.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,7 +15,12 @@ class MyApp extends StatelessWidget {
         // This is the theme of your application.
     
       ),
-      home: MyHomePage(title: 'Flutter Login'),
+      initialRoute: '/',
+      routes: {
+        // When we navigate to the "/" route, build the FirstScreen Widget
+        '/': (context) => MyHomePage(title: 'Home Page'),
+        '/contractList': (context) => ContractList(),
+      },
     );
   }
 }
@@ -67,7 +73,9 @@ class _MyHomePageState extends State<MyHomePage> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         // Here is coming the funcion to login
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/contractList');
+        },
         child: Text(
           'Login',
           textAlign: TextAlign.center,
