@@ -95,6 +95,55 @@ namespace kore_api.Util
                 context.Account.Add(o);
             }
             context.SaveChanges();
+
+            var taskTypes = new Tasktype[]
+            {
+                new Tasktype
+                {
+                    Id = 1,
+                    OrgId = 1,
+                    Name = "Misc.",
+                    DateCreated = DateTime.Now,
+                }
+            };
+            foreach (Tasktype item in taskTypes)
+            {
+                context.Tasktype.Add(item);
+            }
+            context.SaveChanges();
+
+            var tasks = new koredb.Task[]
+            {
+                new koredb.Task
+                {
+                    Id = 1,
+                    OwnerId = 1,
+                    AccountId = 1,
+                    OrgId = 1,
+                    TaskType = 1,
+                    Description = "Determine number of beverage stalls",
+                    DueDate = DateTime.Now.AddDays(20),
+                    DateCreated = DateTime.Now,
+                    Status = 1                    
+                },
+                new koredb.Task
+                {
+                    Id = 2,
+                    OwnerId = 2,
+                    AccountId = 2,
+                    OrgId = 2,
+                    TaskType = 1,
+                    Description = "Determine supply quality",
+                    DueDate = DateTime.Now.AddDays(20),
+                    DateCreated = DateTime.Now,
+                    Status = 1
+                }
+            };
+            foreach (koredb.Task t in tasks)
+            {
+                context.Task.Add(t);
+            }
+            context.SaveChanges();
         }
     }
 }
