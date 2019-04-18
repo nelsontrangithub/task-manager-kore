@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kore_app/theme.dart';
-import 'contractList.dart';
-import 'contractDetail.dart';
+import 'package:kore_app/utils/theme.dart';
+import 'screens/contractList.dart';
+import 'screens/contractDetail.dart';
+import 'package:kore_app/utils/routes.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,11 +17,7 @@ class MyApp extends StatelessWidget {
     
       ),
       initialRoute: '/',
-      routes: {
-        // When we navigate to the "/" route, build the FirstScreen Widget
-        '/': (context) => MyHomePage(title: 'Home Page'),
-        '/contractList': (context) => ContractList(),
-      },
+      routes: routes,
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'data/task.dart';
-import 'package:kore_app/theme.dart';
+import 'package:kore_app/data/task.dart';
+import 'package:kore_app/utils/theme.dart';
 import 'package:intl/intl.dart';
 
 class TaskDetailState extends State<TaskDetail> {

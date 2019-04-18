@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:kore_app/data/task.dart';
-import 'data/contract.dart';
-import 'data/user.dart';
+import '../data/contract.dart';
+import '../data/user.dart';
 import 'contractDetail.dart';
 
 class ContractListState extends State<ContractList> {
@@ -51,7 +50,7 @@ class ContractListState extends State<ContractList> {
   Widget _profileRow() {
     return Container(
       // margin: const EdgeInsets.symmetric(vertical: 0.0),
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      padding:const  EdgeInsets.symmetric(vertical: 10.0),
       decoration: BoxDecoration(
         color: Colors.black12,
       ),
