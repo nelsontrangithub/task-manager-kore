@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace kore_api.ViewModel
+namespace kore_api.ViewModels
 {
     public class UserVM
     {
