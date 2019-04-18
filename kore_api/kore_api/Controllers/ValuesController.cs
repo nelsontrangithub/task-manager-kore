@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using kore_api.koredb;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +13,19 @@ namespace kore_api.Controllers
     [ApiController]
     public class ValuesController : Controller
     {
+
+        private readonly koredbContext _context;
+
+        public ValuesController(koredbContext context)
+        {
+            _context = context;
+        }
+
         // GET api/values
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Account> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _context.Account;
         }
 
         // GET api/values/5
