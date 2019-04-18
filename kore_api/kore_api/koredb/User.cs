@@ -7,6 +7,7 @@ namespace kore_api.koredb
     {
         public User()
         {
+            Orgmembership = new HashSet<Orgmembership>();
             Task = new HashSet<Task>();
             Taskmembership = new HashSet<Taskmembership>();
         }
@@ -23,6 +24,7 @@ namespace kore_api.koredb
         public string LastName { get; set; }
         public string Sid { get; set; }
 
+        public ICollection<Orgmembership> Orgmembership { get; set; }
         public ICollection<Task> Task { get; set; }
         public ICollection<Taskmembership> Taskmembership { get; set; }
     }

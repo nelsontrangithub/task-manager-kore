@@ -8,6 +8,7 @@ namespace kore_api.koredb
         public Organization()
         {
             Account = new HashSet<Account>();
+            Orgmembership = new HashSet<Orgmembership>();
             Task = new HashSet<Task>();
             Taskdepartment = new HashSet<Taskdepartment>();
             Taskmembership = new HashSet<Taskmembership>();
@@ -23,6 +24,7 @@ namespace kore_api.koredb
         public int? ModifiedBy { get; set; }
 
         public ICollection<Account> Account { get; set; }
+        public ICollection<Orgmembership> Orgmembership { get; set; }
         public ICollection<Task> Task { get; set; }
         public ICollection<Taskdepartment> Taskdepartment { get; set; }
         public ICollection<Taskmembership> Taskmembership { get; set; }
