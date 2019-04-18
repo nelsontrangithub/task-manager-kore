@@ -144,6 +144,59 @@ namespace kore_api.Util
                 context.Task.Add(t);
             }
             context.SaveChanges();
+
+            var orgmemberships = new Orgmembership[]
+            {
+                new Orgmembership
+                {
+                    UserId = 1,
+                    OrgId = 1,
+                    Enabled = 1,
+                    JoinedOn = DateTime.Now,
+                    CreatedBy = 1
+                },
+                new Orgmembership
+                {
+                    UserId = 2,
+                    OrgId = 2,
+                    Enabled = 2,
+                    JoinedOn = DateTime.Now,
+                    CreatedBy = 2
+                }
+            };
+            foreach (Orgmembership t in orgmemberships)
+            {
+                context.Orgmembership.Add(t);
+            }
+            context.SaveChanges();
+
+            var taskmemberships = new Taskmembership[]
+            {
+                new Taskmembership
+                {
+                    Id = 1,
+                    TaskId = 1,
+                    AccountId = 1,
+                    UserId = 1,
+                    OrgId = 1,
+                    DateCreated = DateTime.Now
+                },
+                new Taskmembership
+                {
+                    Id = 2,
+                    TaskId = 2,
+                    AccountId = 2,
+                    UserId = 2,
+                    OrgId = 2,
+                    DateCreated = DateTime.Now
+                }
+            };
+            foreach (Taskmembership item in taskmemberships)
+            {
+                context.Taskmembership.Add(item);
+            }
+            context.SaveChanges();
         }
+
     }
 }
