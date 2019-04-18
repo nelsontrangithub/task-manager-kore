@@ -196,6 +196,29 @@ namespace kore_api.Util
                 context.Taskmembership.Add(item);
             }
             context.SaveChanges();
+
+            var taskdepts = new Taskdepartment[]
+            {
+                new Taskdepartment
+                {
+                    Id = 1,
+                    OrgId = 1,
+                    DepartmentName = "Marketing",
+                    DateCreated = DateTime.Now,
+                },
+                new Taskdepartment
+                {
+                    Id = 2,
+                    OrgId = 2,
+                    DepartmentName = "Sales",
+                    DateCreated = DateTime.Now
+                }
+            };
+            foreach (Taskdepartment item in taskdepts)
+            {
+                context.Taskdepartment.Add(item);
+            }
+            context.SaveChanges();
         }
 
     }
