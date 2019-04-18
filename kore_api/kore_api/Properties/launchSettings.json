@@ -12,6 +12,8 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
+        "AWS_SECRET_ACCESS_KEY": "Ky8ImCeRiz5iBoFi0Zrgo5oB2JWPWuuRTc+q7spH",
+        "AWS_ACCESS_KEY_ID": "AKIAI7VGATG6RF6KV6CA",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
@@ -25,9 +27,9 @@
     },
     "Mock Lambda Test Tool": {
       "commandName": "Executable",
+      "executablePath": "C:\\Users\\%USERNAME%\\.dotnet\\tools\\dotnet-lambda-test-tool-2.1.exe",
       "commandLineArgs": "--port 5050",
-      "workingDirectory": ".\\bin\\Debug\\netcoreapp2.1",
-      "executablePath": "C:\\Users\\%USERNAME%\\.dotnet\\tools\\dotnet-lambda-test-tool-2.1.exe"
+      "workingDirectory": ".\\bin\\Debug\\netcoreapp2.1"
     }
   }
 }
