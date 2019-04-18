@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'data/contract.dart';
-import 'data/task.dart';
+import '../data/contract.dart';
+import 'package:kore_app/data/task.dart';
+import 'package:kore_app/screens/taskDetail.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ContractDetailState extends State<ContractDetail> {
-
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _tasks = <Task>[];
   int _count = 0;
@@ -17,20 +17,19 @@ class ContractDetailState extends State<ContractDetail> {
     super.initState();
 
     /*dummy data*/
-    _tasks.add(Task("Task 1", false));
-    _tasks.add(Task("Task 2", false));
-    _tasks.add(Task("Task 3", true));
-    _tasks.add(Task("Task 4", false));
-    _tasks.add(Task("Task 5", false));
-    _tasks.add(Task("Task 6", false));
-    _tasks.add(Task("Task 7", true));
+    _tasks.add(Task( 1 ,"Task 1", false, "This is the description", DateTime.utc(2020, 6, 6)));
+    // _tasks.add(Task("Task 2", false));
+    // _tasks.add(Task("Task 3", true));
+    // _tasks.add(Task("Task 4", false));
+    // _tasks.add(Task("Task 5", false));
+    // _tasks.add(Task("Task 6", false));
+    // _tasks.add(Task("Task 7", true));
     //initialized the number of completed task
-          _tasks.map((task) => (){
-            if(task.isCompleted){
-                _count++;
-            }
-          });
-
+    _tasks.map((task) => () {
+          if (task.isCompleted) {
+            _count++;
+          }
+        });
   }
 
 
@@ -43,12 +42,13 @@ class ContractDetailState extends State<ContractDetail> {
         //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         //   ],
       ),
-      body: new Column(children: <Widget>[ _buildPercentIndicator(), _buildList()]),
+      body: new Column(
+          children: <Widget>[_buildPercentIndicator(), _buildList()]),
     );
   }
 
   Widget _buildPercentIndicator() {
-    return new Container (
+    return new Container(
       padding: const EdgeInsets.symmetric(vertical: 30.0),
       child: new CircularPercentIndicator(
                 radius: 120.0,
@@ -127,10 +127,8 @@ class ContractDetailState extends State<ContractDetail> {
 class ContractDetail extends StatefulWidget {
   final Contract contract;
 
-  const ContractDetail({Key key, this.contract}): super(key: key);
+  const ContractDetail({Key key, this.contract}) : super(key: key);
 
   @override
   ContractDetailState createState() => new ContractDetailState();
 }
-
-
