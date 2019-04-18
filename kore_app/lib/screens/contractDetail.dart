@@ -104,7 +104,6 @@ class ContractDetailState extends State<ContractDetail> {
       },
     );
   }
-
 }
 
 class ContractDetail extends StatefulWidget {
