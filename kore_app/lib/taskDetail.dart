@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'data/task.dart';
 import 'package:kore_app/theme.dart';
-
+import 'package:intl/intl.dart';
 
 class TaskDetailState extends State<TaskDetail> {
-  @override
-  void initState() {
+  initState() {
     super.initState();
+
+    
   }
 
   @override
@@ -14,7 +15,11 @@ class TaskDetailState extends State<TaskDetail> {
     return Scaffold(
         appBar: AppBar(title: Text(widget.task.title)),
         body: new Column(
-          children: <Widget>[_buildTaskHeader(), _buildTaskDescription(), _buildTaskEnd()],
+          children: <Widget>[
+            _buildTaskHeader(),
+            _buildTaskDescription(),
+            _buildTaskEnd()
+          ],
         ));
   }
 
@@ -28,7 +33,7 @@ class TaskDetailState extends State<TaskDetail> {
             ListTile(
               leading: Icon(Icons.contacts, color: KorePrimaryColor),
               title: Text(widget.task.title),
-              subtitle: Text('Id:'),
+              subtitle: Text('Id: ' + widget.task.id.toString()),
             ),
           ],
         ),
@@ -46,7 +51,7 @@ class TaskDetailState extends State<TaskDetail> {
             ListTile(
               leading: Icon(Icons.description, color: KorePrimaryColor),
               title: Text("Description"),
-              subtitle: Text('This is where is coming the description. Every one a have fun'),
+              subtitle: Text(widget.task.description),
             ),
           ],
         ),
@@ -55,6 +60,13 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   Widget _buildTaskEnd() {
+
+    var now = widget.task.dueDate;
+    var formatter = new DateFormat('yyyy-MM-dd');
+    String formatted = formatter.format(now);
+    print(formatted);
+
+
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
       child: Card(
@@ -63,7 +75,7 @@ class TaskDetailState extends State<TaskDetail> {
           children: <Widget>[
             ListTile(
               leading: Icon(Icons.file_upload, color: KorePrimaryColor),
-              title: Text('Due Date:'),
+              title: Text("Due Date: " + formatted),
               subtitle: Text('Date Created:'),
             ),
             ButtonTheme.bar(
@@ -86,7 +98,6 @@ class TaskDetailState extends State<TaskDetail> {
       ),
     );
   }
-
 }
 
 class TaskDetail extends StatefulWidget {

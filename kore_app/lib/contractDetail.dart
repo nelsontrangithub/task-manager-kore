@@ -16,13 +16,13 @@ class ContractDetailState extends State<ContractDetail> {
     super.initState();
 
     /*dummy data*/
-    _tasks.add(Task("Task 1", false));
-    _tasks.add(Task("Task 2", false));
-    _tasks.add(Task("Task 3", true));
-    _tasks.add(Task("Task 4", false));
-    _tasks.add(Task("Task 5", false));
-    _tasks.add(Task("Task 6", false));
-    _tasks.add(Task("Task 7", true));
+    _tasks.add(Task( 1 ,"Task 1", false, "This is the description", DateTime.utc(2020, 6, 6)));
+    // _tasks.add(Task("Task 2", false));
+    // _tasks.add(Task("Task 3", true));
+    // _tasks.add(Task("Task 4", false));
+    // _tasks.add(Task("Task 5", false));
+    // _tasks.add(Task("Task 6", false));
+    // _tasks.add(Task("Task 7", true));
     //initialized the number of completed task
     _tasks.map((task) => () {
           if (task.isCompleted) {
