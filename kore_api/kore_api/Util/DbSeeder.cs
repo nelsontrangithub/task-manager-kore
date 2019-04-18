@@ -46,6 +46,55 @@ namespace kore_api.Util
                 context.User.Add(s);
             }
             context.SaveChanges();
+
+            var orgs = new Organization[]
+            {
+                new Organization
+                {
+                    Id = 1,
+                    Name = "Coca Cola",
+                    DateCreated = DateTime.Now,
+                    Status = 1
+                },
+                new Organization
+                {
+                    Id = 2,
+                    Name = "Pepsi",
+                    DateCreated = DateTime.Now,
+                    Status = 1
+                }
+            };
+            foreach (Organization o in orgs)
+            {
+                context.Organization.Add(o);
+            }
+            context.SaveChanges();
+            var accounts = new Account[]
+            {
+                new Account
+                {
+                    Id = 1,
+                    OrgId = 1,
+                    AccountName = "Real Madrid Contract",
+                    DateCreated = DateTime.Now,
+                    Status = 1,
+                    Description = "Offical stadium beverage contract"
+                },
+                new Account
+                {
+                    Id = 2,
+                    OrgId = 2,
+                    AccountName = "Barcelona FC Contract",
+                    DateCreated = DateTime.Now,
+                    Status = 1,
+                    Description = "Offical stadium beverage contract"
+                }
+            };
+            foreach (Account o in accounts)
+            {
+                context.Account.Add(o);
+            }
+            context.SaveChanges();
         }
     }
 }
