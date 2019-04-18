@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../data/contract.dart';
-import '../data/task.dart';
+import 'package:kore_app/data/task.dart';
+import 'package:kore_app/screens/taskDetail.dart';
 
 class ContractDetailState extends State<ContractDetail> {
-
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _tasks = <Task>[];
   int _count = 0;
@@ -16,20 +16,19 @@ class ContractDetailState extends State<ContractDetail> {
     super.initState();
 
     /*dummy data*/
-    _tasks.add(Task("Task 1", false));
-    _tasks.add(Task("Task 2", false));
-    _tasks.add(Task("Task 3", true));
-    _tasks.add(Task("Task 4", false));
-    _tasks.add(Task("Task 5", false));
-    _tasks.add(Task("Task 6", false));
-    _tasks.add(Task("Task 7", true));
+    _tasks.add(Task( 1 ,"Task 1", false, "This is the description", DateTime.utc(2020, 6, 6)));
+    // _tasks.add(Task("Task 2", false));
+    // _tasks.add(Task("Task 3", true));
+    // _tasks.add(Task("Task 4", false));
+    // _tasks.add(Task("Task 5", false));
+    // _tasks.add(Task("Task 6", false));
+    // _tasks.add(Task("Task 7", true));
     //initialized the number of completed task
-          _tasks.map((task) => (){
-            if(task.isCompleted){
-                _count++;
-            }
-          });
-
+    _tasks.map((task) => () {
+          if (task.isCompleted) {
+            _count++;
+          }
+        });
   }
 
   @override
@@ -41,31 +40,30 @@ class ContractDetailState extends State<ContractDetail> {
         //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         //   ],
       ),
-      body: new Column(children: <Widget>[ _buildPercentIndicator(), _buildList()]),
+      body: new Column(
+          children: <Widget>[_buildPercentIndicator(), _buildList()]),
     );
   }
 
   Widget _buildPercentIndicator() {
-    return new Container (
+    return new Container(
       padding: const EdgeInsets.symmetric(vertical: 30.0),
       child: new CircularPercentIndicator(
-                radius: 120.0,
-                lineWidth: 13.0,
-                animation: true,
-                percent: widget.contract.percentage*0.01,
-                center: new Text(
-                  widget.contract.percentage.toString() + "%",
-                  style:
-                      new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                ),
-                footer: new Text(
-                  "Sales this week",
-                  style:
-                      new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
-                ),
-                circularStrokeCap: CircularStrokeCap.round,
-                progressColor: Colors.purple,
-              ),
+        radius: 120.0,
+        lineWidth: 13.0,
+        animation: true,
+        percent: widget.contract.percentage * 0.01,
+        center: new Text(
+          widget.contract.percentage.toString() + "%",
+          style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        ),
+        footer: new Text(
+          "Sales this week",
+          style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+        ),
+        circularStrokeCap: CircularStrokeCap.round,
+        progressColor: Colors.purple,
+      ),
     );
   }
 
@@ -95,8 +93,12 @@ class ContractDetailState extends State<ContractDetail> {
         task.isCompleted ? Icons.done : null,
       ),
       onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TaskDetail(task: task),
+            ));
         setState(() {
-          task.isCompleted = !task.isCompleted;
           // if(task.isCompleted) _count++;
           // else _count--;
           // widget.contract.percentage = _count/_tasks.length;
@@ -109,7 +111,7 @@ class ContractDetailState extends State<ContractDetail> {
 class ContractDetail extends StatefulWidget {
   final Contract contract;
 
-  const ContractDetail({Key key, this.contract}): super(key: key);
+  const ContractDetail({Key key, this.contract}) : super(key: key);
 
   @override
   ContractDetailState createState() => new ContractDetailState();
