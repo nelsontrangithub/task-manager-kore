@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace kore_api.Util
 {
-    public class DbSeeder
+    public static class DbSeeder
     {
         public static void Initialize(koredbContext context)
         {
