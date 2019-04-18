@@ -6,7 +6,6 @@
 * import this file in the project, anywhere you need it
 * import 'path/to/theme.dart';
 */
-
 import 'package:flutter/material.dart';
 
 final ThemeData KoreThemeData = new ThemeData(
