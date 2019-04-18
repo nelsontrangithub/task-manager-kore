@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'data/contract.dart';
-import 'data/task.dart';
+import '../data/contract.dart';
+import '../data/task.dart';
 
 class ContractDetailState extends State<ContractDetail> {
 
