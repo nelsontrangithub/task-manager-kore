@@ -3,6 +3,7 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import '../data/contract.dart';
 import 'package:kore_app/data/task.dart';
 import 'package:kore_app/screens/taskDetail.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ContractDetailState extends State<ContractDetail> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
@@ -31,6 +32,7 @@ class ContractDetailState extends State<ContractDetail> {
         });
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,21 +51,23 @@ class ContractDetailState extends State<ContractDetail> {
     return new Container(
       padding: const EdgeInsets.symmetric(vertical: 30.0),
       child: new CircularPercentIndicator(
-        radius: 120.0,
-        lineWidth: 13.0,
-        animation: true,
-        percent: widget.contract.percentage * 0.01,
-        center: new Text(
-          widget.contract.percentage.toString() + "%",
-          style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-        ),
-        footer: new Text(
-          "Sales this week",
-          style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
-        ),
-        circularStrokeCap: CircularStrokeCap.round,
-        progressColor: Colors.purple,
-      ),
+                radius: 120.0,
+                lineWidth: 13.0,
+                animation: true,
+                percent: widget.contract.percentage*0.01,
+                center: new Text(
+                  widget.contract.percentage.toString() + "%",
+                  style:
+                      new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                ),
+                footer: new Text(
+                  "Progress",
+                  style:
+                      new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+                ),
+                circularStrokeCap: CircularStrokeCap.round,
+                progressColor: Colors.purple,
+              ),
     );
   }
 
@@ -76,35 +80,47 @@ class ContractDetailState extends State<ContractDetail> {
 
               final index = i ~/ 2;
               if (_tasks.length > index) {
-                return _buildRow(_tasks[index]);
+                return _buildRow(_tasks[index], index);
               }
               return null;
             }));
   }
 
-  Widget _buildRow(Task task) {
-    return ListTile(
-      title: Text(
-        task.title,
-        style: _biggerFont,
+  Widget _buildRow(Task task, int index) {
+  return new Slidable(
+  delegate: new SlidableDrawerDelegate(),
+  actionExtentRatio: 0.25,
+  child: new Container(
+    color: Colors.white,
+    child: new ListTile(
+      leading: new CircleAvatar(
+        backgroundColor: Colors.indigo[700],
+        child: new Text((index+1).toString()),
+        foregroundColor: Colors.white,
       ),
-      trailing: Icon(
-        // Add the lines from here...
-        task.isCompleted ? Icons.done : null,
-      ),
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TaskDetail(task: task),
-            ));
-        setState(() {
-          // if(task.isCompleted) _count++;
-          // else _count--;
-          // widget.contract.percentage = _count/_tasks.length;
-        });
-      },
-    );
+      title: new Text(task.title),
+      subtitle: new Text('subtitle'),
+    ),
+  ),
+  secondaryActions: <Widget>[
+    new IconSlideAction(
+      caption: 'Upload',
+      color: Colors.blueAccent,
+      icon: Icons.file_upload,
+    ),
+    new IconSlideAction(
+      caption: 'Complete',
+      color: Colors.green[800],
+      icon: Icons.done,
+      onTap: ()=> markComplete(task),
+    ),
+  ],
+);
+  }
+
+  markComplete(Task task){
+    task.isCompleted = !task.isCompleted;
+    print(task.isCompleted);
   }
 }
 
