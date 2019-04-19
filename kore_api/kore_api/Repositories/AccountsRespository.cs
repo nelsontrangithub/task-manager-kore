@@ -17,7 +17,8 @@ namespace kore_api.Repositories
 
         public Account GetAccount(int id)
         {
-            throw new NotImplementedException();
+            var account = _context.Account.Where(a => a.Id == id).FirstOrDefault();
+            return account;
         }
 
         public IEnumerable<Account> GetAccounts()
