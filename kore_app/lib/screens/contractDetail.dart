@@ -3,9 +3,10 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:kore_app/models/contract.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/data/signin.dart';
+import 'package:kore_app/screens/taskDetail.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ContractDetailState extends State<ContractDetail> {
-
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _tasks = <Task>[];
   int _count = 0;
@@ -20,21 +21,21 @@ class ContractDetailState extends State<ContractDetail> {
     super.initState();
 
     /*dummy data*/
-    _tasks.add(Task("Task 1", false));
-    _tasks.add(Task("Task 2", false));
-    _tasks.add(Task("Task 3", true));
-    _tasks.add(Task("Task 4", false));
-    _tasks.add(Task("Task 5", false));
-    _tasks.add(Task("Task 6", false));
-    _tasks.add(Task("Task 7", true));
+    _tasks.add(Task( 1 ,"Task 1", false, "This is the description", DateTime.utc(2020, 6, 6)));
+    // _tasks.add(Task("Task 2", false));
+    // _tasks.add(Task("Task 3", true));
+    // _tasks.add(Task("Task 4", false));
+    // _tasks.add(Task("Task 5", false));
+    // _tasks.add(Task("Task 6", false));
+    // _tasks.add(Task("Task 7", true));
     //initialized the number of completed task
-          _tasks.map((task) => (){
-            if(task.isCompleted){
-                _count++;
-            }
-          });
-
+    _tasks.map((task) => () {
+          if (task.isCompleted) {
+            _count++;
+          }
+        });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +46,13 @@ class ContractDetailState extends State<ContractDetail> {
         //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         //   ],
       ),
-      body: new Column(children: <Widget>[ _buildPercentIndicator(), _buildList()]),
+      body: new Column(
+          children: <Widget>[_buildPercentIndicator(), _buildList()]),
     );
   }
 
   Widget _buildPercentIndicator() {
-    return new Container (
+    return new Container(
       padding: const EdgeInsets.symmetric(vertical: 30.0),
       child: new CircularPercentIndicator(
                 radius: 120.0,
@@ -63,7 +65,7 @@ class ContractDetailState extends State<ContractDetail> {
                       new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
                 ),
                 footer: new Text(
-                  "Sales this week",
+                  "Progress",
                   style:
                       new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
                 ),
@@ -82,39 +84,59 @@ class ContractDetailState extends State<ContractDetail> {
 
               final index = i ~/ 2;
               if (_tasks.length > index) {
-                return _buildRow(_tasks[index]);
+                return _buildRow(_tasks[index], index);
               }
               return null;
             }));
   }
 
-  Widget _buildRow(Task task) {
-    return ListTile(
-      title: Text(
-        task.title,
-        style: _biggerFont,
+  Widget _buildRow(Task task, int index) {
+  return new Slidable(
+  delegate: new SlidableDrawerDelegate(),
+  actionExtentRatio: 0.25,
+  child: new Container(
+    color: Colors.white,
+    child: new ListTile(
+      leading: new CircleAvatar(
+        backgroundColor: Colors.indigo[700],
+        child: new Text((index+1).toString()),
+        foregroundColor: Colors.white,
       ),
-      trailing: Icon(
-        // Add the lines from here...
-        task.isCompleted ? Icons.done : null,
-      ),
+      title: new Text(task.title),
+      subtitle: new Text('subtitle'),
       onTap: () {
-        datasource.test();
-        setState(() {
-          task.isCompleted = !task.isCompleted;
-          // if(task.isCompleted) _count++;
-          // else _count--;
-          // widget.contract.percentage = _count/_tasks.length;
-        });
+        Navigator.push(context,
+          MaterialPageRoute(
+            builder: (context) => TaskDetail(task: task),));
       },
-    );
+    ),
+  ),
+  secondaryActions: <Widget>[
+    new IconSlideAction(
+      caption: 'Upload',
+      color: Colors.blueAccent,
+      icon: Icons.file_upload,
+    ),
+    new IconSlideAction(
+      caption: 'Complete',
+      color: Colors.green[800],
+      icon: Icons.done,
+      onTap: ()=> markComplete(task),
+    ),
+  ],
+);
+  }
+
+  markComplete(Task task){
+    task.isCompleted = !task.isCompleted;
+    print(task.isCompleted);
   }
 }
 
 class ContractDetail extends StatefulWidget {
   final Contract contract;
 
-  const ContractDetail({Key key, this.contract}): super(key: key);
+  const ContractDetail({Key key, this.contract}) : super(key: key);
 
   @override
   ContractDetailState createState() => new ContractDetailState();

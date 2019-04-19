@@ -128,6 +128,7 @@ class ContractListState extends State<ContractList> {
 }
 
 class ContractList extends StatefulWidget {
+
   @override
   ContractListState createState() => new ContractListState();
 }

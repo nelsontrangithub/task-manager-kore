@@ -1,5 +1,10 @@
 class Task {
+  int id;
   String title;
   bool isCompleted;
-  Task(this.title, this.isCompleted);
+  String description;
+  DateTime dueDate;
+  DateTime dateCreated;
+  int status;
+  Task(this.id, this.title, this.isCompleted, this.description, this.dueDate);
 }

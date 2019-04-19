@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace kore_api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : Controller

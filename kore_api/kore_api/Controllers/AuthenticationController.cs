@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Amazon;
 using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
+using kore_api.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,16 +18,9 @@ namespace kore_api.Controllers
         private const string _clientId = "6fba0vhhhemve6bq3sm5evd0do";
         private readonly RegionEndpoint _region = RegionEndpoint.USEast2;
 
-        public class User
-        {
-            public string Username { get; set; }
-            public string Password { get; set; }
-            public string Email { get; set; }
-        }
-
         [HttpPost]
         [Route("api/register")]
-        public async Task<ActionResult<string>> Register(User user)
+        public async Task<ActionResult<string>> Register(UserVM user)
         {
             var cognito = new AmazonCognitoIdentityProviderClient(_region);
 
@@ -51,7 +45,7 @@ namespace kore_api.Controllers
 
         [HttpPost]
         [Route("api/signin")]
-        public async Task<ActionResult<string>> SignIn(User user)
+        public async Task<ActionResult<string>> SignIn(UserVM user)
         {
             var cognito = new AmazonCognitoIdentityProviderClient(_region);
 

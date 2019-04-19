@@ -18,18 +18,18 @@ namespace kore_api.koredb
         public virtual DbSet<Account> Account { get; set; }
         public virtual DbSet<File> File { get; set; }
         public virtual DbSet<Organization> Organization { get; set; }
+        public virtual DbSet<Orgmembership> Orgmembership { get; set; }
         public virtual DbSet<Task> Task { get; set; }
         public virtual DbSet<Taskdepartment> Taskdepartment { get; set; }
         public virtual DbSet<Taskmembership> Taskmembership { get; set; }
         public virtual DbSet<Tasktype> Tasktype { get; set; }
         public virtual DbSet<User> User { get; set; }
 
-        // Unable to generate entity type for table 'koredb.orgmembership'. Please see the warning messages.
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=password;database=koredb");
             }
         }
@@ -147,6 +147,46 @@ namespace kore_api.koredb
                     .IsUnicode(false);
 
                 entity.Property(e => e.Status).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<Orgmembership>(entity =>
+            {
+                entity.HasKey(e => new { e.UserId, e.OrgId });
+
+                entity.ToTable("orgmembership", "koredb");
+
+                entity.HasIndex(e => e.UserId)
+                    .HasName("FK_User_Membership_idx");
+
+                entity.HasIndex(e => new { e.OrgId, e.UserId })
+                    .HasName("OrgId_UserId_UNIQUE")
+                    .IsUnique();
+
+                entity.Property(e => e.UserId).HasColumnType("int(11)");
+
+                entity.Property(e => e.OrgId).HasColumnType("int(11)");
+
+                entity.Property(e => e.CreatedBy).HasColumnType("int(11)");
+
+                entity.Property(e => e.Enabled)
+                    .HasColumnType("int(1)")
+                    .HasDefaultValueSql("1");
+
+                entity.Property(e => e.JoinedOn).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.Property(e => e.ModifiedBy).HasColumnType("int(11)");
+
+                entity.HasOne(d => d.Org)
+                    .WithMany(p => p.Orgmembership)
+                    .HasForeignKey(d => d.OrgId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Organization_Membership");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Orgmembership)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_User_Membership");
             });
 
             modelBuilder.Entity<Task>(entity =>
