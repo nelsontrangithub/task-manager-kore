@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import '../data/contract.dart';
-import '../data/task.dart';
+import 'package:kore_app/models/contract.dart';
+import 'package:kore_app/models/task.dart';
+import 'package:kore_app/data/signin.dart';
 
 class ContractDetailState extends State<ContractDetail> {
 
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _tasks = <Task>[];
   int _count = 0;
+
+  //test
+  RestDatasource datasource = new RestDatasource();
 
   //one of the state lifecycle function, only load once
   //good place for dummydata loading
@@ -95,6 +99,7 @@ class ContractDetailState extends State<ContractDetail> {
         task.isCompleted ? Icons.done : null,
       ),
       onTap: () {
+        datasource.test();
         setState(() {
           task.isCompleted = !task.isCompleted;
           // if(task.isCompleted) _count++;

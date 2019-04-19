@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../data/contract.dart';
-import '../data/user.dart';
-import 'contractDetail.dart';
+import 'package:kore_app/models/contract.dart';
+import 'package:kore_app/models/user.dart';
+import 'package:kore_app/screens/contractDetail.dart';
 
 class ContractListState extends State<ContractList> {
   final _contractStates = <ContractList>[];
