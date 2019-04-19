@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using kore_api.koredb;
+using kore_api.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,9 @@ namespace kore_api
 
             services.AddDbContext<koredbContext>(options =>
             options.UseMySQL("server=localhost;port=3306;user=root;password=password;database=koredb"));
+
+            services.AddTransient<AccountsRespository, AccountsRespository>();
+
 
             // Add S3 to the ASP.NET Core dependency injection framework.
             services.AddAWSService<Amazon.S3.IAmazonS3>();
