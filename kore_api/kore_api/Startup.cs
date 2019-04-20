@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using kore_api.koredb;
 using kore_api.Repositories;
+using kore_api.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -41,6 +42,7 @@ namespace kore_api
 
             //Repos
             services.AddScoped<IAccountsRepository, AccountsRespository>();
+            services.AddScoped<ITasksRepository, TasksRepository>();
 
             // Add S3 to the ASP.NET Core dependency injection framework.
             services.AddAWSService<Amazon.S3.IAmazonS3>();
