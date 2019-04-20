@@ -39,8 +39,8 @@ namespace kore_api
             services.AddDbContext<koredbContext>(options =>
             options.UseMySQL("server=localhost;port=3306;user=root;password=password;database=koredb"));
 
-            services.AddTransient<AccountsRespository, AccountsRespository>();
-
+            //Repos
+            services.AddScoped<IAccountsRepository, AccountsRespository>();
 
             // Add S3 to the ASP.NET Core dependency injection framework.
             services.AddAWSService<Amazon.S3.IAmazonS3>();
