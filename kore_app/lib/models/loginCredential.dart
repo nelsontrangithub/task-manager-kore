@@ -8,7 +8,7 @@ class LoginCredential {
     this._password = obj["password"];
   }
 
-  String get username => _username;
+  String get username => _username;//geter
   String get password => _password;
 
   Map<String, dynamic> toMap() {

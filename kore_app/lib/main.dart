@@ -1,9 +1,22 @@
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:kore_app/utils/routes.dart';
 
-void main() => runApp(MyApp());
+class SimpleBlocDelegate extends BlocDelegate {
+  @override
+  void onTransition(Transition transition) {
+    print(transition.toString());
+  }
+}
 
-class MyApp extends StatelessWidget {
+// void main() => runApp(MyApp());
+void main() {
+  BlocSupervisor().delegate = SimpleBlocDelegate();
+  runApp(MyApp(userRepository: UserRepository());
+}
+
+class MyApp extends StatefulWidget {
+  final UserRepository userRepository;
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
