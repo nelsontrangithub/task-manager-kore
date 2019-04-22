@@ -70,7 +70,7 @@ class _AppState extends State<MyApp> {
           bloc: authenticationBloc,
           builder: (BuildContext context, AuthenticationState state) {
             if (state is AuthenticationUninitialized) {
-              return SplashPage();
+              return LoadingIndicator();
             }
             if (state is AuthenticationAuthenticated) {
               return ContractList();

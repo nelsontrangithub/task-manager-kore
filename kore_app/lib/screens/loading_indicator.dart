@@ -11,7 +11,6 @@ class LoadingIndicator extends StatefulWidget {
 class _LoadingIndicatorState extends State<LoadingIndicator>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
-  Animation<double> animation;
 
   @override
   void initState() {
@@ -20,24 +19,19 @@ class _LoadingIndicatorState extends State<LoadingIndicator>
       duration: Duration(milliseconds: 2000),
       vsync: this,
     );
-
-    animation = Tween(begin: 0.0, end: 1.0).animate(controller)
-      ..addListener(() {
-        setState(() {});
-      });
-    controller.forward();
+    controller.repeat();
   }
 
   @override
   void dispose() {
-    super.dispose();
     controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final logo = ScaleTransition(
-      scale: animation,
+    final logo = AnimatedBuilder(
+      animation: controller,
       child: SizedBox(
         height: 155.0,
         child: Image.asset(
@@ -45,13 +39,18 @@ class _LoadingIndicatorState extends State<LoadingIndicator>
           fit: BoxFit.contain,
         ),
       ),
+      builder: (BuildContext context, Widget _widget) {
+          return new Transform.rotate(
+            angle: controller.value * 6.3,
+            child: _widget,
+          );
+      },
     );
 
-    return Scaffold(
-        backgroundColor: Colors.white10,
-        body: Center(
-          // child: CircularProgressIndicator(),
-          child: logo,
-        ));
+    return Container(
+        color: Colors.white,
+        alignment: Alignment.center,
+        child: logo,
+        );
   }
 }
