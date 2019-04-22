@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/auth/login_state.dart';
@@ -37,6 +38,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     // Email Field
     final emailField = TextFormField(
       controller: _usernameController,
@@ -71,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // Here is coming the funcion to login
           onPressed: () {
             // Navigator.pushNamed(context, '/contractList');
-            state is! LoginLoading ? _onLoginButtonPressed : null;
+            state is! LoginLoading ? _onLoginButtonPressed() : null;
           },
           child: Text(
             'Login',

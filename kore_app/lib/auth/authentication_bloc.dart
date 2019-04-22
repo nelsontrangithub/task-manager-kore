@@ -18,7 +18,7 @@ class AuthenticationBloc
 
   @override
   Stream<AuthenticationState> mapEventToState(
-    AuthenticationState currentState,
+    // AuthenticationState currentState,
     AuthenticationEvent event,
   ) async* {
     if (event is AppStarted) {

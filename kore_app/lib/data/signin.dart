@@ -8,15 +8,14 @@ class RestDatasource {
   static final LOGIN_URL = BASE_URL + "/prod";
   static final _API_KEY = "somerandomkey";
 
-  Future<LoginCredential> login(String username, String password) {
+//return token
+  Future<String> login(String username, String password) {
     return _netUtil.post(LOGIN_URL, body: {
-      "token": _API_KEY,
       "username": username,
       "password": password
     }).then((dynamic res) {
       print(res.toString());
-      if (res["error"]) throw new Exception(res["error_msg"]);
-      return new LoginCredential.map(res["user"]);
+      return res["token"];
     });
   }
 

@@ -1,11 +1,14 @@
 import 'package:meta/meta.dart';
 
 class UserRepository {
+  String token;
+  // RestDatasource source = new RestDatasource();
   Future<String> authenticate({
     @required String username,
     @required String password,
   }) async {
     await Future.delayed(Duration(seconds: 1));
+    token = 'token';
     return 'token';
   }
 
@@ -24,6 +27,7 @@ class UserRepository {
   Future<bool> hasToken() async {
     /// read from keystore/keychain
     await Future.delayed(Duration(seconds: 1));
-    return false;
+    print(token);
+    return token == 'token';
   }
 }
