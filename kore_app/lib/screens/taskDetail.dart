@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:kore_app/data/task.dart';
+import 'package:kore_app/models/task.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:intl/intl.dart';
 

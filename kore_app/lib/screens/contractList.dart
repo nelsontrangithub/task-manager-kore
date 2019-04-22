@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../data/contract.dart';
-import '../data/user.dart';
-import 'contractDetail.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kore_app/auth/authentication_bloc.dart';
+import 'package:kore_app/auth/authentication_event.dart';
+import 'package:kore_app/models/contract.dart';
+import 'package:kore_app/models/user.dart';
+import 'package:kore_app/screens/contractDetail.dart';
 
 class ContractListState extends State<ContractList> {
   final _contractStates = <ContractList>[];
@@ -36,12 +39,19 @@ class ContractListState extends State<ContractList> {
 
   @override
   Widget build(BuildContext context) {
+    final AuthenticationBloc authenticationBloc =
+        BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Contract List'),
-        // actions: <Widget>[      // Add 3 lines from here...
-        //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
-        //   ],
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: () {
+              authenticationBloc.dispatch(LoggedOut());
+            },
+          ),
+        ],
       ),
       body: new Column(children: <Widget>[_profileRow(), _buildList()]),
     );
@@ -50,7 +60,7 @@ class ContractListState extends State<ContractList> {
   Widget _profileRow() {
     return Container(
       // margin: const EdgeInsets.symmetric(vertical: 0.0),
-      padding:const  EdgeInsets.symmetric(vertical: 10.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
       decoration: BoxDecoration(
         color: Colors.black12,
       ),
@@ -70,16 +80,16 @@ class ContractListState extends State<ContractList> {
             ),
           ),
           Expanded(
-          child: new Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              new Text(_user.name, style: _nameFont),
-              new Container(
-                margin: const EdgeInsets.only(top: 5.0),
-                child: new Text(_user.status),
-              ),
-            ],
-          ),
+            child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                new Text(_user.name, style: _nameFont),
+                new Container(
+                  margin: const EdgeInsets.only(top: 5.0),
+                  child: new Text(_user.status),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -109,12 +119,14 @@ class ContractListState extends State<ContractList> {
       ),
       trailing: Icon(
         // Add the lines from here...
-        contract.percentage>=100 ? Icons.done : null,
+        contract.percentage >= 100 ? Icons.done : null,
       ),
       onTap: () {
-        Navigator.push(context,
-          MaterialPageRoute(
-            builder: (context) => ContractDetail(contract: contract),));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ContractDetail(contract: contract),
+            ));
         setState(() {
           // if (contact.isCompleted) {
           //   _saved.remove(pair);
@@ -128,7 +140,6 @@ class ContractListState extends State<ContractList> {
 }
 
 class ContractList extends StatefulWidget {
-
   @override
   ContractListState createState() => new ContractListState();
 }
