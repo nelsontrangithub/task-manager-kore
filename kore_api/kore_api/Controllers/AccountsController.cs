@@ -3,47 +3,48 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using kore_api.koredb;
+using kore_api.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace kore_api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class AccountsController : ControllerBase
+    public class AccountsController : Controller
     {
-        private koredbContext context;
+        private readonly koredbContext _context;
 
         public AccountsController(koredbContext context)
         {
-            this.context = context;
+            _context = context;
         }
 
-        // GET: api/Accounts
+        // GET: api/accounts
         [HttpGet]
-        public IEnumerable<Account> Get()
+        public IEnumerable<Account> GetAll()
         {
-            var accounts = context.Account.ToList();
-
+            AccountsRespository accRepo = new AccountsRespository(_context);
+            var accounts = accRepo.GetAccounts();
             return accounts;
         }
 
-        [HttpPost("{id}")]
-        public bool UpdateStatus(int id, [FromBody] int status)
+        // GET: api/accounts/id
+        [HttpGet("{id}")]
+        public Account Get(int id)
         {
-            var account = context.Account.Where(a => a.Id == id).FirstOrDefault();
-            account.Status = status;
-            account.DateModified = DateTime.Now;
-            try
-            {
-                context.Update(account);
-                context.SaveChanges();
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return true;
+            return new AccountsRespository(_context).GetAccount(id);
         }
+
+        // POST: api/accounts/id
+        // updates the status and date modified rows
+        [HttpPost("{id}")]
+        public bool UpdateAccount(int id, [FromBody] int status)
+        {
+            return new AccountsRespository(_context).UpdateAccount(id, status);
+        }
+
     }
 }
