@@ -7,7 +7,7 @@ import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/screens/contractList.dart';
 import 'package:kore_app/screens/loading_indicator.dart';
 import 'package:kore_app/auth/authentication_bloc.dart';
-import 'package:kore_app/screens/splash_page.dart';
+import 'package:kore_app/screens/splash.dart';
 import 'package:kore_app/screens/login.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
@@ -70,7 +70,7 @@ class _AppState extends State<MyApp> {
           bloc: authenticationBloc,
           builder: (BuildContext context, AuthenticationState state) {
             if (state is AuthenticationUninitialized) {
-              return LoadingIndicator();
+              return Splash();
             }
             if (state is AuthenticationAuthenticated) {
               return ContractList();
@@ -81,7 +81,7 @@ class _AppState extends State<MyApp> {
                   userRepository: UserRepository());
             }
             if (state is AuthenticationLoading) {
-              return LoadingIndicator();
+              return Splash();
             }
           },
         ),
