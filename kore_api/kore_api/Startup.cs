@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using kore_api.Util.Cognito;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace kore_api
 {
@@ -39,8 +40,8 @@ namespace kore_api
 					policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Admin" })));
 				options.AddPolicy("IsAgent", policy =>
 					policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Agent" })));
-			options.AddPolicy("IsAdminOrAgent", policy =>
-				policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Admin", "Agent" })));
+			    options.AddPolicy("IsAdminOrAgent", policy =>
+				    policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Admin", "Agent" })));
 			});
 
 			services.AddSingleton<IAuthorizationHandler, CognitoGroupAuthorizationHandler>();
@@ -51,6 +52,22 @@ namespace kore_api
                     options.Authority = "https://cognito-idp.us-east-2.amazonaws.com/us-east-2_G26JTdg5h";
                 });
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Task Manager", Version = "v1" });
+                c.AddSecurityDefinition("Bearer",
+                    new ApiKeyScheme
+                    {
+                        In = "header",
+                        Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                        Name = "Authorization",
+                        Type = "apiKey"
+                    });
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+                                { "Bearer", Enumerable.Empty<string>() },
+                            });
+            });
 
             services.AddDbContext<koredbContext>(options =>
             options.UseMySQL("server=localhost;port=3306;user=root;password=password;database=koredb"));
@@ -80,6 +97,12 @@ namespace kore_api
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+            });
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
             });
         }
     }
