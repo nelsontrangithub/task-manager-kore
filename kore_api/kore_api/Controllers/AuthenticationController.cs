@@ -34,7 +34,7 @@ namespace kore_api.Controllers
         {
             var cognito = new AmazonCognitoIdentityProviderClient(_region);
 
-            var request = new SignUpRequest
+            var signUpRequest = new SignUpRequest
             {
                 ClientId = _clientId,
                 Password = user.Password,
@@ -46,11 +46,20 @@ namespace kore_api.Controllers
                 Name = "email",
                 Value = user.Email
             };
-            request.UserAttributes.Add(emailAttribute);
+			signUpRequest.UserAttributes.Add(emailAttribute);
+            
 
-            var response = await cognito.SignUpAsync(request);
+			var addToGroupRequest = new AdminAddUserToGroupRequest
+			{
+				GroupName = "Agent",
+				Username = user.Username,
+				UserPoolId = "us-east-2_G26JTdg5h"
+			};
 
-			if (response.HttpStatusCode == HttpStatusCode.OK)
+			var signUpResponse = await cognito.SignUpAsync(signUpRequest);
+			var addToGroupResponse = await cognito.AdminAddUserToGroupAsync(addToGroupRequest);
+
+			if (signUpResponse.HttpStatusCode == HttpStatusCode.OK)
 			{
 				_userRepository.CreateUser(user);
 			}
