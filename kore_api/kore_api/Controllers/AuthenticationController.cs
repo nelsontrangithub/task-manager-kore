@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
+using kore_api.Repositories;
+using kore_api.Repositories.Interfaces;
 using kore_api.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,8 +18,15 @@ namespace kore_api.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
+		private readonly IUserRepository _userRepository;
+
         private const string _clientId = "6fba0vhhhemve6bq3sm5evd0do";
         private readonly RegionEndpoint _region = RegionEndpoint.USEast2;
+
+		public AuthenticationController(IUserRepository _userRepository)
+		{
+			this._userRepository = _userRepository;
+		}
 
         [HttpPost]
         [Route("api/register")]
@@ -39,6 +49,11 @@ namespace kore_api.Controllers
             request.UserAttributes.Add(emailAttribute);
 
             var response = await cognito.SignUpAsync(request);
+
+			if (response.HttpStatusCode == HttpStatusCode.OK)
+			{
+				_userRepository.CreateUser(user);
+			}
 
             return Ok();
         }
