@@ -49,6 +49,7 @@ namespace kore_api.Controllers
             return Ok(task);
         }
 
+        //GET: api/Tasks/user/5
         [HttpGet("user/{id}")]
         public async Task<IActionResult> GetByUser([FromRoute] int id)
         {
