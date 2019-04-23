@@ -20,7 +20,9 @@ namespace kore_api.Controllers
     {
 		private readonly IUserRepository _userRepository;
 
-        private const string _clientId = "6fba0vhhhemve6bq3sm5evd0do";
+		private const string _defaultRole = "Agent";
+		private const string _poolId = "us-east-2_G26JTdg5h";
+		private const string _clientId = "6fba0vhhhemve6bq3sm5evd0do";
         private readonly RegionEndpoint _region = RegionEndpoint.USEast2;
 
 		public AuthenticationController(IUserRepository _userRepository)
@@ -51,9 +53,9 @@ namespace kore_api.Controllers
 
 			var addToGroupRequest = new AdminAddUserToGroupRequest
 			{
-				GroupName = "Agent",
+				GroupName = _defaultRole,
 				Username = user.Username,
-				UserPoolId = "us-east-2_G26JTdg5h"
+				UserPoolId = _poolId
 			};
 
 			var signUpResponse = await cognito.SignUpAsync(signUpRequest);
@@ -75,7 +77,7 @@ namespace kore_api.Controllers
 
             var request = new AdminInitiateAuthRequest
             {
-                UserPoolId = "us-east-2_G26JTdg5h",
+                UserPoolId = _poolId,
                 ClientId = _clientId,
                 AuthFlow = AuthFlowType.ADMIN_NO_SRP_AUTH
             };
