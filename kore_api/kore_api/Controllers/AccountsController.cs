@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace kore_api.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AccountsController : Controller
@@ -22,18 +21,19 @@ namespace kore_api.Controllers
             _accountsRepository = accountsRepository;
         }
 
-        // GET: api/accounts
+        // GET: api/account
         [HttpGet]
-        public IEnumerable<Account> GetAll()
+		[Authorize(Policy = "IsAdminOrAgent")]
+		public IEnumerable<Account> GetAll()
         {
             return _accountsRepository.GetAccounts();
         }
 
-        // GET: api/accounts/id
-        [HttpGet("{id}")]
+
+        [Authorize(Policy = "IsAdminOrAgent")]
         public async Task<IActionResult> Get([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
+		{
+			if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -48,8 +48,10 @@ namespace kore_api.Controllers
             return Ok(result);
         }
 
+
         // PUT: api/Accounts/5
         [HttpPut("{id}")]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> PutTask([FromRoute] int id, [FromBody] int status)
         {
             if (!ModelState.IsValid)

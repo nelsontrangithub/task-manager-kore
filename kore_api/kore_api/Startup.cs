@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using kore_api.koredb;
 using kore_api.Repositories;
 using kore_api.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using kore_api.Util.Cognito;
 
 namespace kore_api
 {
@@ -29,6 +31,19 @@ namespace kore_api
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
+			string[] arr = { "" };
+
+			services.AddAuthorization(options =>
+			{
+				options.AddPolicy("IsAdmin", policy =>
+					policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Admin" })));
+				options.AddPolicy("IsAgent", policy =>
+					policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Agent" })));
+			options.AddPolicy("IsAdminOrAgent", policy =>
+				policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Admin", "Agent" })));
+			});
+
+			services.AddSingleton<IAuthorizationHandler, CognitoGroupAuthorizationHandler>();
             services.AddAuthentication("Bearer")
                 .AddJwtBearer(options =>
                 {
