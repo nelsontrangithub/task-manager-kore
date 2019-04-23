@@ -10,8 +10,8 @@ namespace kore_api.Repositories.Interfaces
 	public interface IUserRepository
 	{
 		IEnumerable<User> GetUsers();
-		User GetUser(int id);
+		int GetUserId(string email);
 		bool CreateUser(UserVM userVM);
-		bool UserExists();
+		bool UserExists(string email);
 	}
 }

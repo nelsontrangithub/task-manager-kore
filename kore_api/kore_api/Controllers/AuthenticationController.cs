@@ -85,7 +85,11 @@ namespace kore_api.Controllers
             request.AuthParameters.Add("USERNAME", user.Username);
             request.AuthParameters.Add("PASSWORD", user.Password);
 
-            var response = await cognito.AdminInitiateAuthAsync(request);
+			if (!_userRepository.UserExists(user.Username))
+			{
+				return NotFound("User not found");
+			}
+			var response = await cognito.AdminInitiateAuthAsync(request);
 
             return Ok(response.AuthenticationResult.IdToken);
         }
