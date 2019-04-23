@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace kore_api.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = "IsAgent")]
     [Route("api/[controller]")]
     [ApiController]
     public class AccountsController : Controller
