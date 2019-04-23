@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace kore_api.Controllers
 {
-    [Authorize(Policy = "IsAgent")]
     [Route("api/[controller]")]
     [ApiController]
     public class AccountsController : Controller
@@ -22,16 +21,18 @@ namespace kore_api.Controllers
             _accountsRepository = accountsRepository;
         }
 
-        // GET: api/accounts
+        // GET: api/account
         [HttpGet]
-        public IEnumerable<Account> GetAll()
+		[Authorize(Policy = "IsAgent,IsAdmin")]
+		public IEnumerable<Account> GetAll()
         {
             return _accountsRepository.GetAccounts();
         }
 
         // GET: api/accounts/id
         [HttpGet("{id}")]
-        public Account Get(int id)
+		[Authorize(Policy = "IsAgent,IsAdmin")]
+		public Account Get(int id)
         {
             return _accountsRepository.GetAccount(id);
         }
@@ -39,7 +40,8 @@ namespace kore_api.Controllers
         // POST: api/accounts/id
         // updates the status and date modified rows
         [HttpPost("{id}")]
-        public bool UpdateAccount(int id, [FromBody] int status)
+		[Authorize(Policy = "IsAdmin")]
+		public bool UpdateAccount(int id, [FromBody] int status)
         {
             return _accountsRepository.UpdateAccount(id, status);
         }
