@@ -75,6 +75,7 @@ namespace kore_api
             //Repos
             services.AddScoped<IAccountsRepository, AccountsRespository>();
             services.AddScoped<ITasksRepository, TasksRepository>();
+			services.AddScoped<IUserRepository, UserRepository>();
 
             // Add S3 to the ASP.NET Core dependency injection framework.
             services.AddAWSService<Amazon.S3.IAmazonS3>();
