@@ -15,27 +15,25 @@ namespace kore_api.Controllers
     [ApiController]
     public class AccountsController : Controller
     {
-        private readonly koredbContext _context;
+        private readonly IAccountsRepository _accountsRepository;
 
-        public AccountsController(koredbContext context)
+        public AccountsController(IAccountsRepository accountsRepository)
         {
-            _context = context;
+            _accountsRepository = accountsRepository;
         }
 
         // GET: api/accounts
         [HttpGet]
         public IEnumerable<Account> GetAll()
         {
-            AccountsRespository accRepo = new AccountsRespository(_context);
-            var accounts = accRepo.GetAccounts();
-            return accounts;
+            return _accountsRepository.GetAccounts();
         }
 
         // GET: api/accounts/id
         [HttpGet("{id}")]
         public Account Get(int id)
         {
-            return new AccountsRespository(_context).GetAccount(id);
+            return _accountsRepository.GetAccount(id);
         }
 
         // POST: api/accounts/id
@@ -43,8 +41,7 @@ namespace kore_api.Controllers
         [HttpPost("{id}")]
         public bool UpdateAccount(int id, [FromBody] int status)
         {
-            return new AccountsRespository(_context).UpdateAccount(id, status);
+            return _accountsRepository.UpdateAccount(id, status);
         }
-
     }
 }
