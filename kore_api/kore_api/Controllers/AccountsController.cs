@@ -29,17 +29,11 @@ namespace kore_api.Controllers
             return _accountsRepository.GetAccounts();
         }
 
-        // GET: api/accounts/id
-        [HttpGet("{id}")]
-<<<<<<< HEAD
-		[Authorize(Policy = "IsAdminOrAgent")]
-		public Account Get(int id)
-=======
-        [Authorize(Policy = "IsAgent,IsAdmin")]
+
+        [Authorize(Policy = "IsAdminOrAgent")]
         public async Task<IActionResult> Get([FromRoute] int id)
->>>>>>> 7194884ec1c2d6a4c1ff58f00ecb28ea918ff428
-        {
-            if (!ModelState.IsValid)
+		{
+			if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
