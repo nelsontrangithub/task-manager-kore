@@ -29,7 +29,7 @@ namespace kore_api.Controllers
             return _accountsRepository.GetAccounts();
         }
 
-
+        [HttpGet("{id}")]
         [Authorize(Policy = "IsAdminOrAgent")]
         public async Task<IActionResult> Get([FromRoute] int id)
 		{
