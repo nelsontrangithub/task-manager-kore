@@ -31,6 +31,11 @@ namespace kore_api.Repositories
             return task;
         }
 
+        public Task<Task> GetTaskByUser(int userID)
+        {
+            return _context.Task.Where(t => t.OwnerId == userID).FirstOrDefaultAsync();
+        }
+
         public async Task<bool> Update(int id, int status)
         {
             var result = await _context.Task.Where(t => t.Id == id).FirstOrDefaultAsync();

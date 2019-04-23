@@ -51,6 +51,25 @@ namespace kore_api.Controllers
             return Ok(task);
         }
 
+        //GET: api/Tasks/user/5
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetByUser([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var task = await _tasksRepository.GetTaskByUser(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(task);
+        }
+
         // PUT: api/Tasks/5
         [HttpPut("{id}")]
 		[Authorize(Policy = "IsAdminOrAgent")]
