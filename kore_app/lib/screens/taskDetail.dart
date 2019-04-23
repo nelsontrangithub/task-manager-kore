@@ -9,7 +9,8 @@ class TaskDetailState extends State<TaskDetail> {
  
   initState() {
     super.initState();
-     if (widget.task.isCompleted = true){
+    print(widget.task.isCompleted);
+     if (widget.task.isCompleted == true){
        text = "Mark Not Complete";
      } else {
        text = 'Mark Complete';
@@ -77,7 +78,6 @@ class TaskDetailState extends State<TaskDetail> {
       setState(() {
         text = 'Mark Not Completed';
       });
-      print('markCompleted');
     }
 
     void markNotCompleted(Task task){
@@ -85,7 +85,6 @@ class TaskDetailState extends State<TaskDetail> {
       setState(() {
         text = 'Mark Completed';
       });
-      print('markNotCompleted');
     }
 
     return new Container(

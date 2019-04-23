@@ -14,6 +14,7 @@ class ContractDetailState extends State<ContractDetail> {
   var text;
   var color;
   var icon;
+  var completeIcon;
 
   //test
   RestDatasource datasource = new RestDatasource();
@@ -114,6 +115,7 @@ class ContractDetailState extends State<ContractDetail> {
             child: new Text((index + 1).toString()),
             foregroundColor: Colors.white,
           ),
+          trailing: Icon(completeIcon),
           title: new Text(task.title),
           subtitle: new Text('subtitle'),
           onTap: () {
@@ -142,20 +144,13 @@ class ContractDetailState extends State<ContractDetail> {
       ],
     );
   }
-
-/*
-  toggleCompleted(Task task) {
-    task.isCompleted = !task.isCompleted;
-    print(task.isCompleted);
-  }
-*/
-
     void markCompleted(Task task){
       task.isCompleted = true;
       setState(() {
-        text = 'Not Completed';
+        text = 'Mark Completed';
         color = Colors.red[800];
         icon = Icons.cancel;
+        completeIcon = Icons.done;
       });
       print('markCompleted');
     }
@@ -166,17 +161,15 @@ class ContractDetailState extends State<ContractDetail> {
         text = 'Completed';
         color = Colors.green[800];
         icon = Icons.done;
+        completeIcon = Icons.refresh;
       });
       print('markNotCompleted');
     }
-
 }
 
 class ContractDetail extends StatefulWidget {
   final Contract contract;
-
   const ContractDetail({Key key, this.contract}) : super(key: key);
-
   @override
   ContractDetailState createState() => new ContractDetailState();
 }
