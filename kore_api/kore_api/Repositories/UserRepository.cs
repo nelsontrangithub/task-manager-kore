@@ -31,7 +31,6 @@ namespace kore_api.Repositories
 
 			return true;
 		}
-
 		public int GetUserId(string email)
 		{
 			var user = context.User.Where(u => u.Email == email).FirstOrDefault();
@@ -45,7 +44,7 @@ namespace kore_api.Repositories
 
 		public bool UserExists(string email)
 		{
-			if (context.User.Any(u => u.Email == email))
+			if (context.User.Where(u => u.Email == email).FirstOrDefault() != null)
 			{
 				return true;
 			}
