@@ -25,14 +25,16 @@ namespace kore_api.Controllers
 
         // GET: api/Tasks
         [HttpGet]
-        public IEnumerable<Task> GetTasks()
+		[Authorize(Policy = "IsAdminOrAgent")]
+		public IEnumerable<Task> GetTasks()
         {
             return _tasksRepository.GetTasks();
         }
 
         // GET: api/Tasks/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetTask([FromRoute] int id)
+		[Authorize(Policy = "IsAdminOrAgent")]
+		public async Task<IActionResult> GetTask([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -49,9 +51,29 @@ namespace kore_api.Controllers
             return Ok(task);
         }
 
+        //GET: api/Tasks/user/5
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetByUser([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var task = await _tasksRepository.GetTaskByUser(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(task);
+        }
+
         // PUT: api/Tasks/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTask([FromRoute] int id, [FromBody] int status)
+		[Authorize(Policy = "IsAdminOrAgent")]
+		public async Task<IActionResult> PutTask([FromRoute] int id, [FromBody] int status)
         {
             if (!ModelState.IsValid)
             {
@@ -71,7 +93,8 @@ namespace kore_api.Controllers
         // DELETE: api/Tasks/5
         //Admin only
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTask([FromRoute] int id)
+		[Authorize(Policy = "IsAdmin")]
+		public async Task<IActionResult> DeleteTask([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {

@@ -9,7 +9,8 @@ namespace kore_api.Repositories
     public interface IAccountsRepository
     {
         IEnumerable<Account> GetAccounts();
-        Account GetAccount(int id);
-        bool UpdateAccount(int id, int status);
+        Task<Account> GetAccount(int id);
+        Task<bool> Update(int id, int status);
+        Task<bool> Delete(int id);
     }
 }
