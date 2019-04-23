@@ -49,6 +49,24 @@ namespace kore_api.Controllers
             return Ok(task);
         }
 
+        [HttpGet("user/{id}")]
+        public async Task<IActionResult> GetByUser([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var task = await _tasksRepository.GetTaskByUser(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(task);
+        }
+
         // PUT: api/Tasks/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTask([FromRoute] int id, [FromBody] int status)
