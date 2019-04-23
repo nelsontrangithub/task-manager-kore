@@ -113,12 +113,6 @@ class TaskDetailState extends State<TaskDetail> {
                        Text(text),
                     onPressed: () {
                       task.isCompleted ? markNotCompleted(task) : markCompleted(task);
-                  
-/*onPressed: () {
-            // Navigator.pushNamed(context, '/contractList');
-            state is! LoginLoading ? _onLoginButtonPressed() : null;
-          }, */
-
                     },
                   ),
                 ],
