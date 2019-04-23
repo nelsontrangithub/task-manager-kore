@@ -7,6 +7,7 @@ using kore_api.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Task = kore_api.koredb.Task;
 
 namespace kore_api.Controllers
 {
@@ -22,11 +23,64 @@ namespace kore_api.Controllers
             _tasksRepository = tasksRepository;
         }
 
-        [HttpGet("{userID}")]
-        public IQueryable<IEnumerable<Taskmembership>> GetUserTasks(int userID)
+        // GET: api/Tasks
+        [HttpGet]
+        public IEnumerable<Task> GetTasks()
         {
-            var result = _tasksRepository.GetTasks(userID);
-            return result;
+            return _tasksRepository.GetTasks();
+        }
+
+        // GET: api/Tasks/5
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTask([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var task = await _tasksRepository.GetTask(id);
+
+            if (task == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(task);
+        }
+
+        // PUT: api/Tasks/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutTask([FromRoute] int id, [FromBody] int status)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _tasksRepository.Update(id, status);
+
+            if (result == true)
+            {
+                return Ok(result);
+            }
+
+            return NoContent();
+        }
+
+        // DELETE: api/Tasks/5
+        //Admin only
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTask([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _tasksRepository.Delete(id);
+
+            return Ok(result);
         }
     }
 }

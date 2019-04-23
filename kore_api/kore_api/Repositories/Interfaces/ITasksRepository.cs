@@ -9,8 +9,10 @@ namespace kore_api.Repositories.Interfaces
 {
     public interface ITasksRepository
     {
-        IQueryable<IEnumerable<Taskmembership>> GetTasks(int userID);
-        Task GetTask();
-        bool UpdateTask();
+        IEnumerable<Task> GetTasks();
+        Task<Task> GetTask(int id);
+        Task<bool> Update(int id, int status);
+        Task<bool> Delete(int id);
+        bool TaskExists(int id);
     }
 }

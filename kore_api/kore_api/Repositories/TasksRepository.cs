@@ -1,5 +1,6 @@
 ﻿using kore_api.koredb;
 using kore_api.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,33 +19,59 @@ namespace kore_api.Repositories
             _context = context;
         }
 
-        public koredb.Task GetTask()
+        // Get all tasks
+        public IEnumerable<Task> GetTasks()
         {
-            throw new NotImplementedException();
+            return _context.Task;
         }
 
-        //// Get all tasks assigned to user
-        //public async Task<Taskmembership> GetTasks(int userID)
-        //{
-        //    var result = await _context.Taskmembership
-        //        .Include(i => i.Task)
-        //        .Where(i => i.UserId == userID).SingleOrDefaultAsync();
-
-        //    return result;
-        //}
-
-        // Get all tasks assigned to user
-        public IQueryable<IEnumerable<Taskmembership>> GetTasks(int userID)
+        public Task<Task> GetTask(int id)
         {
-            //var result = _context.Taskmembership.Include(w => w.Task)
-            //    .Where(i => i.UserId == userID).ToList();
-            var result = _context.Task.Include(i => i.Taskmembership).Select(i => i.Taskmembership.Where(p => p.UserId == userID));
-            return result;
+            var task = _context.Task.FindAsync(id);
+            return task;
         }
 
-        public bool UpdateTask()
+        public async Task<bool> Update(int id, int status)
         {
-            throw new NotImplementedException();
+            var result = await _context.Task.Where(t => t.Id == id).FirstOrDefaultAsync();
+
+            try
+            {
+                result.Status = status;
+                _context.Update(result);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> Delete(int id)
+        {
+            var task = await _context.Task.FindAsync(id);
+
+            if (task == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                _context.Task.Remove(task);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public bool TaskExists(int id)
+        {
+            return _context.Task.Any(e => e.Id == id);
         }
     }
 }
