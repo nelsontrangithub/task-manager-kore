@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using kore_api.koredb;
+using Microsoft.EntityFrameworkCore;
 
 namespace kore_api.Repositories
 {
@@ -15,10 +16,9 @@ namespace kore_api.Repositories
             _context = context;
         }
 
-        public Account GetAccount(int id)
+        public Task<Account> GetAccount(int id)
         {
-            var account = _context.Account.Where(a => a.Id == id).FirstOrDefault();
-            return account;
+            return _context.Account.FindAsync(id);
         }
 
         public IEnumerable<Account> GetAccounts()
@@ -27,21 +27,43 @@ namespace kore_api.Repositories
             return accounts;
         }
 
-        public bool UpdateAccount(int id, int status)
+        public async Task<bool> Update(int id, int status)
         {
-            var account = _context.Account.Where(a => a.Id == id).FirstOrDefault();
-            account.Status = status;
-            account.DateModified = DateTime.Now;
+            var result = await _context.Account.Where(t => t.Id == id).FirstOrDefaultAsync();
+
             try
             {
-                _context.Update(account);
-                _context.SaveChanges();
+                result.Status = status;
+                result.DateModified = DateTime.Now;
+                _context.Update(result);
+                await _context.SaveChangesAsync();
+                return true;
             }
             catch (Exception)
             {
                 return false;
             }
-            return true;
+        }
+
+        public async Task<bool> Delete(int id)
+        {
+            var account = await _context.Account.FindAsync(id);
+
+            if (account == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                _context.Account.Remove(account);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
     }
 }
