@@ -21,7 +21,7 @@ namespace kore_api.Repositories
 			User user = new User
 			{
 				Email = userVM.Email,
-				Name = userVM.Email,
+				Name = userVM.FirstName + " " + userVM.LastName,
 				FirstName = userVM.FirstName,
 				LastName = userVM.LastName
 			};
@@ -32,19 +32,24 @@ namespace kore_api.Repositories
 			return true;
 		}
 
-		public User GetUser(int id)
+		public int GetUserId(string email)
 		{
-			throw new NotImplementedException();
+			var user = context.User.Where(u => u.Email == email).FirstOrDefault();
+			return user.Id;
 		}
 
 		public IEnumerable<User> GetUsers()
 		{
-			throw new NotImplementedException();
+			return context.User.ToList();
 		}
 
-		public bool UserExists()
+		public bool UserExists(string email)
 		{
-			throw new NotImplementedException();
+			if (context.User.Any(u => u.Email == email))
+			{
+				return true;
+			}
+			return false;
 		}
 	}
 }
