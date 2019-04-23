@@ -123,13 +123,13 @@ class ContractDetailState extends State<ContractDetail> {
           caption: 'Complete',
           color: Colors.green[800],
           icon: Icons.done,
-          onTap: () => markComplete(task),
+          onTap: () => toggleComplete(task),
         ),
       ],
     );
   }
 
-  markComplete(Task task) {
+  toggleComplete(Task task) {
     task.isCompleted = !task.isCompleted;
     print(task.isCompleted);
   }
