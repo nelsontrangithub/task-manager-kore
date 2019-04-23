@@ -5,11 +5,16 @@ import 'package:kore_app/models/task.dart';
 import 'package:kore_app/data/signin.dart';
 import 'package:kore_app/screens/taskDetail.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import '../models/task.dart';
 
 class ContractDetailState extends State<ContractDetail> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _tasks = <Task>[];
   int _count = 0;
+  var text;
+  var color;
+  var icon;
+  var completeIcon;
 
   //test
   RestDatasource datasource = new RestDatasource();
@@ -18,7 +23,16 @@ class ContractDetailState extends State<ContractDetail> {
   //good place for dummydata loading
   @override
   initState() {
+   
     super.initState();
+    
+    /*
+    if (task){
+       text = "Mark Not Complete";
+     } else {
+       text = 'Mark Complete';
+     }
+    */
 
     /*dummy data*/
     _tasks.add(Task(1, "Task 1", false, "This is the description",
@@ -79,7 +93,6 @@ class ContractDetailState extends State<ContractDetail> {
         // padding: const EdgeInsets.symmetric(vertical: 25.0),
         itemBuilder: (context, i) {
       // if (i.isOdd) return Divider();
-
       // final index = i ~/ 2;
       if (_tasks.length > i) {
         return _buildRow(_tasks[i], i);
@@ -102,6 +115,7 @@ class ContractDetailState extends State<ContractDetail> {
             child: new Text((index + 1).toString()),
             foregroundColor: Colors.white,
           ),
+          trailing: Icon(completeIcon),
           title: new Text(task.title),
           subtitle: new Text('subtitle'),
           onTap: () {
@@ -120,26 +134,42 @@ class ContractDetailState extends State<ContractDetail> {
           icon: Icons.file_upload,
         ),
         new IconSlideAction(
-          caption: 'Complete',
-          color: Colors.green[800],
-          icon: Icons.done,
-          onTap: () => markComplete(task),
+          caption: text,
+          color: color,
+          icon: icon,
+          onTap: () {
+            task.isCompleted ? markNotCompleted(task) : markCompleted(task);
+          },
         ),
       ],
     );
   }
+    void markCompleted(Task task){
+      task.isCompleted = true;
+      setState(() {
+        text = 'Mark Completed';
+        color = Colors.red[800];
+        icon = Icons.cancel;
+        completeIcon = Icons.done;
+      });
+      print('markCompleted');
+    }
 
-  markComplete(Task task) {
-    task.isCompleted = !task.isCompleted;
-    print(task.isCompleted);
-  }
+    void markNotCompleted(Task task){
+      task.isCompleted = false;
+      setState(() {
+        text = 'Completed';
+        color = Colors.green[800];
+        icon = Icons.done;
+        completeIcon = Icons.refresh;
+      });
+      print('markNotCompleted');
+    }
 }
 
 class ContractDetail extends StatefulWidget {
   final Contract contract;
-
   const ContractDetail({Key key, this.contract}) : super(key: key);
-
   @override
   ContractDetailState createState() => new ContractDetailState();
 }
