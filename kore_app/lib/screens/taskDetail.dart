@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:intl/intl.dart';
+import '../models/task.dart';
 
 class TaskDetailState extends State<TaskDetail> {
   initState() {
     super.initState();
 
+    
     
   }
 
@@ -18,7 +20,7 @@ class TaskDetailState extends State<TaskDetail> {
           children: <Widget>[
             _buildTaskHeader(),
             _buildTaskDescription(),
-            _buildTaskEnd()
+            _buildTaskEnd(widget.task),
           ],
         ));
   }
@@ -59,13 +61,16 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  Widget _buildTaskEnd() {
+  Widget _buildTaskEnd(Task task) {
 
     var now = widget.task.dueDate;
     var formatter = new DateFormat('yyyy-MM-dd');
     String formatted = formatter.format(now);
-    print(formatted);
 
+    void toggleCompleted(Task task){
+      task.isCompleted = !task.isCompleted;
+      print(task.isCompleted);
+    }
 
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
@@ -75,7 +80,7 @@ class TaskDetailState extends State<TaskDetail> {
           children: <Widget>[
             ListTile(
               leading: Icon(Icons.file_upload, color: KorePrimaryColor),
-              title: Text("Due Date: " + formatted),
+              title: Text("Due: " + formatted),
               subtitle: Text('Date Created:'),
             ),
             ButtonTheme.bar(
@@ -84,11 +89,15 @@ class TaskDetailState extends State<TaskDetail> {
                 children: <Widget>[
                   FlatButton(
                     child: const Text('Upload File'),
-                    onPressed: () {/* ... */},
+                    onPressed: () {
+                      
+                    },
                   ),
                   FlatButton(
-                    child: const Text('Task Done'),
-                    onPressed: () {/* ... */},
+                    child: const Text('Mark Complete'),
+                    onPressed: () {
+                      toggleCompleted(task);
+                    },
                   ),
                 ],
               ),
