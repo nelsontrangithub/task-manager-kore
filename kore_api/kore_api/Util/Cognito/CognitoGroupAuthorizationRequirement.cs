@@ -8,9 +8,9 @@ namespace kore_api.Util.Cognito
 {
 	public class CognitoGroupAuthorizationRequirement: IAuthorizationRequirement
 	{
-		public string CognitoGroup { get; set; }
+		public string[] CognitoGroup { get; set; }
 
-		public CognitoGroupAuthorizationRequirement(string cognitoGroup)
+		public CognitoGroupAuthorizationRequirement(string[] cognitoGroup)
 		{
 			CognitoGroup = cognitoGroup;
 		}

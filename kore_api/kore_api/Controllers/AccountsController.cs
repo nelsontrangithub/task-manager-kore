@@ -23,7 +23,7 @@ namespace kore_api.Controllers
 
         // GET: api/account
         [HttpGet]
-		[Authorize(Policy = "IsAgent,IsAdmin")]
+		[Authorize(Policy = "IsAdminOrAgent")]
 		public IEnumerable<Account> GetAll()
         {
             return _accountsRepository.GetAccounts();
@@ -31,7 +31,7 @@ namespace kore_api.Controllers
 
         // GET: api/accounts/id
         [HttpGet("{id}")]
-		[Authorize(Policy = "IsAgent,IsAdmin")]
+		[Authorize(Policy = "IsAdminOrAgent")]
 		public Account Get(int id)
         {
             return _accountsRepository.GetAccount(id);

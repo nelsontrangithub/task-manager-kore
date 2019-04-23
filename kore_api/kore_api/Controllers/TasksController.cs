@@ -25,7 +25,7 @@ namespace kore_api.Controllers
 
         // GET: api/Tasks
         [HttpGet]
-		[Authorize(Policy = "IsAgent,IsAdmin")]
+		[Authorize(Policy = "IsAdminOrAgent")]
 		public IEnumerable<Task> GetTasks()
         {
             return _tasksRepository.GetTasks();
@@ -33,7 +33,7 @@ namespace kore_api.Controllers
 
         // GET: api/Tasks/5
         [HttpGet("{id}")]
-		[Authorize(Policy = "IsAgent,IsAdmin")]
+		[Authorize(Policy = "IsAdminOrAgent")]
 		public async Task<IActionResult> GetTask([FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -53,7 +53,7 @@ namespace kore_api.Controllers
 
         // PUT: api/Tasks/5
         [HttpPut("{id}")]
-		[Authorize(Policy = "IsAgent,IsAdmin")]
+		[Authorize(Policy = "IsAdminOrAgent")]
 		public async Task<IActionResult> PutTask([FromRoute] int id, [FromBody] int status)
         {
             if (!ModelState.IsValid)

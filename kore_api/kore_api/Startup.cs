@@ -31,12 +31,16 @@ namespace kore_api
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
+			string[] arr = { "" };
+
 			services.AddAuthorization(options =>
 			{
 				options.AddPolicy("IsAdmin", policy =>
-					policy.Requirements.Add(new CognitoGroupAuthorizationRequirement("Admin")));
+					policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Admin" })));
 				options.AddPolicy("IsAgent", policy =>
-					policy.Requirements.Add(new CognitoGroupAuthorizationRequirement("Agent")));
+					policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Agent" })));
+			options.AddPolicy("IsAdminOrAgent", policy =>
+				policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Admin", "Agent" })));
 			});
 
 			services.AddSingleton<IAuthorizationHandler, CognitoGroupAuthorizationHandler>();
