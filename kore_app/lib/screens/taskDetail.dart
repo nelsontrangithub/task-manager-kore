@@ -5,10 +5,15 @@ import 'package:intl/intl.dart';
 import '../models/task.dart';
 
 class TaskDetailState extends State<TaskDetail> {
+ var text;
+ 
   initState() {
     super.initState();
-
-    
+     if (widget.task.isCompleted = true){
+       text = "Mark Not Complete";
+     } else {
+       text = 'Mark Complete';
+     }
     
   }
 
@@ -67,9 +72,20 @@ class TaskDetailState extends State<TaskDetail> {
     var formatter = new DateFormat('yyyy-MM-dd');
     String formatted = formatter.format(now);
 
-    void toggleCompleted(Task task){
-      task.isCompleted = !task.isCompleted;
-      print(task.isCompleted);
+    void markCompleted(Task task){
+      task.isCompleted = true;
+      setState(() {
+        text = 'Mark Not Completed';
+      });
+      print('markCompleted');
+    }
+
+    void markNotCompleted(Task task){
+      task.isCompleted = false;
+      setState(() {
+        text = 'Mark Completed';
+      });
+      print('markNotCompleted');
     }
 
     return new Container(
@@ -88,15 +104,21 @@ class TaskDetailState extends State<TaskDetail> {
               child: ButtonBar(
                 children: <Widget>[
                   FlatButton(
-                    child: const Text('Upload File'),
-                    onPressed: () {
-                      
+                    child:  Text('Upload File'),
+                    onPressed: () { 
                     },
                   ),
                   FlatButton(
-                    child: const Text('Mark Complete'),
+                    child: 
+                       Text(text),
                     onPressed: () {
-                      toggleCompleted(task);
+                      task.isCompleted ? markNotCompleted(task) : markCompleted(task);
+                  
+/*onPressed: () {
+            // Navigator.pushNamed(context, '/contractList');
+            state is! LoginLoading ? _onLoginButtonPressed() : null;
+          }, */
+
                     },
                   ),
                 ],
