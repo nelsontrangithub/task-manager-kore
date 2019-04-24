@@ -1,4 +1,5 @@
 ﻿using kore_api.koredb;
+using kore_api.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,9 @@ namespace kore_api.Repositories.Interfaces
     public interface ITasksRepository
     {
         IEnumerable<Task> GetTasks();
+        IEnumerable<TaskVM> GetUserAssignedTasks(int userID);
         Task<Task> GetTask(int id);
-        Task<Task> GetTaskByUser(int userID);
+        Task<Task> GetTaskByOwner(int userID);
         Task<bool> Update(int id, int status);
         Task<bool> Delete(int id);
         bool TaskExists(int id);

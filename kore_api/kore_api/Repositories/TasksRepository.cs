@@ -1,5 +1,6 @@
 ﻿using kore_api.koredb;
 using kore_api.Repositories.Interfaces;
+using kore_api.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,13 +26,42 @@ namespace kore_api.Repositories
             return _context.Task;
         }
 
+        public IEnumerable<TaskVM> GetUserAssignedTasks(int userID)
+        {
+            var query = from x in _context.Taskmembership
+                        join y in _context.Task on x.TaskId equals y.Id
+                        where x.UserId.Equals(userID)
+                        select new TaskVM
+                        {
+                            Id = x.Id,
+                            TaskId = x.TaskId,
+                            AccountId = x.AccountId,
+                            UserId = x.UserId,
+                            OrgId = x.OrgId,
+                            DateCreated = x.DateCreated,
+                            DateModified = x.DateModified,
+                            Status = x.Status,
+                            CreatedBy = x.CreatedBy,
+                            ModifiedBy = x.ModifiedBy,
+                            OwnerId = y.OwnerId,
+                            TaskStatus = y.Status,
+                            Description = y.Description,
+                            DueDate = y.DueDate,
+                            CompletedOn = y.CompletedOn,
+                            Subject = y.Subject,
+                            Department = y.Department
+                        };
+
+            return query;
+        }
+
         public Task<Task> GetTask(int id)
         {
             var task = _context.Task.FindAsync(id);
             return task;
         }
 
-        public Task<Task> GetTaskByUser(int userID)
+        public Task<Task> GetTaskByOwner(int userID)
         {
             return _context.Task.Where(t => t.OwnerId == userID).FirstOrDefaultAsync();
         }

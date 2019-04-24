@@ -31,6 +31,27 @@ namespace kore_api.Controllers
             return _tasksRepository.GetTasks();
         }
 
+        //GET: api/Tasks/user/5
+        [HttpGet("user/{id}")]
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IActionResult GetUserAssignedTasks([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = _tasksRepository.GetUserAssignedTasks(id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+
         // GET: api/Tasks/5
         [HttpGet("{id}")]
 		[Authorize(Policy = "IsAdminOrAgent")]
@@ -42,26 +63,6 @@ namespace kore_api.Controllers
             }
 
             var task = await _tasksRepository.GetTask(id);
-
-            if (task == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(task);
-        }
-
-        //GET: api/Tasks/user/5
-        [HttpGet("user/{id}")]
-        [Authorize(Policy = "IsAdminOrAgent")]
-        public async Task<IActionResult> GetByUser([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var task = await _tasksRepository.GetTaskByUser(id);
 
             if (task == null)
             {
