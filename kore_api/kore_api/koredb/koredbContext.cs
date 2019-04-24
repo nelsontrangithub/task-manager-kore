@@ -29,7 +29,17 @@ namespace kore_api.koredb
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=password;database=koredb");
+                string ConnectionString = null;
+                if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+                {
+                    ConnectionString = "server=localhost;port=3306;user=root;password=password;database=koredb";
+                }
+                else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+                {
+                    ConnectionString = "server=koretaskmanagerrdsinstance.cya4cpibjenz.us-east-2.rds.amazonaws.com;port=3306;user=koreadmin;password=koressd2019;database=task_manager";
+                }
+                if(ConnectionString != null)
+                    optionsBuilder.UseMySQL(ConnectionString);
             }
         }
 
