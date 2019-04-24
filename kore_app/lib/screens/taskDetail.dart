@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:intl/intl.dart';
+import '../models/task.dart';
 
 class TaskDetailState extends State<TaskDetail> {
+ var text;
+ 
   initState() {
     super.initState();
-
+    print(widget.task.isCompleted);
+     if (widget.task.isCompleted == true){
+       text = "Mark Not Complete";
+     } else {
+       text = 'Mark Complete';
+     }
     
   }
 
@@ -18,7 +26,7 @@ class TaskDetailState extends State<TaskDetail> {
           children: <Widget>[
             _buildTaskHeader(),
             _buildTaskDescription(),
-            _buildTaskEnd()
+            _buildTaskEnd(widget.task),
           ],
         ));
   }
@@ -59,13 +67,25 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  Widget _buildTaskEnd() {
+  Widget _buildTaskEnd(Task task) {
 
     var now = widget.task.dueDate;
     var formatter = new DateFormat('yyyy-MM-dd');
     String formatted = formatter.format(now);
-    print(formatted);
 
+    void markCompleted(Task task){
+      task.isCompleted = true;
+      setState(() {
+        text = 'Mark Not Completed';
+      });
+    }
+
+    void markNotCompleted(Task task){
+      task.isCompleted = false;
+      setState(() {
+        text = 'Mark Completed';
+      });
+    }
 
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
@@ -75,7 +95,7 @@ class TaskDetailState extends State<TaskDetail> {
           children: <Widget>[
             ListTile(
               leading: Icon(Icons.file_upload, color: KorePrimaryColor),
-              title: Text("Due Date: " + formatted),
+              title: Text("Due: " + formatted),
               subtitle: Text('Date Created:'),
             ),
             ButtonTheme.bar(
@@ -83,12 +103,16 @@ class TaskDetailState extends State<TaskDetail> {
               child: ButtonBar(
                 children: <Widget>[
                   FlatButton(
-                    child: const Text('Upload File'),
-                    onPressed: () {/* ... */},
+                    child:  Text('Upload File'),
+                    onPressed: () { 
+                    },
                   ),
                   FlatButton(
-                    child: const Text('Task Done'),
-                    onPressed: () {/* ... */},
+                    child: 
+                       Text(text),
+                    onPressed: () {
+                      task.isCompleted ? markNotCompleted(task) : markCompleted(task);
+                    },
                   ),
                 ],
               ),

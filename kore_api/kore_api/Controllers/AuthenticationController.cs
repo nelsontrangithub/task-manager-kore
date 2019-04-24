@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Amazon;
 using Amazon.CognitoIdentityProvider;
 using Amazon.CognitoIdentityProvider.Model;
+using kore_api.Repositories;
+using kore_api.Repositories.Interfaces;
 using kore_api.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,8 +18,17 @@ namespace kore_api.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private const string _clientId = "6fba0vhhhemve6bq3sm5evd0do";
+		private readonly IUserRepository _userRepository;
+
+		private const string _defaultRole = "Agent";
+		private const string _poolId = "us-east-2_G26JTdg5h";
+		private const string _clientId = "6fba0vhhhemve6bq3sm5evd0do";
         private readonly RegionEndpoint _region = RegionEndpoint.USEast2;
+
+		public AuthenticationController(IUserRepository _userRepository)
+		{
+			this._userRepository = _userRepository;
+		}
 
         [HttpPost]
         [Route("api/register")]
@@ -24,7 +36,7 @@ namespace kore_api.Controllers
         {
             var cognito = new AmazonCognitoIdentityProviderClient(_region);
 
-            var request = new SignUpRequest
+            var signUpRequest = new SignUpRequest
             {
                 ClientId = _clientId,
                 Password = user.Password,
@@ -36,9 +48,23 @@ namespace kore_api.Controllers
                 Name = "email",
                 Value = user.Email
             };
-            request.UserAttributes.Add(emailAttribute);
+			signUpRequest.UserAttributes.Add(emailAttribute);
+            
 
-            var response = await cognito.SignUpAsync(request);
+			var addToGroupRequest = new AdminAddUserToGroupRequest
+			{
+				GroupName = _defaultRole,
+				Username = user.Username,
+				UserPoolId = _poolId
+			};
+
+			var signUpResponse = await cognito.SignUpAsync(signUpRequest);
+			var addToGroupResponse = await cognito.AdminAddUserToGroupAsync(addToGroupRequest);
+
+			if (signUpResponse.HttpStatusCode == HttpStatusCode.OK)
+			{
+				_userRepository.CreateUser(user);
+			}
 
             return Ok();
         }
@@ -51,7 +77,7 @@ namespace kore_api.Controllers
 
             var request = new AdminInitiateAuthRequest
             {
-                UserPoolId = "us-east-2_G26JTdg5h",
+                UserPoolId = _poolId,
                 ClientId = _clientId,
                 AuthFlow = AuthFlowType.ADMIN_NO_SRP_AUTH
             };
@@ -59,7 +85,11 @@ namespace kore_api.Controllers
             request.AuthParameters.Add("USERNAME", user.Username);
             request.AuthParameters.Add("PASSWORD", user.Password);
 
-            var response = await cognito.AdminInitiateAuthAsync(request);
+			if (!_userRepository.UserExists(user.Username))
+			{
+				return NotFound("User not found");
+			}
+			var response = await cognito.AdminInitiateAuthAsync(request);
 
             return Ok(response.AuthenticationResult.IdToken);
         }
