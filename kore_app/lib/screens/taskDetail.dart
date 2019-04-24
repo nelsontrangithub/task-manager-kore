@@ -6,14 +6,17 @@ import '../models/task.dart';
 
 class TaskDetailState extends State<TaskDetail> {
  var text;
+ var textcolor;
  
   initState() {
     super.initState();
     print(widget.task.isCompleted);
      if (widget.task.isCompleted == true){
        text = "Mark Not Complete";
+       textcolor = Colors.redAccent;
      } else {
        text = 'Mark Complete';
+       textcolor = Colors.green[800];
      }
   }
 
@@ -77,9 +80,11 @@ void toggleCompleted(Task task){
   task.isCompleted = !task.isCompleted;
   setState(() {
       if (task.isCompleted == true){
-        text = 'Mark Not Complete';
+        text = 'Status: Not Complete';
+        textcolor = Colors.redAccent;
       } else{
-        text = 'Mark Complete';
+        text = 'Status: Complete';
+        textcolor = Colors.green[800];
       }
       task.setStatus();
     });
@@ -109,6 +114,7 @@ void toggleCompleted(Task task){
                   FlatButton(
                     child: 
                        Text(text),
+                       textColor: textcolor,
                     onPressed: () {
                       toggleCompleted(task);
                     },
