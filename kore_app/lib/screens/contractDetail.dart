@@ -134,9 +134,9 @@ class ContractDetailState extends State<ContractDetail> {
           icon: Icons.file_upload,
         ),
         new IconSlideAction(
-          caption: text,
-          color: color,
-          icon: icon,
+          caption: task.label,
+          color: task.color,
+          icon: task.icon,
           onTap: () {
             task.isCompleted ? markNotCompleted(task) : markCompleted(task);
           },
@@ -146,24 +146,22 @@ class ContractDetailState extends State<ContractDetail> {
   }
     void markCompleted(Task task){
       task.isCompleted = true;
+      
       setState(() {
-        text = 'Mark Completed';
-        color = Colors.red[800];
-        icon = Icons.cancel;
-        completeIcon = Icons.done;
+        task.setStatus();
       });
-      print('markCompleted');
+      
+      print(task.isCompleted);
     }
 
     void markNotCompleted(Task task){
       task.isCompleted = false;
+      
       setState(() {
-        text = 'Completed';
-        color = Colors.green[800];
-        icon = Icons.done;
-        completeIcon = Icons.refresh;
+        task.setStatus();
       });
-      print('markNotCompleted');
+      
+      print(task.isCompleted);
     }
 }
 
