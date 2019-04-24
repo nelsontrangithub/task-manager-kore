@@ -31,6 +31,6 @@ class UserRepository {
     /// read from keystore/keychain
     String tokenFromKeyChain = await storage.read(key: 'token');
     print(tokenFromKeyChain);
-    return token != tokenFromKeyChain;
+    return token == tokenFromKeyChain;
   }
 }
