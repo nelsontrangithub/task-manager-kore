@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using kore_api.koredb;
 using kore_api.Repositories.Interfaces;
+using kore_api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,9 @@ namespace kore_api.Controllers
             _tasksRepository = tasksRepository;
         }
 
+        /// <summary>
+        /// Gets all Tasks.
+        /// </summary>
         // GET: api/Tasks
         [HttpGet]
 		[Authorize(Policy = "IsAdminOrAgent")]
@@ -31,6 +35,20 @@ namespace kore_api.Controllers
             return _tasksRepository.GetTasks();
         }
 
+        /// <summary>
+        /// Gets all Tasks with memberships.
+        /// </summary>
+        // GET: api/Tasks/memberships
+        [HttpGet("memberships/")]
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IEnumerable<TaskVM> GetTaskMemberships()
+        {
+            return _tasksRepository.GetTaskMemberships();
+        }
+
+        /// <summary>
+        /// Gets Tasks assigned to a User
+        /// </summary>
         //GET: api/Tasks/user/5
         [HttpGet("user/{id}")]
         [Authorize(Policy = "IsAdminOrAgent")]
@@ -51,7 +69,9 @@ namespace kore_api.Controllers
             return Ok(result);
         }
 
-
+        /// <summary>
+        /// Gets Task by Id
+        /// </summary>
         // GET: api/Tasks/5
         [HttpGet("{id}")]
 		[Authorize(Policy = "IsAdminOrAgent")]
@@ -72,6 +92,9 @@ namespace kore_api.Controllers
             return Ok(task);
         }
 
+        /// <summary>
+        /// Update 'Status' of a Task by Id, 0 = Incomplete / 1 = Completed
+        /// </summary>
         // PUT: api/Tasks/5
         [HttpPut("{id}")]
 		[Authorize(Policy = "IsAdminOrAgent")]
@@ -92,6 +115,9 @@ namespace kore_api.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Assign a Task to a User
+        /// </summary>
         // PUT: api/Tasks/5
         [HttpPut("user/{id}")]
         [Authorize(Policy = "IsAdmin")]
@@ -112,6 +138,9 @@ namespace kore_api.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Delete a Task (Admin only)
+        /// </summary>
         // DELETE: api/Tasks/5
         //Admin only
         [HttpDelete("{id}")]

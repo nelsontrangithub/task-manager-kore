@@ -11,6 +11,7 @@ namespace kore_api.Repositories.Interfaces
     public interface ITasksRepository
     {
         IEnumerable<Task> GetTasks();
+        IEnumerable<TaskVM> GetTaskMemberships();
         IEnumerable<TaskVM> GetUserAssignedTasks(int userID);
         Task<Task> GetTask(int id);
         Task<Task> GetTaskByOwner(int userID);

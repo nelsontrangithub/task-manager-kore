@@ -15,6 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using kore_api.Util.Cognito;
 using Swashbuckle.AspNetCore.Swagger;
+using System.Reflection;
+using System.IO;
 
 namespace kore_api
 {
@@ -69,6 +71,10 @@ namespace kore_api
                 c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
                                 { "Bearer", Enumerable.Empty<string>() },
                             });
+                // Set the comments path for the Swagger JSON and UI.
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")

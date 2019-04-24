@@ -26,6 +26,36 @@ namespace kore_api.Repositories
             return _context.Task;
         }
 
+        // Get all taskmemberships
+        public IEnumerable<TaskVM> GetTaskMemberships()
+        {
+            var query = from x in _context.Taskmembership
+                        join y in _context.Task on x.TaskId equals y.Id
+                        select new TaskVM
+                        {
+                            Id = x.Id,
+                            TaskId = x.TaskId,
+                            AccountId = x.AccountId,
+                            UserId = x.UserId,
+                            OrgId = x.OrgId,
+                            DateCreated = x.DateCreated,
+                            DateModified = x.DateModified,
+                            Status = x.Status,
+                            CreatedBy = x.CreatedBy,
+                            ModifiedBy = x.ModifiedBy,
+                            OwnerId = y.OwnerId,
+                            TaskStatus = y.Status,
+                            Description = y.Description,
+                            DueDate = y.DueDate,
+                            CompletedOn = y.CompletedOn,
+                            Subject = y.Subject,
+                            Department = y.Department
+                        };
+
+            return query;
+        }
+
+        //Get tasks assigned to a user
         public IEnumerable<TaskVM> GetUserAssignedTasks(int userID)
         {
             var query = from x in _context.Taskmembership
@@ -55,12 +85,14 @@ namespace kore_api.Repositories
             return query;
         }
 
+        //Get task by ID
         public Task<Task> GetTask(int id)
         {
             var task = _context.Task.FindAsync(id);
             return task;
         }
 
+        //Get task by OwnerID
         public Task<Task> GetTaskByOwner(int userID)
         {
             return _context.Task.Where(t => t.OwnerId == userID).FirstOrDefaultAsync();
@@ -83,6 +115,7 @@ namespace kore_api.Repositories
             }
         }
 
+        //Assign a task to a user
         public async Task<bool> AssignToUser(int id, int userID)
         {
             var task = await _context.Taskmembership.Where(t => t.Id == id).FirstOrDefaultAsync();
@@ -105,6 +138,7 @@ namespace kore_api.Repositories
             }
         }
 
+        //Delete a task (admin only)
         public async Task<bool> Delete(int id)
         {
             var task = await _context.Task.FindAsync(id);

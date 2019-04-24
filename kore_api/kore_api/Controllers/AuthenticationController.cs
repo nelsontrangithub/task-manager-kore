@@ -30,6 +30,9 @@ namespace kore_api.Controllers
 			this._userRepository = _userRepository;
 		}
 
+        /// <summary>
+        /// Register a User
+        /// </summary>
         [HttpPost]
         [Route("api/register")]
         public async Task<ActionResult<string>> Register(UserVM user)
@@ -69,6 +72,9 @@ namespace kore_api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Sign in with 'admin@kore.com' and 'P@ssw0rd!'
+        /// </summary>
         [HttpPost]
         [Route("api/signin")]
         public async Task<ActionResult<string>> SignIn(UserVM user)
