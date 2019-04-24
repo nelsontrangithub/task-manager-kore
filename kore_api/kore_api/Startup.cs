@@ -22,6 +22,8 @@ namespace kore_api
     {
         public const string AppS3BucketKey = "AppS3Bucket";
 
+        public string ConnectionString;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -69,8 +71,17 @@ namespace kore_api
                             });
             });
 
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                this.ConnectionString = "server=localhost;port=3306;user=root;password=password;database=koredb";
+            }
+            else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                this.ConnectionString = "server=koretaskmanagerrdsinstance.cya4cpibjenz.us-east-2.rds.amazonaws.com;port=3306;user=koreadmin;password=koressd2019;database=task_manager";
+            }
+
             services.AddDbContext<koredbContext>(options =>
-            options.UseMySQL("server=localhost;port=3306;user=root;password=password;database=koredb"));
+            options.UseMySQL(ConnectionString));
 
             //Repos
             services.AddScoped<IAccountsRepository, AccountsRespository>();
