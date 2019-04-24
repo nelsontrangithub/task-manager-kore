@@ -92,6 +92,26 @@ namespace kore_api.Controllers
             return NoContent();
         }
 
+        // PUT: api/Tasks/5
+        [HttpPut("user/{id}")]
+        [Authorize(Policy = "IsAdmin")]
+        public async Task<IActionResult> AssignTask([FromRoute] int id, [FromBody] int userID)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _tasksRepository.AssignToUser(id, userID);
+
+            if (result == true)
+            {
+                return Ok(result);
+            }
+
+            return NoContent();
+        }
+
         // DELETE: api/Tasks/5
         //Admin only
         [HttpDelete("{id}")]

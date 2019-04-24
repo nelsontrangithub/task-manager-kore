@@ -83,6 +83,28 @@ namespace kore_api.Repositories
             }
         }
 
+        public async Task<bool> AssignToUser(int id, int userID)
+        {
+            var task = await _context.Taskmembership.Where(t => t.Id == id).FirstOrDefaultAsync();
+
+            if (task == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                task.UserId = userID;
+                _context.Update(task);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public async Task<bool> Delete(int id)
         {
             var task = await _context.Task.FindAsync(id);
