@@ -38,6 +38,8 @@ dependencies:
   flutter_secure_storage: ^3.2.1+1
   #cognito framework package
   amazon_cognito_identity_dart: ^0.0.22
+  #Flutter Calendar package
+  flutter_calendar_carousel: ^1.3.16 
 
 
 dev_dependencies:

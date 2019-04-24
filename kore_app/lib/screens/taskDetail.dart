@@ -1,30 +1,31 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:kore_app/models/contract.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:intl/intl.dart';
 import '../models/task.dart';
 import '../utils/theme.dart';
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show CalendarCarousel;
+
 
 class TaskDetailState extends State<TaskDetail> {
-final _user = User("Tina",
+  final _user = User("Tina",
       "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
-      
- var text;
- var textcolor;
- 
+
+  var text;
+  var textcolor;
+
   initState() {
     super.initState();
     print(widget.task.isCompleted);
-     if (widget.task.isCompleted == true){
-       text = "Mark Not Complete";
-       textcolor = Colors.redAccent;
-     } else {
-       text = 'Mark Complete';
-       textcolor = Colors.green[800];
-     }
+    if (widget.task.isCompleted == true) {
+      text = "Mark Not Complete";
+      textcolor = Colors.redAccent;
+    } else {
+      text = 'Mark Complete';
+      textcolor = Colors.green[800];
+    }
   }
 
   @override
@@ -34,11 +35,25 @@ final _user = User("Tina",
         body: new Column(
           children: <Widget>[
             _buildHeader(),
+            _buildCard(),
             _buildTaskDescription(),
-            _buildTaskEnd(widget.task),
+          //  _buildTaskEnd(widget.task),
           ],
         ));
   }
+
+Widget _buildCard() {
+  return Container(
+    margin: EdgeInsets.symmetric(horizontal: 6.0),
+    child: Card(
+      elevation: 4,
+      child: CalendarCarousel(
+        height: 340,
+      ),
+    )
+      
+  );  
+}
 
   Widget _buildHeader() {
     return Container(
@@ -92,79 +107,27 @@ final _user = User("Tina",
     );
   }
 
- 
-
   Widget _buildTaskDescription() {
     return new Container(
-      padding: const EdgeInsets.fromLTRB(5, 10, 5, 5),
+      padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
       child: Card(
+        elevation: 4,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
               leading: Icon(Icons.description, color: KorePrimaryColor),
-              title: Text("Description: ",
-              style: TextStyle(
-                fontSize: 20,
+              title: Text(
+                "Description: ",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              ),
-              subtitle: Text(widget.task.description),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTaskEnd(Task task) {
-    var now = widget.task.dueDate;
-    var formatter = new DateFormat('yyyy-MM-dd');
-    String formatted = formatter.format(now);
-
-
-void toggleCompleted(Task task){
-  task.isCompleted = !task.isCompleted;
-  setState(() {
-      if (task.isCompleted == true){
-        text = 'Status: Not Complete';
-        textcolor = Colors.redAccent;
-      } else{
-        text = 'Status: Complete';
-        textcolor = Colors.green[800];
-      }
-      task.setStatus();
-    });
-}
-
-
-    return new Container(
-      padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
-      child: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.file_upload, color: KorePrimaryColor),
-              title: Text("Due: " + formatted),
-              subtitle: Text('Date Created:'),
-            ),
-            ButtonTheme.bar(
-              // make buttons use the appropriate styles for cards
-              child: ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                    child: Text('Upload File'),
-                    onPressed: () {},
-                  ),
-                  FlatButton(
-                    child: 
-                       Text(text),
-                       textColor: textcolor,
-                    onPressed: () {
-                      toggleCompleted(task);
-                    },
-                  ),
-                ],
+              subtitle: Text(
+                widget.task.description,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
               ),
             ),
           ],
@@ -172,6 +135,44 @@ void toggleCompleted(Task task){
       ),
     );
   }
+
+  // Widget _buildTaskEnd(Task task) {
+  //   var now = widget.task.dueDate;
+  //   var formatter = new DateFormat('yyyy-MM-dd');
+  //   String formatted = formatter.format(now);
+
+  //   void toggleCompleted(Task task) {
+  //     task.isCompleted = !task.isCompleted;
+  //     setState(() {
+  //       if (task.isCompleted == true) {
+  //         text = 'Status: Not Complete';
+  //         textcolor = Colors.redAccent;
+  //       } else {
+  //         text = 'Status: Complete';
+  //         textcolor = Colors.green[800];
+  //       }
+  //       task.setStatus();
+  //     });
+  //   }
+
+  //   return new Container(
+  //     padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+  //     child: Card(
+  //       child: Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: <Widget>[
+  //           ListTile(
+  //             leading: Icon(Icons.file_upload, color: KorePrimaryColor),
+  //             title: Text("Date created: " + formatted),
+  //             subtitle: Text('Date due: ' + formatted),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  
 }
 
 class TaskDetail extends StatefulWidget {
