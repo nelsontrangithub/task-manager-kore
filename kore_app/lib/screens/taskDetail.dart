@@ -6,16 +6,18 @@ import '../models/task.dart';
 
 class TaskDetailState extends State<TaskDetail> {
  var text;
+ var textcolor;
  
   initState() {
     super.initState();
     print(widget.task.isCompleted);
      if (widget.task.isCompleted == true){
        text = "Mark Not Complete";
+       textcolor = Colors.redAccent;
      } else {
        text = 'Mark Complete';
+       textcolor = Colors.green[800];
      }
-    
   }
 
   @override
@@ -73,19 +75,21 @@ class TaskDetailState extends State<TaskDetail> {
     var formatter = new DateFormat('yyyy-MM-dd');
     String formatted = formatter.format(now);
 
-    void markCompleted(Task task){
-      task.isCompleted = true;
-      setState(() {
-        text = 'Mark Not Completed';
-      });
-    }
 
-    void markNotCompleted(Task task){
-      task.isCompleted = false;
-      setState(() {
-        text = 'Mark Completed';
-      });
-    }
+void toggleCompleted(Task task){
+  task.isCompleted = !task.isCompleted;
+  setState(() {
+      if (task.isCompleted == true){
+        text = 'Status: Not Complete';
+        textcolor = Colors.redAccent;
+      } else{
+        text = 'Status: Complete';
+        textcolor = Colors.green[800];
+      }
+      task.setStatus();
+    });
+}
+
 
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
@@ -110,8 +114,9 @@ class TaskDetailState extends State<TaskDetail> {
                   FlatButton(
                     child: 
                        Text(text),
+                       textColor: textcolor,
                     onPressed: () {
-                      task.isCompleted ? markNotCompleted(task) : markCompleted(task);
+                      toggleCompleted(task);
                     },
                   ),
                 ],
