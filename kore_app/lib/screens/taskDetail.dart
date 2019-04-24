@@ -91,30 +91,22 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  Widget _buildTaskHeader() {
-    return new Container(
-      padding: const EdgeInsets.fromLTRB(5, 30, 5, 5),
-      child: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            
-          ],
-        ),
-      ),
-    );
-  }
+ 
 
   Widget _buildTaskDescription() {
     return new Container(
-      padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+      padding: const EdgeInsets.fromLTRB(5, 10, 5, 5),
       child: Card(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
               leading: Icon(Icons.description, color: KorePrimaryColor),
-              title: Text("Description"),
+              title: Text("Description: ",
+              style: TextStyle(
+                fontSize: 20,
+              ),
+              ),
               subtitle: Text(widget.task.description),
             ),
           ],
