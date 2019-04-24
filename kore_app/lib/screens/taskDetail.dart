@@ -1,10 +1,11 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:kore_app/models/contract.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 import '../models/task.dart';
 import '../utils/theme.dart';
 
@@ -17,6 +18,7 @@ final _user = User("Tina",
  
   initState() {
     super.initState();
+     _controller.addListener(() => _extension = _controller.text);
     print(widget.task.isCompleted);
      if (widget.task.isCompleted == true){
        text = "Mark Not Complete";
@@ -153,8 +155,10 @@ void toggleCompleted(Task task){
               child: ButtonBar(
                 children: <Widget>[
                   FlatButton(
-                    child: Text('Upload File'),
-                    onPressed: () {},
+                    child:  Text('Upload File'),
+                    onPressed: () {
+                      openFileExplorer();
+                    },
                   ),
                   FlatButton(
                     child: 
@@ -172,11 +176,43 @@ void toggleCompleted(Task task){
       ),
     );
   }
+  String _fileName;
+  String _path;
+  Map<String, String> _paths;
+  String _extension;
+  bool _multiPick = false;
+  bool _hasValidMime = false;
+  FileType _pickingType;
+  TextEditingController _controller = new TextEditingController();
+
+  void openFileExplorer() async {
+    if (_pickingType != FileType.CUSTOM || _hasValidMime) {
+      try {
+        if (_multiPick) {
+          _path = null;
+          _paths = await FilePicker.getMultiFilePath(type: _pickingType, fileExtension: _extension);
+        } else {
+          _paths = null;
+          _path = await FilePicker.getFilePath(type: _pickingType, fileExtension: _extension);
+        }
+      } on PlatformException catch (e) {
+        print("Unsupported operation" + e.toString());
+      }
+      if (!mounted) return;
+
+      setState(() {
+        _fileName = _path != null ? _path.split('/').last : _paths != null ? _paths.keys.toString() : '...';
+        print(_fileName);
+        print(_path);
+      });
+    }
+  }
+
+
 }
 
 class TaskDetail extends StatefulWidget {
   final Task task;
-
   const TaskDetail({Key key, this.task}) : super(key: key);
 
   @override
