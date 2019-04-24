@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using kore_api.koredb;
 using kore_api.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace kore_api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class FilesController : ControllerBase
@@ -23,6 +25,7 @@ namespace kore_api.Controllers
 
         // GET: api/Files
         [HttpGet]
+        [Authorize(Policy = "IsAdminOrAgent")]
         public IEnumerable<File> GetFile()
         {
             return _filesRepository.GetFiles();
@@ -30,6 +33,7 @@ namespace kore_api.Controllers
 
         // GET: api/Files/5
         [HttpGet("{id}")]
+        [Authorize(Policy = "IsAdminOrAgent")]
         public async Task<IActionResult> GetFile([FromRoute] string id)
         {
             if (!ModelState.IsValid)
@@ -49,6 +53,7 @@ namespace kore_api.Controllers
 
         // PUT: api/Files/5
         [HttpPut("{id}")]
+        [Authorize(Policy = "IsAdminOrAgent")]
         public async Task<IActionResult> PutFile([FromRoute] string id, [FromBody] File file)
         {
             if (!ModelState.IsValid)
@@ -68,6 +73,7 @@ namespace kore_api.Controllers
 
         // POST: api/Files
         [HttpPost]
+        [Authorize(Policy = "IsAdminOrAgent")]
         public async Task<IActionResult> PostFile([FromBody] File file)
         {
             if (!ModelState.IsValid)
@@ -87,6 +93,7 @@ namespace kore_api.Controllers
 
         // DELETE: api/Files/5
         [HttpDelete("{id}")]
+        [Authorize(Policy = "IsAdminOrAgent")]
         public async Task<IActionResult> DeleteFile([FromRoute] string id)
         {
             if (!ModelState.IsValid)
