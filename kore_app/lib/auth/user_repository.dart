@@ -1,33 +1,36 @@
+import 'package:kore_app/utils/cognito.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
 
 class UserRepository {
-  String token;
+  final storage = new FlutterSecureStorage();
   // RestDatasource source = new RestDatasource();
+  String token;
   Future<String> authenticate({
     @required String username,
     @required String password,
   }) async {
-    await Future.delayed(Duration(seconds: 1));
-    token = 'token';
-    return 'token';
+    token = await Cognito.getToken(username, password);
+    return token;
+    // return 'token';
   }
 
   Future<void> deleteToken() async {
     /// delete from keystore/keychain
-    await Future.delayed(Duration(seconds: 1));
+    await storage.delete(key: 'token');
     return;
   }
 
   Future<void> persistToken(String token) async {
     /// write to keystore/keychain
-    await Future.delayed(Duration(seconds: 1));
+    await storage.write(key: 'token', value: token);
     return;
   }
 
   Future<bool> hasToken() async {
     /// read from keystore/keychain
-    await Future.delayed(Duration(seconds: 1));
-    print(token);
-    return token == 'token';
+    String tokenFromKeyChain = await storage.read(key: 'token');
+    print(tokenFromKeyChain);
+    return token != tokenFromKeyChain;
   }
 }

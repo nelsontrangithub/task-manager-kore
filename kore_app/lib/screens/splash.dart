@@ -8,6 +8,11 @@ class Splash extends StatefulWidget {
   _SplashIndicatorState createState() => _SplashIndicatorState();
 }
 
+const TextStyle textStyle = TextStyle(
+  color: Color(0xff1282c5),
+  fontFamily: 'Poppins',
+);
+
 class _SplashIndicatorState extends State<Splash>
     with SingleTickerProviderStateMixin {
   AnimationController controller;
@@ -40,17 +45,27 @@ class _SplashIndicatorState extends State<Splash>
         ),
       ),
       builder: (BuildContext context, Widget _widget) {
-          return new Transform.rotate(
-            angle: controller.value * 6.3,
-            child: _widget,
-          );
+        return new Transform.rotate(
+          angle: controller.value * 6.3,
+          child: _widget,
+        );
       },
     );
 
-    return Container(
+    final companyName = Text(
+      'KORE',
+      style: textStyle.copyWith(fontSize: 48),
+    );
+
+    return new Material(
+        type: MaterialType.transparency,
+        child: Container(
         color: Colors.white,
         alignment: Alignment.center,
-        child: logo,
-        );
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[logo, companyName],
+        )));
   }
 }
