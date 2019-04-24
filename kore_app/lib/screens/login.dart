@@ -23,7 +23,7 @@ class _MyHomePageState extends State<MyHomePage> {
   AuthenticationBloc _authenticationBloc;
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-
+  final _formKey = GlobalKey<FormState>();
   UserRepository get _userRepository => widget.userRepository;
 
   @override
@@ -45,6 +45,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // Email Field
     final emailField = TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Invalid Email';
+        }
+      },
       controller: _usernameController,
       obscureText: false,
       decoration: InputDecoration(
@@ -56,6 +61,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // Password Field
     final passwordField = TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Invalid Password';
+        }
+      },
       controller: _passwordController,
       obscureText: true,
       decoration: InputDecoration(
@@ -77,7 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // Here is coming the funcion to login
           onPressed: () {
             // Navigator.pushNamed(context, '/contractList');
+            if (_formKey.currentState.validate()) {
             state is! LoginLoading ? _onLoginButtonPressed() : null;
+            }
           },
           child: Text(
             'Login',
@@ -110,7 +122,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.white,
                 child: Padding(
                   padding: const EdgeInsets.all(36.0),
-                  child: Column(
+                  child: Form(
+                    key: _formKey,
+                    child:Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -134,6 +148,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             : null,
                       ),
                     ],
+                  ),
                   ),
                 )),
           ),
