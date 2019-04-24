@@ -53,6 +53,7 @@ namespace kore_api.Controllers
 
         //GET: api/Tasks/user/5
         [HttpGet("user/{id}")]
+        [Authorize(Policy = "IsAdminOrAgent")]
         public async Task<IActionResult> GetByUser([FromRoute] int id)
         {
             if (!ModelState.IsValid)
