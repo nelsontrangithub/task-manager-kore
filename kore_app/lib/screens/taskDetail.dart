@@ -15,7 +15,6 @@ class TaskDetailState extends State<TaskDetail> {
      } else {
        text = 'Mark Complete';
      }
-    
   }
 
   @override
@@ -73,19 +72,19 @@ class TaskDetailState extends State<TaskDetail> {
     var formatter = new DateFormat('yyyy-MM-dd');
     String formatted = formatter.format(now);
 
-    void markCompleted(Task task){
-      task.isCompleted = true;
-      setState(() {
-        text = 'Mark Not Completed';
-      });
-    }
 
-    void markNotCompleted(Task task){
-      task.isCompleted = false;
-      setState(() {
-        text = 'Mark Completed';
-      });
-    }
+void toggleCompleted(Task task){
+  task.isCompleted = !task.isCompleted;
+  setState(() {
+      if (task.isCompleted == true){
+        text = 'Mark Not Complete';
+      } else{
+        text = 'Mark Complete';
+      }
+      task.setStatus();
+    });
+}
+
 
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
@@ -111,7 +110,7 @@ class TaskDetailState extends State<TaskDetail> {
                     child: 
                        Text(text),
                     onPressed: () {
-                      task.isCompleted ? markNotCompleted(task) : markCompleted(task);
+                      toggleCompleted(task);
                     },
                   ),
                 ],
