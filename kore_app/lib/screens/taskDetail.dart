@@ -157,7 +157,8 @@ void toggleCompleted(Task task){
 
       setState(() {
         _fileName = _path != null ? _path.split('/').last : _paths != null ? _paths.keys.toString() : '...';
-        
+        print(_fileName);
+        print(_path);
       });
     }
   }
