@@ -8,7 +8,6 @@ import 'package:kore_app/models/user.dart';
 import 'package:kore_app/screens/contractDetail.dart';
 
 class ContractListState extends State<ContractList> {
-  final _contractStates = <ContractList>[];
   final _user = User("Tina",
       "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   final _contracts = <Contract>[];

@@ -154,4 +154,10 @@ class _MyHomePageState extends State<MyHomePage> {
       password: _passwordController.text,
     ));
   }
+
+  @override
+  void dispose() {
+    _loginBloc.dispose();
+    super.dispose();
+  }
 }
