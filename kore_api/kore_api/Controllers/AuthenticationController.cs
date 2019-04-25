@@ -99,5 +99,16 @@ namespace kore_api.Controllers
 
             return Ok(response.AuthenticationResult.IdToken);
         }
+
+        /// <summary>
+        /// Get UserID by Username
+        /// </summary>
+        [HttpGet]
+        [Route("api/getUser")]
+        public IActionResult GetUserId(string username)
+        {
+            var result = _userRepository.GetUserId(username);
+            return Ok(result);
+        }
     }
 }

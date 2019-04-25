@@ -55,6 +55,36 @@ namespace kore_api.Repositories
             return query;
         }
 
+        //Get tasks by accountID
+        public IEnumerable<TaskVM> GetTasksByAccount(int accountID)
+        {
+            var query = from x in _context.Taskmembership
+                        join y in _context.Task on x.TaskId equals y.Id
+                        where x.AccountId.Equals(accountID)
+                        select new TaskVM
+                        {
+                            Id = x.Id,
+                            TaskId = x.TaskId,
+                            AccountId = x.AccountId,
+                            UserId = x.UserId,
+                            OrgId = x.OrgId,
+                            DateCreated = x.DateCreated,
+                            DateModified = x.DateModified,
+                            Status = x.Status,
+                            CreatedBy = x.CreatedBy,
+                            ModifiedBy = x.ModifiedBy,
+                            OwnerId = y.OwnerId,
+                            TaskStatus = y.Status,
+                            Description = y.Description,
+                            DueDate = y.DueDate,
+                            CompletedOn = y.CompletedOn,
+                            Subject = y.Subject,
+                            Department = y.Department
+                        };
+
+            return query;
+        }
+
         //Get tasks assigned to a user
         public IEnumerable<TaskVM> GetUserAssignedTasks(int userID)
         {
