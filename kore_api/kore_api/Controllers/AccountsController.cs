@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using kore_api.koredb;
 using kore_api.Repositories;
+using kore_api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,7 @@ namespace kore_api.Controllers
         // GET: api/account
         [HttpGet]
 		[Authorize(Policy = "IsAdminOrAgent")]
-		public IEnumerable<Account> GetAll()
+		public IEnumerable<AccountVM> GetAll()
         {
             return _accountsRepository.GetAccounts();
         }

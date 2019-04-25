@@ -59,7 +59,7 @@ namespace kore_api
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Task Manager", Version = "v1" });
+                c.SwaggerDoc("v1", new Info { Title = "Task Manager API", Version = "v1" });
                 c.AddSecurityDefinition("Bearer",
                     new ApiKeyScheme
                     {
