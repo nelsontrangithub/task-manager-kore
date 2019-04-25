@@ -8,38 +8,56 @@ import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import '../models/task.dart';
 import '../utils/theme.dart';
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
+    show CalendarCarousel;
 
 class TaskDetailState extends State<TaskDetail> {
-final _user = User("Tina",
+  final _user = User("Tina",
       "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
-      
- var text;
- var textcolor;
- 
+
+  var icon;
+  var iconColor;
+
+  //file picker
+  String _fileName;
+  String _path;
+  Map<String, String> _paths;
+  String _extension;
+  bool _multiPick = false;
+  bool _hasValidMime = false;
+  FileType _pickingType;
+  TextEditingController _controller = new TextEditingController();
+
   initState() {
     super.initState();
-     _controller.addListener(() => _extension = _controller.text);
-    print(widget.task.isCompleted);
-     if (widget.task.isCompleted == true){
-       text = "Mark Not Complete";
-       textcolor = Colors.redAccent;
-     } else {
-       text = 'Mark Complete';
-       textcolor = Colors.green[800];
-     }
+    if (widget.task.isCompleted == true) {
+      icon = Icons.check;
+      iconColor = KorePrimaryColor;
+    } else {
+      icon = Icons.do_not_disturb_on;
+      iconColor = Colors.redAccent;
+    }
+    _controller.addListener(() => _extension = _controller.text);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget.task.title)),
-        body: new Column(
-          children: <Widget>[
-            _buildHeader(),
-            _buildTaskDescription(),
-            _buildTaskEnd(widget.task),
-          ],
-        ));
+      appBar: AppBar(title: Text(widget.task.title)),
+      body: new ListView(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              _buildHeader(),
+              _buildCalendar(widget.task),
+              _buildTaskDescription(),
+              _buildTaskEnd()
+              //  _buildTaskEnd(widget.task),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildHeader() {
@@ -94,23 +112,47 @@ final _user = User("Tina",
     );
   }
 
- 
+  Widget _buildCalendar(Task task) {
+    return Container(
+        child: Card(
+      elevation: 0,
+      child: CalendarCarousel(
+        //  viewportFraction: 0.5,
+        dayPadding: 5,
+        height: 380,
+        weekendTextStyle: TextStyle(
+          color: Colors.red,
+        ),
+        todayTextStyle: TextStyle(fontSize: 20),
+        selectedDayTextStyle: TextStyle(fontSize: 20),
+        todayButtonColor: KorePrimaryColor,
+        selectedDateTime: widget.task.dueDate,
+        selectedDayButtonColor: Colors.red,
+      ),
+    ));
+  }
 
   Widget _buildTaskDescription() {
     return new Container(
-      padding: const EdgeInsets.fromLTRB(5, 10, 5, 5),
+      padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
       child: Card(
+        elevation: 0,
         child: Column(
-          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.description, color: KorePrimaryColor),
-              title: Text("Description: ",
-              style: TextStyle(
-                fontSize: 20,
+              title: Text(
+                "Description: ",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
+              subtitle: Text(
+                widget.task.description,
+                style: TextStyle(
+                  fontSize: 16,
+                ),
               ),
-              subtitle: Text(widget.task.description),
             ),
           ],
         ),
@@ -118,82 +160,118 @@ final _user = User("Tina",
     );
   }
 
-  Widget _buildTaskEnd(Task task) {
-    var now = widget.task.dueDate;
-    var formatter = new DateFormat('yyyy-MM-dd');
-    String formatted = formatter.format(now);
+  Widget _buildTaskEnd() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Column(
+            children: <Widget>[_buildUploadButton()],
+          ),
+          Column(
+            children: <Widget>[_buildDoneButton()],
+          ),
+        ],
+      ),
+    );
+  }
 
+  Widget _buildUploadButton() {
+    return Material(
+      elevation: 4.0,
+      borderRadius: BorderRadius.circular(30.0),
+      color: Color(0xff1282c5),
+      child: MaterialButton(
+        minWidth: 100,
+        onPressed: () {
+          openFileExplorer();
+        },
+        child: Text(
+          'Upload File',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
 
-void toggleCompleted(Task task){
-  task.isCompleted = !task.isCompleted;
-  setState(() {
-      if (task.isCompleted == true){
-        text = 'Status: Not Complete';
-        textcolor = Colors.redAccent;
-      } else{
-        text = 'Status: Complete';
-        textcolor = Colors.green[800];
+  Widget _buildDoneButton() {
+    return Material(
+      elevation: 4.0,
+      shape: CircleBorder(side: BorderSide.none),
+      color: Color(0xff1282c5),
+      child: MaterialButton(
+          minWidth: 100,
+          onPressed: () {
+            showAlertDialog(context);
+          },
+          child: Icon(
+            Icons.check,
+            color: Colors.white,
+          )),
+    );
+  }
+
+  void toggleCompleted(Task task) {
+    task.isCompleted = !task.isCompleted;
+    setState(() {
+      if (task.isCompleted == true) {
+        icon = Icons.check;
+        iconColor = KorePrimaryColor;
+      } else {
+        icon = Icons.do_not_disturb_on;
+        iconColor = Colors.redAccent;
       }
       task.setStatus();
     });
-}
+  }
 
-
-    return new Container(
-      padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
-      child: Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.file_upload, color: KorePrimaryColor),
-              title: Text("Due: " + formatted),
-              subtitle: Text('Date Created:'),
-            ),
-            ButtonTheme.bar(
-              // make buttons use the appropriate styles for cards
-              child: ButtonBar(
-                children: <Widget>[
-                  FlatButton(
-                    child:  Text('Upload File'),
-                    onPressed: () {
-                      openFileExplorer();
-                    },
-                  ),
-                  FlatButton(
-                    child: 
-                       Text(text),
-                       textColor: textcolor,
-                    onPressed: () {
-                      toggleCompleted(task);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+  //Alert Dialog
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Done!!"),
+      onPressed: () {
+        toggleCompleted(widget.task);
+        Navigator.of(context).pop();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Notice"),
+      content: Text("Would you like to confirm the task?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
-  String _fileName;
-  String _path;
-  Map<String, String> _paths;
-  String _extension;
-  bool _multiPick = false;
-  bool _hasValidMime = false;
-  FileType _pickingType;
-  TextEditingController _controller = new TextEditingController();
 
   void openFileExplorer() async {
     if (_pickingType != FileType.CUSTOM || _hasValidMime) {
       try {
         if (_multiPick) {
           _path = null;
-          _paths = await FilePicker.getMultiFilePath(type: _pickingType, fileExtension: _extension);
+          _paths = await FilePicker.getMultiFilePath(
+              type: _pickingType, fileExtension: _extension);
         } else {
           _paths = null;
-          _path = await FilePicker.getFilePath(type: _pickingType, fileExtension: _extension);
+          _path = await FilePicker.getFilePath(
+              type: _pickingType, fileExtension: _extension);
         }
       } on PlatformException catch (e) {
         print("Unsupported operation" + e.toString());
@@ -201,14 +279,14 @@ void toggleCompleted(Task task){
       if (!mounted) return;
 
       setState(() {
-        _fileName = _path != null ? _path.split('/').last : _paths != null ? _paths.keys.toString() : '...';
+        _fileName = _path != null
+            ? _path.split('/').last
+            : _paths != null ? _paths.keys.toString() : '...';
         print(_fileName);
         print(_path);
       });
     }
   }
-
-
 }
 
 class TaskDetail extends StatefulWidget {
