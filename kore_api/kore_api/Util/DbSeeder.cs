@@ -13,10 +13,10 @@ namespace kore_api.Util
             context.Database.EnsureCreated();
 
 			//Look for any users.
-			if (context.User.Any())
-			{
-				return;   // DB has data
-			}
+			//if (context.User.Any())
+			//{
+			//	return;   // DB has data
+			//}
 
 			var users = new User[]
             {

@@ -34,6 +34,28 @@ namespace kore_api.Controllers
         }
 
         /// <summary>
+        /// Get all Accounts by User
+        /// </summary>
+        [HttpGet("user/{userID}")]
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IActionResult GetAccountsByUserId([FromRoute] int userID)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = _accountsRepository.GetAccountsByUser(userID);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Get an Account by Id
         /// </summary>
         [HttpGet("{id}")]

@@ -5,15 +5,16 @@ using System.Threading.Tasks;
 using kore_api.koredb;
 using kore_api.Repositories.Interfaces;
 using kore_api.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace kore_api.Repositories
 {
 	public class UserRepository : IUserRepository
 	{
-		private readonly koredbContext context;
+		private readonly koredbContext _context;
 
 		public UserRepository(koredbContext context) {
-			this.context = context;
+			_context = context;
 		}
 
 		public bool CreateUser(UserVM userVM)
@@ -26,25 +27,32 @@ namespace kore_api.Repositories
 				LastName = userVM.LastName
 			};
 
-			context.User.Add(user);
-			context.SaveChanges();
+			_context.User.Add(user);
+			_context.SaveChanges();
 
 			return true;
 		}
+
 		public int GetUserId(string email)
 		{
-			var user = context.User.Where(u => u.Email == email).FirstOrDefault();
+			var user = _context.User.Where(u => u.Email == email).FirstOrDefault();
 			return user.Id;
 		}
 
+        public async Task<User> GetUser(string username)
+        {
+            var user = await _context.User.Where(u => u.Email == username).FirstOrDefaultAsync();
+            return user;
+        }
+
 		public IEnumerable<User> GetUsers()
 		{
-			return context.User.ToList();
+			return _context.User.ToList();
 		}
 
 		public bool UserExists(string email)
 		{
-			if (context.User.Where(u => u.Email == email).FirstOrDefault() != null)
+			if (_context.User.Where(u => u.Email == email).FirstOrDefault() != null)
 			{
 				return true;
 			}
