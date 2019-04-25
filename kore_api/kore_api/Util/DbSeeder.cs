@@ -12,13 +12,13 @@ namespace kore_api.Util
         {
             context.Database.EnsureCreated();
 
-            ////Look for any users.
-            //if (context.ApplicationUsers.Any())
-            //    {
-            //        return;   // DB has been seeded
-            //    }
+			//Look for any users.
+			if (context.User.Any())
+			{
+				return;   // DB has data
+			}
 
-            var users = new User[]
+			var users = new User[]
             {
                 new User
                 {
@@ -37,7 +37,7 @@ namespace kore_api.Util
                        Name = "Anne Smith",
                        DateCreated = DateTime.Now,
                        Status = 1,
-                       FirstName = "Joe",
+                       FirstName = "Anne",
                        LastName = "Smith"
                 }
             };

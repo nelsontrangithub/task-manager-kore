@@ -23,6 +23,7 @@ namespace kore_api.Controllers
             _filesRepository = filesRepository;
         }
 
+
         // GET: api/Files
         [HttpGet]
         [Authorize(Policy = "IsAdminOrAgent")]
