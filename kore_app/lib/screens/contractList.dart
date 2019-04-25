@@ -14,26 +14,25 @@ class ContractListState extends State<ContractList> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _nameFont = const TextStyle(fontSize: 28.0);
   // final Set<ContractInfo> _saved = Set<ContractInfo>();
-
   //one of the state lifecycle function, only load once
   //good place for dummydata loading
   @override
   initState() {
     super.initState();
-
+    // _contracts.add();
     /*dummy data*/
-    _contracts.add(Contract("Contract 1", false, 20));
-    _contracts.add(Contract("Contract 2", false, 50));
-    _contracts.add(Contract("Contract 3", true, 100));
-    _contracts.add(Contract("Contract 4", false, 40));
-    _contracts.add(Contract("Contract 5", false, 50));
-    _contracts.add(Contract("Contract 6", false, 60));
-    _contracts.add(Contract("Contract 7", true, 70));
-    _contracts.add(Contract("Contract 8", false, 80));
-    _contracts.add(Contract("Contract 9", false, 100));
-    _contracts.add(Contract("Contract 10", false, 100));
-    _contracts.add(Contract("Contract 11", true, 100));
-    _contracts.add(Contract("Contract 12", false, 100));
+    _contracts.add(Contract("Contract 1", false, 20, null));
+    _contracts.add(Contract("Contract 2", false, 50, null));
+    _contracts.add(Contract("Contract 3", true, 100, null));
+    _contracts.add(Contract("Contract 4", false, 40, null));
+    _contracts.add(Contract("Contract 5", false, 50, null));
+    _contracts.add(Contract("Contract 6", false, 60, null));
+    _contracts.add(Contract("Contract 7", true, 70, null));
+    _contracts.add(Contract("Contract 8", false, 80, null));
+    _contracts.add(Contract("Contract 9", false, 100, null));
+    _contracts.add(Contract("Contract 10", false, 100, null));
+    _contracts.add(Contract("Contract 11", true, 100, null));
+    _contracts.add(Contract("Contract 12", false, 100, null));
   }
 
   @override
