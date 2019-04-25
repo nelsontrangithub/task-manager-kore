@@ -101,13 +101,17 @@ namespace kore_api.Controllers
         }
 
         /// <summary>
-        /// Get UserID by Username
+        /// Get User by Username
         /// </summary>
         [HttpGet]
         [Route("api/getUser")]
-        public IActionResult GetUserId(string username)
+        public async Task<IActionResult> GetUser(string username, string password)
         {
-            var result = _userRepository.GetUserId(username);
+            var result = await _userRepository.GetUser(username, password);
+            if (result == null)
+            {
+                return NotFound();
+            }
             return Ok(result);
         }
     }

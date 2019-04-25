@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using kore_api.koredb;
 using kore_api.Repositories.Interfaces;
 using kore_api.ViewModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace kore_api.Repositories
 {
@@ -37,6 +38,20 @@ namespace kore_api.Repositories
 			var user = _context.User.Where(u => u.Email == email).FirstOrDefault();
 			return user.Id;
 		}
+
+        public async Task<UserVM> GetUser(string username, string password)
+        {
+            var query = await _context.User.Where(u => u.Email == username).FirstOrDefaultAsync();
+            var user = new UserVM
+            {
+                Username = query.Email,
+                Email = query.Email,
+                FirstName = query.FirstName,
+                LastName = query.LastName,
+                Password = password
+            };
+            return user;
+        }
 
 		public IEnumerable<User> GetUsers()
 		{
