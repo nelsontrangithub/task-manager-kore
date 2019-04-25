@@ -6,8 +6,8 @@ import 'package:kore_app/utils/theme.dart';
 import 'package:intl/intl.dart';
 import '../models/task.dart';
 import '../utils/theme.dart';
-import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show CalendarCarousel;
-
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
+    show CalendarCarousel;
 
 class TaskDetailState extends State<TaskDetail> {
   final _user = User("Tina",
@@ -35,25 +35,68 @@ class TaskDetailState extends State<TaskDetail> {
         body: new Column(
           children: <Widget>[
             _buildHeader(),
-            _buildCard(),
+            _buildCalendar(),
             _buildTaskDescription(),
-          //  _buildTaskEnd(widget.task),
+            _buildTaskEnd()
+            //  _buildTaskEnd(widget.task),
           ],
         ));
   }
+  Widget _buildUploadButton() {
+      return Material(
+        elevation: 4.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Color(0xff1282c5),
+        child: MaterialButton(
+          minWidth: 200,
+          onPressed: () {},
+          child: Text(
+            'Upload File',
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+        ),
+      );
+    }
 
-Widget _buildCard() {
-  return Container(
-    margin: EdgeInsets.symmetric(horizontal: 6.0),
-    child: Card(
-      elevation: 4,
-      child: CalendarCarousel(
-        height: 340,
+Widget _buildDoneButton() {
+      return Material(
+        elevation: 4.0,
+        shape: CircleBorder(side: BorderSide.none),
+        color: Color(0xff1282c5),
+        child: MaterialButton(
+          minWidth: 100,
+          onPressed: () {},
+          child: Icon(Icons.check, color: Colors.white,)
+          ),
+      );
+    }
+
+
+
+
+
+
+  Widget _buildTaskEnd() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              _buildUploadButton()
+            ],
+          ),
+          Column(
+            children: <Widget>[
+              _buildDoneButton()
+            ],
+          ),
+        ],
       ),
-    )
-      
-  );  
-}
+    );
+  }
 
   Widget _buildHeader() {
     return Container(
@@ -105,6 +148,17 @@ Widget _buildCard() {
         ],
       ),
     );
+  }
+
+  Widget _buildCalendar() {
+    return Container(
+        margin: EdgeInsets.symmetric(horizontal: 6.0),
+        child: Card(
+          elevation: 4,
+          child: CalendarCarousel(
+            height: 340,
+          ),
+        ));
   }
 
   Widget _buildTaskDescription() {
@@ -172,7 +226,6 @@ Widget _buildCard() {
   //   );
   // }
 
-  
 }
 
 class TaskDetail extends StatefulWidget {
