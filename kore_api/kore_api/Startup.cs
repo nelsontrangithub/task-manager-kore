@@ -23,6 +23,7 @@ namespace kore_api
         public const string AppS3BucketKey = "AppS3Bucket";
 
         public string ConnectionString;
+		public string SwaggerPath;
 
         public Startup(IConfiguration configuration)
         {
@@ -112,10 +113,19 @@ namespace kore_api
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
 
-            app.UseSwagger();
+			if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+			{
+				this.SwaggerPath = "/swagger/v1/swagger.json";
+			}
+			else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+			{
+				this.SwaggerPath = "/Prod/swagger/v1/swagger.json";
+			}
+
+			app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("Prod/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint(SwaggerPath, "My API V1");
             });
         }
     }
