@@ -93,9 +93,9 @@ namespace kore_api.Repositories
         }
 
         //Get task by OwnerID
-        public Task<Task> GetTaskByOwner(int userID)
+        public IEnumerable<Task> GetTaskByOwner(int userID)
         {
-            return _context.Task.Where(t => t.OwnerId == userID).FirstOrDefaultAsync();
+            return _context.Task.Where(t => t.OwnerId == userID);
         }
 
         public async Task<bool> Update(int id, int status)
