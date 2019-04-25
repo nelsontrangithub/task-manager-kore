@@ -116,7 +116,10 @@ class ContractDetailState extends State<ContractDetail> {
           ),
           footer: new Text(
             "Progress",
-            style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
+            style: new TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold, 
+              fontSize: 17.0),
           ),
           circularStrokeCap: CircularStrokeCap.round,
           backgroundColor: Colors.white,
