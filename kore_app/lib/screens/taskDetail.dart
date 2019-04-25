@@ -6,28 +6,26 @@ import 'package:kore_app/utils/theme.dart';
 import 'package:intl/intl.dart';
 import '../models/task.dart';
 import '../utils/theme.dart';
-import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show CalendarCarousel;
-
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
+    show CalendarCarousel;
 
 class TaskDetailState extends State<TaskDetail> {
   final _user = User("Tina",
       "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
 
-  var text;
-  var textcolor;
+  var icon;
+  var iconColor;
 
   initState() {
     super.initState();
-    print(widget.task.isCompleted);
     if (widget.task.isCompleted == true) {
-      text = "Mark Not Complete";
-      textcolor = Colors.redAccent;
+      icon = Icons.check;
+      iconColor = KorePrimaryColor;
     } else {
-      text = 'Mark Complete';
-      textcolor = Colors.green[800];
+      icon = Icons.do_not_disturb_on;
+      iconColor = Colors.redAccent;
     }
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -102,30 +100,23 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   Widget _buildCalendar(Task task) {
-
-    
-
     return Container(
         child: Card(
-          elevation: 0,
-          child: CalendarCarousel(
-            viewportFraction: 0.5,
-            dayPadding: 5,	
-            height: 380,
-            weekendTextStyle: TextStyle(
-              color: Colors.red,
-            ),
-            todayTextStyle: TextStyle(
-              fontSize: 20
-            ),
-            selectedDayTextStyle: TextStyle(
-              fontSize: 20
-            ),
-            todayButtonColor: KorePrimaryColor,
-            selectedDateTime: widget.task.dueDate,
-            selectedDayButtonColor: Colors.red,
-          ),
-        ));
+      elevation: 0,
+      child: CalendarCarousel(
+        //  viewportFraction: 0.5,
+        dayPadding: 5,
+        height: 380,
+        weekendTextStyle: TextStyle(
+          color: Colors.red,
+        ),
+        todayTextStyle: TextStyle(fontSize: 20),
+        selectedDayTextStyle: TextStyle(fontSize: 20),
+        todayButtonColor: KorePrimaryColor,
+        selectedDateTime: widget.task.dueDate,
+        selectedDayButtonColor: Colors.red,
+      ),
+    ));
   }
 
   Widget _buildTaskDescription() {
@@ -207,41 +198,19 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  // Widget _buildTaskEnd(Task task) {
-  //   var now = widget.task.dueDate;
-  //   var formatter = new DateFormat('yyyy-MM-dd');
-  //   String formatted = formatter.format(now);
-
-  //   void toggleCompleted(Task task) {
-  //     task.isCompleted = !task.isCompleted;
-  //     setState(() {
-  //       if (task.isCompleted == true) {
-  //         text = 'Status: Not Complete';
-  //         textcolor = Colors.redAccent;
-  //       } else {
-  //         text = 'Status: Complete';
-  //         textcolor = Colors.green[800];
-  //       }
-  //       task.setStatus();
-  //     });
-  //   }
-
-  //   return new Container(
-  //     padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
-  //     child: Card(
-  //       child: Column(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: <Widget>[
-  //           ListTile(
-  //             leading: Icon(Icons.file_upload, color: KorePrimaryColor),
-  //             title: Text("Date created: " + formatted),
-  //             subtitle: Text('Date due: ' + formatted),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  void toggleCompleted(Task task) {
+    task.isCompleted = !task.isCompleted;
+    setState(() {
+      if (task.isCompleted == true) {
+        icon = Icons.check;
+        iconColor = KorePrimaryColor;
+      } else {
+        icon = Icons.do_not_disturb_on;
+        iconColor = Colors.redAccent;
+      }
+      task.setStatus();
+    });
+  }
 
   //Alert Dialog
   showAlertDialog(BuildContext context) {
