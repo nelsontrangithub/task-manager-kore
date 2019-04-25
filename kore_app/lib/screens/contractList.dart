@@ -6,6 +6,7 @@ import 'package:kore_app/auth/authentication_event.dart';
 import 'package:kore_app/models/contract.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/screens/contractDetail.dart';
+import 'package:kore_app/utils/theme.dart';
 
 class ContractListState extends State<ContractList> {
   final _user = User("Tina",
@@ -61,7 +62,9 @@ class ContractListState extends State<ContractList> {
       // margin: const EdgeInsets.symmetric(vertical: 0.0),
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       decoration: BoxDecoration(
-        color: Colors.black12,
+         borderRadius:
+            BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
+        color: KorePrimaryColor,
       ),
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
