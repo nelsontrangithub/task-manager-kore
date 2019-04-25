@@ -39,17 +39,9 @@ namespace kore_api.Repositories
 			return user.Id;
 		}
 
-        public async Task<UserVM> GetUser(string username, string password)
+        public async Task<User> GetUser(string username)
         {
-            var query = await _context.User.Where(u => u.Email == username).FirstOrDefaultAsync();
-            var user = new UserVM
-            {
-                Username = query.Email,
-                Email = query.Email,
-                FirstName = query.FirstName,
-                LastName = query.LastName,
-                Password = password
-            };
+            var user = await _context.User.Where(u => u.Email == username).FirstOrDefaultAsync();
             return user;
         }
 

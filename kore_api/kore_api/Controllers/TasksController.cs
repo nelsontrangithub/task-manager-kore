@@ -92,6 +92,29 @@ namespace kore_api.Controllers
         }
 
         /// <summary>
+        /// Gets Tasks by AccountID and UserID
+        /// </summary>
+        //GET: api/Tasks/account/5/user/5
+        [HttpGet("account/{accountID}/user/{userID}")]
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IActionResult GetTasksByAccountUser([FromRoute] int accountID, [FromRoute] int userID)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = _tasksRepository.GetTasksByAccountUser(accountID, userID);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Gets Task by Id
         /// </summary>
         // GET: api/Tasks/5

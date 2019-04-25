@@ -37,7 +37,7 @@ namespace kore_api.Repositories
             return query;
         }
 
-        public async IEnumerable<AccountVM> GetAccountsByUser(int userID)
+        public IEnumerable<AccountVM> GetAccountsByUser(int userID)
         {
             var query = from x in _context.Account
                         join y in _context.Organization on x.OrgId equals y.Id

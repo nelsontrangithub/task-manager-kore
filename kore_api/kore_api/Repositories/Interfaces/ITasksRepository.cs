@@ -13,6 +13,7 @@ namespace kore_api.Repositories.Interfaces
         IEnumerable<Task> GetTasks();
         IEnumerable<TaskVM> GetTaskMemberships();
         IEnumerable<TaskVM> GetTasksByAccount(int accountID);
+        IEnumerable<TaskVM> GetTasksByAccountUser(int accountID, int userID);
         IEnumerable<TaskVM> GetUserAssignedTasks(int userID);
         Task<Task> GetTask(int id);
         IEnumerable<Task> GetTaskByOwner(int userID);
