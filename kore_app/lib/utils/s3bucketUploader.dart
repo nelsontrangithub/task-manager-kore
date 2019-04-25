@@ -3,12 +3,11 @@ import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
-import 'package:test/test.dart';
 import 'package:amazon_cognito_identity_dart/sig_v4.dart';
 import './s3bucketPolicy.dart';
 
 class S3bucketUploader {
-  void uploadFile(String pathToFile, String fileName, String bucketName) {
+  static void uploadFile(String pathToFile, String fileName, String bucketName) async {
     const _accessKeyId = 'AKIAI7VGATG6RF6KV6CA';
     const _secretKeyId = 'Ky8ImCeRiz5iBoFi0Zrgo5oB2JWPWuuRTc+q7spH';
     const _region = 'us-east-2';

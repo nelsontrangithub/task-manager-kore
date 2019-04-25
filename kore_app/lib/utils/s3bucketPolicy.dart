@@ -10,7 +10,7 @@ class S3bucketPolicy {
   String datetime;
   int maxFileSize;
 
-  Policy(this.key, this.bucket, this.datetime, this.expiration, this.credential,
+  S3bucketPolicy(this.key, this.bucket, this.datetime, this.expiration, this.credential,
       this.maxFileSize,
       {this.region = 'us-east-2'});
 

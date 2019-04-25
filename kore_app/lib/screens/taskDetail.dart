@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import '../models/task.dart';
 import '../utils/theme.dart';
+import '../utils/s3bucketUploader.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
 
@@ -286,6 +287,7 @@ class TaskDetailState extends State<TaskDetail> {
         print(_path);
       });
     }
+    S3bucketUploader.uploadFile(_path, _fileName, "koretaskmanagermediabucket");
   }
 }
 
