@@ -31,51 +31,56 @@ class TaskDetailState extends State<TaskDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(widget.task.title)),
-        body: new Column(
-          children: <Widget>[
-            _buildHeader(),
-            _buildCalendar(),
-            _buildTaskDescription(),
-            _buildTaskEnd()
-            //  _buildTaskEnd(widget.task),
-          ],
-        ));
+      appBar: AppBar(title: Text(widget.task.title)),
+      body: new ListView(
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              _buildHeader(),
+              _buildCalendar(),
+              _buildTaskDescription(),
+              _buildTaskEnd()
+              //  _buildTaskEnd(widget.task),
+            ],
+          ),
+        ],
+      ),
+    );
   }
+
   Widget _buildUploadButton() {
-      return Material(
-        elevation: 4.0,
-        borderRadius: BorderRadius.circular(30.0),
-        color: Color(0xff1282c5),
-        child: MaterialButton(
-          minWidth: 200,
-          onPressed: () {},
-          child: Text(
-            'Upload File',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-          ),
+    return Material(
+      elevation: 4.0,
+      borderRadius: BorderRadius.circular(30.0),
+      color: Color(0xff1282c5),
+      child: MaterialButton(
+        minWidth: 100,
+        onPressed: () {},
+        child: Text(
+          'Upload File',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
-      );
-    }
+      ),
+    );
+  }
 
-Widget _buildDoneButton() {
-      return Material(
-        elevation: 4.0,
-        shape: CircleBorder(side: BorderSide.none),
-        color: Color(0xff1282c5),
-        child: MaterialButton(
+  Widget _buildDoneButton() {
+    return Material(
+      elevation: 4.0,
+      shape: CircleBorder(side: BorderSide.none),
+      color: Color(0xff1282c5),
+      child: MaterialButton(
           minWidth: 100,
-          onPressed: () {},
-          child: Icon(Icons.check, color: Colors.white,)
-          ),
-      );
-    }
-
-
-
-
-
+          onPressed: () {
+            showAlertDialog(context);
+          },
+          child: Icon(
+            Icons.check,
+            color: Colors.white,
+          )),
+    );
+  }
 
   Widget _buildTaskEnd() {
     return Container(
@@ -84,14 +89,10 @@ Widget _buildDoneButton() {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Column(
-            children: <Widget>[
-              _buildUploadButton()
-            ],
+            children: <Widget>[_buildUploadButton()],
           ),
           Column(
-            children: <Widget>[
-              _buildDoneButton()
-            ],
+            children: <Widget>[_buildDoneButton()],
           ),
         ],
       ),
@@ -154,7 +155,7 @@ Widget _buildDoneButton() {
     return Container(
         margin: EdgeInsets.symmetric(horizontal: 6.0),
         child: Card(
-          elevation: 4,
+          elevation: 0,
           child: CalendarCarousel(
             height: 340,
           ),
@@ -165,11 +166,11 @@ Widget _buildDoneButton() {
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
       child: Card(
-        elevation: 4,
+        elevation: 0,
         child: Column(
           children: <Widget>[
             ListTile(
-              leading: Icon(Icons.description, color: KorePrimaryColor),
+              // leading: Icon(Icons.description, color: KorePrimaryColor),
               title: Text(
                 "Description: ",
                 style: TextStyle(
@@ -225,7 +226,38 @@ Widget _buildDoneButton() {
   //     ),
   //   );
   // }
-
+  showAlertDialog(BuildContext context) {
+    // set up the buttons
+    Widget cancelButton = FlatButton(
+      child: Text("Cancel"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Done!!"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Notice"),
+      content: Text(
+          "Would you like to confirm the task?"),
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 }
 
 class TaskDetail extends StatefulWidget {
