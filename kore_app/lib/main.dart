@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kore_app/auth/authentication_event.dart';
 import 'package:kore_app/auth/authentication_state.dart';
 import 'package:kore_app/auth/user_repository.dart';
-import 'package:kore_app/screens/contractList.dart';
+import 'package:kore_app/screens/accountList.dart';
 import 'package:kore_app/screens/loading_indicator.dart';
 import 'package:kore_app/auth/authentication_bloc.dart';
 import 'package:kore_app/screens/splash.dart';
@@ -73,7 +73,7 @@ class _AppState extends State<MyApp> {
               return Splash();
             }
             if (state is AuthenticationAuthenticated) {
-              return ContractList();
+              return AccountList();
             }
             if (state is AuthenticationUnauthenticated) {
               return MyHomePage(

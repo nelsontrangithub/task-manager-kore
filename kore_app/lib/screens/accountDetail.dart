@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:kore_app/utils/theme.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:kore_app/models/contract.dart';
+import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/data/signin.dart';
 import 'package:kore_app/screens/taskDetail.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../models/task.dart';
 
-class ContractDetailState extends State<ContractDetail> {
+class AccountDetailState extends State<AccountDetail> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _tasks = <Task>[];
   int _count = 0;
@@ -23,9 +24,8 @@ class ContractDetailState extends State<ContractDetail> {
   //good place for dummydata loading
   @override
   initState() {
-   
     super.initState();
-    
+
     /*
     if (task){
        text = "Mark Not Complete";
@@ -35,7 +35,11 @@ class ContractDetailState extends State<ContractDetail> {
     */
 
     /*dummy data*/
-    _tasks.add(Task(1, "Task 1", false, "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+    _tasks.add(Task(
+        1,
+        "Task 1",
+        false,
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
         DateTime.utc(2019, 4, 26)));
     _tasks.add(Task(2, "Task 2", false, "This is the description",
         DateTime.utc(2019, 6, 6)));
@@ -55,36 +59,72 @@ class ContractDetailState extends State<ContractDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text(widget.contract.title),
+        title: Text(widget.account.title),
         // actions: <Widget>[      // Add 3 lines from here...
         //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         //   ],
       ),
-      body: new Column(
-          children: <Widget>[_buildPercentIndicator(), _buildList()]),
+      body: new Column(children: <Widget>[
+        _buildHeader(),
+       // _buildPercentIndicator(),
+        _buildList()
+      ]),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      // margin: const EdgeInsets.symmetric(vertical: 0.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      decoration: BoxDecoration(
+        borderRadius:
+            BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
+        color: KorePrimaryColor,
+      ),
+      child: new Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          //Using expanded to ensure the image is always sized with contraint
+          Expanded(
+            child: new Container(
+              height: 150.0,
+              child: Column(
+                children: <Widget>[
+                  _buildPercentIndicator(),
+                ],
+              ),
+            )
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildPercentIndicator() {
     return new Container(
-      padding: const EdgeInsets.symmetric(vertical: 30.0),
-      child: new CircularPercentIndicator(
-        radius: 120.0,
-        lineWidth: 13.0,
-        animation: true,
-        percent: widget.contract.percentage * 0.01,
-        center: new Text(
-          widget.contract.percentage.toString() + "%",
-          style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: new CircularPercentIndicator(
+          radius: 95.0,
+          lineWidth: 13.0,
+          animation: true,
+          percent: widget.account.percentage * 0.01,
+          center: new Text(
+            widget.account.percentage.toString() + "%",
+            style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          ),
+          footer: new Text(
+            "Progress",
+            style: new TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold, 
+              fontSize: 17.0),
+          ),
+          circularStrokeCap: CircularStrokeCap.round,
+          backgroundColor: Colors.white,
+          progressColor: Colors.purple,
         ),
-        footer: new Text(
-          "Progress",
-          style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
-        ),
-        circularStrokeCap: CircularStrokeCap.round,
-        progressColor: Colors.purple,
-      ),
     );
   }
 
@@ -144,30 +184,32 @@ class ContractDetailState extends State<ContractDetail> {
       ],
     );
   }
-    void markCompleted(Task task){
-      task.isCompleted = true;
-      
-      setState(() {
-        task.setStatus();
-      });
-      
-      print(task.isCompleted);
-    }
 
-    void markNotCompleted(Task task){
-      task.isCompleted = false;
-      
-      setState(() {
-        task.setStatus();
-      });
-      
-      print(task.isCompleted);
-    }
+  void markCompleted(Task task) {
+    task.isCompleted = true;
+
+    setState(() {
+      task.setStatus();
+    });
+
+    print(task.isCompleted);
+  }
+
+  void markNotCompleted(Task task) {
+    task.isCompleted = false;
+
+    setState(() {
+      task.setStatus();
+    });
+
+    print(task.isCompleted);
+  }
 }
 
-class ContractDetail extends StatefulWidget {
-  final Contract contract;
-  const ContractDetail({Key key, this.contract}) : super(key: key);
+class AccountDetail extends StatefulWidget {
+  final Account account;
+  const AccountDetail({Key key, this.account}) : super(key: key);
+
   @override
-  ContractDetailState createState() => new ContractDetailState();
+  AccountDetailState createState() => new AccountDetailState();
 }

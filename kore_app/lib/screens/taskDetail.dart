@@ -32,9 +32,9 @@ class TaskDetailState extends State<TaskDetail> {
     super.initState();
     if (widget.task.isCompleted == true) {
       icon = Icons.check;
-      iconColor = KorePrimaryColor;
+      iconColor = Colors.green;
     } else {
-      icon = Icons.do_not_disturb_on;
+      icon = Icons.block;
       iconColor = Colors.redAccent;
     }
     _controller.addListener(() => _extension = _controller.text);
@@ -49,8 +49,8 @@ class TaskDetailState extends State<TaskDetail> {
           Column(
             children: <Widget>[
               _buildHeader(),
-              _buildCalendar(widget.task),
               _buildTaskDescription(),
+              _buildCalendar(widget.task),
               _buildTaskEnd()
               //  _buildTaskEnd(widget.task),
             ],
@@ -92,6 +92,16 @@ class TaskDetailState extends State<TaskDetail> {
                     fontSize: 21.0,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
+                  ),
+                ),
+                new Container(
+                  margin: const EdgeInsets.only(top: 5.0),
+                  child: new Text(
+                    'Status: ' + widget.task.status.toString(),
+                    style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
                 new Container(
@@ -200,14 +210,14 @@ class TaskDetailState extends State<TaskDetail> {
     return Material(
       elevation: 4.0,
       shape: CircleBorder(side: BorderSide.none),
-      color: Color(0xff1282c5),
+      color: iconColor,
       child: MaterialButton(
           minWidth: 100,
           onPressed: () {
             showAlertDialog(context);
           },
           child: Icon(
-            Icons.check,
+            icon,
             color: Colors.white,
           )),
     );
@@ -218,9 +228,9 @@ class TaskDetailState extends State<TaskDetail> {
     setState(() {
       if (task.isCompleted == true) {
         icon = Icons.check;
-        iconColor = KorePrimaryColor;
+        iconColor = Colors.green;
       } else {
-        icon = Icons.do_not_disturb_on;
+        icon = Icons.block;
         iconColor = Colors.redAccent;
       }
       task.setStatus();
