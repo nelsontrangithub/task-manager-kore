@@ -1,9 +1,11 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 import '../models/task.dart';
 import '../utils/theme.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
@@ -16,6 +18,16 @@ class TaskDetailState extends State<TaskDetail> {
   var icon;
   var iconColor;
 
+  //file picker
+  String _fileName;
+  String _path;
+  Map<String, String> _paths;
+  String _extension;
+  bool _multiPick = false;
+  bool _hasValidMime = false;
+  FileType _pickingType;
+  TextEditingController _controller = new TextEditingController();
+
   initState() {
     super.initState();
     if (widget.task.isCompleted == true) {
@@ -25,6 +37,7 @@ class TaskDetailState extends State<TaskDetail> {
       icon = Icons.do_not_disturb_on;
       iconColor = Colors.redAccent;
     }
+    _controller.addListener(() => _extension = _controller.text);
   }
 
   @override
@@ -171,7 +184,9 @@ class TaskDetailState extends State<TaskDetail> {
       color: Color(0xff1282c5),
       child: MaterialButton(
         minWidth: 100,
-        onPressed: () {},
+        onPressed: () {
+          openFileExplorer();
+        },
         child: Text(
           'Upload File',
           textAlign: TextAlign.center,
@@ -224,6 +239,7 @@ class TaskDetailState extends State<TaskDetail> {
     Widget continueButton = FlatButton(
       child: Text("Done!!"),
       onPressed: () {
+        toggleCompleted(widget.task);
         Navigator.of(context).pop();
       },
     );
@@ -244,11 +260,37 @@ class TaskDetailState extends State<TaskDetail> {
       },
     );
   }
+
+  void openFileExplorer() async {
+    if (_pickingType != FileType.CUSTOM || _hasValidMime) {
+      try {
+        if (_multiPick) {
+          _path = null;
+          _paths = await FilePicker.getMultiFilePath(
+              type: _pickingType, fileExtension: _extension);
+        } else {
+          _paths = null;
+          _path = await FilePicker.getFilePath(
+              type: _pickingType, fileExtension: _extension);
+        }
+      } on PlatformException catch (e) {
+        print("Unsupported operation" + e.toString());
+      }
+      if (!mounted) return;
+
+      setState(() {
+        _fileName = _path != null
+            ? _path.split('/').last
+            : _paths != null ? _paths.keys.toString() : '...';
+        print(_fileName);
+        print(_path);
+      });
+    }
+  }
 }
 
 class TaskDetail extends StatefulWidget {
   final Task task;
-
   const TaskDetail({Key key, this.task}) : super(key: key);
 
   @override

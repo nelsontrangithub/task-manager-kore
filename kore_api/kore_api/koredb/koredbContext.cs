@@ -36,7 +36,7 @@ namespace kore_api.koredb
                 }
                 else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
                 {
-                    ConnectionString = "server=koretaskmanagerrdsinstance.cya4cpibjenz.us-east-2.rds.amazonaws.com;port=3306;user=koreadmin;password=koressd2019;database=task_manager";
+                    ConnectionString = "server=koretaskmanagerrdsinstance.cya4cpibjenz.us-east-2.rds.amazonaws.com;port=3306;user=koreadmin;password=koressd2019;database=koredb";
                 }
                 if(ConnectionString != null)
                     optionsBuilder.UseMySQL(ConnectionString);
