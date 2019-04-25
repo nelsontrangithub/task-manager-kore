@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -263,6 +265,7 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   void openFileExplorer() async {
+    File file;
     if (_pickingType != FileType.CUSTOM || _hasValidMime) {
       try {
         if (_multiPick) {
@@ -271,23 +274,22 @@ class TaskDetailState extends State<TaskDetail> {
               type: _pickingType, fileExtension: _extension);
         } else {
           _paths = null;
-          _path = await FilePicker.getFilePath(
-              type: _pickingType, fileExtension: _extension);
+          file = await FilePicker.getFile(type: FileType.ANY);
+          // _path = await FilePicker.getFilePath(
+          //     type: _pickingType, fileExtension: _extension);
         }
       } on PlatformException catch (e) {
         print("Unsupported operation" + e.toString());
       }
       if (!mounted) return;
 
-      setState(() {
-        _fileName = _path != null
-            ? _path.split('/').last
-            : _paths != null ? _paths.keys.toString() : '...';
-        print(_fileName);
-        print(_path);
-      });
+      // setState(() {
+      //   _fileName = _path != null
+      //       ? _path.split('/').last
+      //       : _paths != null ? _paths.keys.toString() : '...';
+      // });
     }
-    S3bucketUploader.uploadFile(_path, _fileName, "koretaskmanagermediabucket");
+    S3bucketUploader.uploadFile(file, "koretaskmanagermediabucket");
   }
 }
 
