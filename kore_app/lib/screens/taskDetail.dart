@@ -6,8 +6,8 @@ import 'package:kore_app/utils/theme.dart';
 import 'package:intl/intl.dart';
 import '../models/task.dart';
 import '../utils/theme.dart';
-import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
-    show CalendarCarousel;
+import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart' show CalendarCarousel;
+
 
 class TaskDetailState extends State<TaskDetail> {
   final _user = User("Tina",
@@ -27,6 +27,7 @@ class TaskDetailState extends State<TaskDetail> {
       textcolor = Colors.green[800];
     }
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -37,62 +38,11 @@ class TaskDetailState extends State<TaskDetail> {
           Column(
             children: <Widget>[
               _buildHeader(),
-              _buildCalendar(),
+              _buildCalendar(widget.task),
               _buildTaskDescription(),
               _buildTaskEnd()
               //  _buildTaskEnd(widget.task),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildUploadButton() {
-    return Material(
-      elevation: 4.0,
-      borderRadius: BorderRadius.circular(30.0),
-      color: Color(0xff1282c5),
-      child: MaterialButton(
-        minWidth: 100,
-        onPressed: () {},
-        child: Text(
-          'Upload File',
-          textAlign: TextAlign.center,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDoneButton() {
-    return Material(
-      elevation: 4.0,
-      shape: CircleBorder(side: BorderSide.none),
-      color: Color(0xff1282c5),
-      child: MaterialButton(
-          minWidth: 100,
-          onPressed: () {
-            showAlertDialog(context);
-          },
-          child: Icon(
-            Icons.check,
-            color: Colors.white,
-          )),
-    );
-  }
-
-  Widget _buildTaskEnd() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Column(
-            children: <Widget>[_buildUploadButton()],
-          ),
-          Column(
-            children: <Widget>[_buildDoneButton()],
           ),
         ],
       ),
@@ -151,13 +101,29 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  Widget _buildCalendar() {
+  Widget _buildCalendar(Task task) {
+
+    
+
     return Container(
-        margin: EdgeInsets.symmetric(horizontal: 6.0),
         child: Card(
           elevation: 0,
           child: CalendarCarousel(
-            height: 340,
+            viewportFraction: 0.5,
+            dayPadding: 5,	
+            height: 380,
+            weekendTextStyle: TextStyle(
+              color: Colors.red,
+            ),
+            todayTextStyle: TextStyle(
+              fontSize: 20
+            ),
+            selectedDayTextStyle: TextStyle(
+              fontSize: 20
+            ),
+            todayButtonColor: KorePrimaryColor,
+            selectedDateTime: widget.task.dueDate,
+            selectedDayButtonColor: Colors.red,
           ),
         ));
   }
@@ -170,7 +136,6 @@ class TaskDetailState extends State<TaskDetail> {
         child: Column(
           children: <Widget>[
             ListTile(
-              // leading: Icon(Icons.description, color: KorePrimaryColor),
               title: Text(
                 "Description: ",
                 style: TextStyle(
@@ -188,6 +153,57 @@ class TaskDetailState extends State<TaskDetail> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildTaskEnd() {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Column(
+            children: <Widget>[_buildUploadButton()],
+          ),
+          Column(
+            children: <Widget>[_buildDoneButton()],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildUploadButton() {
+    return Material(
+      elevation: 4.0,
+      borderRadius: BorderRadius.circular(30.0),
+      color: Color(0xff1282c5),
+      child: MaterialButton(
+        minWidth: 100,
+        onPressed: () {},
+        child: Text(
+          'Upload File',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDoneButton() {
+    return Material(
+      elevation: 4.0,
+      shape: CircleBorder(side: BorderSide.none),
+      color: Color(0xff1282c5),
+      child: MaterialButton(
+          minWidth: 100,
+          onPressed: () {
+            showAlertDialog(context);
+          },
+          child: Icon(
+            Icons.check,
+            color: Colors.white,
+          )),
     );
   }
 
@@ -226,6 +242,8 @@ class TaskDetailState extends State<TaskDetail> {
   //     ),
   //   );
   // }
+
+  //Alert Dialog
   showAlertDialog(BuildContext context) {
     // set up the buttons
     Widget cancelButton = FlatButton(
@@ -243,8 +261,7 @@ class TaskDetailState extends State<TaskDetail> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Notice"),
-      content: Text(
-          "Would you like to confirm the task?"),
+      content: Text("Would you like to confirm the task?"),
       actions: [
         cancelButton,
         continueButton,
