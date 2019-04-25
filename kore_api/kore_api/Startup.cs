@@ -56,6 +56,9 @@ namespace kore_api
                     options.Audience = "6fba0vhhhemve6bq3sm5evd0do";
                     options.Authority = "https://cognito-idp.us-east-2.amazonaws.com/us-east-2_G26JTdg5h";
                 });
+
+            services.AddCors();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSwaggerGen(c =>
@@ -114,6 +117,11 @@ namespace kore_api
             app.UseAuthentication();
             app.UseHttpsRedirection();
             //app.UseMvc();
+
+            app.UseCors(
+                options => options.WithOrigins("http://example.com").AllowAnyMethod()
+            );
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
