@@ -119,7 +119,7 @@ namespace kore_api.Controllers
         /// Assign a Task to a User
         /// </summary>
         // PUT: api/Tasks/5
-        [HttpPut("user/{id}")]
+        [HttpPost("user/{id}")]
         [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> AssignTask([FromRoute] int id, [FromBody] int userID)
         {

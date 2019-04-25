@@ -118,17 +118,29 @@ namespace kore_api.Repositories
         //Assign a task to a user
         public async Task<bool> AssignToUser(int id, int userID)
         {
-            var task = await _context.Taskmembership.Where(t => t.Id == id).FirstOrDefaultAsync();
+            var task = await _context.Task.Where(t => t.Id == id).FirstOrDefaultAsync();
 
             if (task == null)
             {
                 return false;
             }
 
+            var taskMembership = new Taskmembership
+            {
+                TaskId = task.Id,
+                AccountId = task.AccountId,
+                UserId = userID,
+                OrgId = task.OrgId,
+                DateCreated = DateTime.Now,
+                DateModified = DateTime.Now,
+                Status = 0,
+                CreatedBy = task.OwnerId,
+                ModifiedBy = task.OwnerId
+            };
+
             try
             {
-                task.UserId = userID;
-                _context.Update(task);
+                _context.Taskmembership.Add(taskMembership);
                 await _context.SaveChangesAsync();
                 return true;
             }
