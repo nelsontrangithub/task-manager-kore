@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:kore_app/models/contract.dart';
+import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/data/signin.dart';
 import 'package:kore_app/screens/taskDetail.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../models/task.dart';
 
-class ContractDetailState extends State<ContractDetail> {
+class AccountDetailState extends State<AccountDetail> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _tasks = <Task>[];
   int _count = 0;
@@ -61,7 +61,7 @@ class ContractDetailState extends State<ContractDetail> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text(widget.contract.title),
+        title: Text(widget.account.title),
         // actions: <Widget>[      // Add 3 lines from here...
         //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         //   ],
@@ -109,9 +109,9 @@ class ContractDetailState extends State<ContractDetail> {
           radius: 95.0,
           lineWidth: 13.0,
           animation: true,
-          percent: widget.contract.percentage * 0.01,
+          percent: widget.account.percentage * 0.01,
           center: new Text(
-            widget.contract.percentage.toString() + "%",
+            widget.account.percentage.toString() + "%",
             style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
           ),
           footer: new Text(
@@ -206,9 +206,10 @@ class ContractDetailState extends State<ContractDetail> {
   }
 }
 
-class ContractDetail extends StatefulWidget {
-  final Contract contract;
-  const ContractDetail({Key key, this.contract}) : super(key: key);
+class AccountDetail extends StatefulWidget {
+  final Account account;
+  const AccountDetail({Key key, this.account}) : super(key: key);
+
   @override
-  ContractDetailState createState() => new ContractDetailState();
+  AccountDetailState createState() => new AccountDetailState();
 }

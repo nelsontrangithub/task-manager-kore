@@ -1,9 +1,9 @@
 import 'package:kore_app/models/task.dart';
 
-class Contract {
+class Account {
   String title;
   bool isCompleted;
   double percentage;
   List<Task> taskList;
-  Contract(this.title, this.isCompleted, this.percentage, this.taskList);
+  Account(this.title, this.isCompleted, this.percentage, this.taskList);
 }
