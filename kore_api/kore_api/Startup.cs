@@ -34,10 +34,10 @@ namespace kore_api
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
-			string[] arr = { "" };
-
+			
 			services.AddAuthorization(options =>
 			{
+				//Policies for Cognito roles
 				options.AddPolicy("IsAdmin", policy =>
 					policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Admin" })));
 				options.AddPolicy("IsAgent", policy =>
@@ -115,7 +115,7 @@ namespace kore_api
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                c.SwaggerEndpoint("Prod/swagger/v1/swagger.json", "My API V1");
             });
         }
     }
