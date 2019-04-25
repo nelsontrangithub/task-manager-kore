@@ -3,8 +3,9 @@
 [Google Drive](https://drive.google.com/open?id=152iXPBzXkmBrEiGeA1CxkhKxQQXTxXR6)
 
 ## Test API
+Full API documentation with testing available at http://localhost:56203/swagger/ after launching the sln.
 
-Use Postman OR launch kore_api.sln and navigate to http://localhost:56203/swagger/
+- If you are testing with a local MySql database you must set username to 'root' and password to 'password'
 
 - Sign In
 ![](project-files/swagger1.png)

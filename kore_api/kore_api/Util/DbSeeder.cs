@@ -37,7 +37,7 @@ namespace kore_api.Util
                        Name = "Anne Smith",
                        DateCreated = DateTime.Now,
                        Status = 1,
-                       FirstName = "Joe",
+                       FirstName = "Anne",
                        LastName = "Smith"
                 }
             };

@@ -17,6 +17,7 @@ namespace kore_api.Controllers
     /// <summary>
     /// ASP.NET Core controller acting as a S3 Proxy.
     /// </summary>
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("api/[controller]")]
     public class S3ProxyController : Controller
     {
