@@ -22,6 +22,9 @@ namespace kore_api.Controllers
             _accountsRepository = accountsRepository;
         }
 
+        /// <summary>
+        /// Get all Accounts with OrgName
+        /// </summary>
         // GET: api/account
         [HttpGet]
 		[Authorize(Policy = "IsAdminOrAgent")]
@@ -30,6 +33,9 @@ namespace kore_api.Controllers
             return _accountsRepository.GetAccounts();
         }
 
+        /// <summary>
+        /// Get an Account by Id
+        /// </summary>
         [HttpGet("{id}")]
         [Authorize(Policy = "IsAdminOrAgent")]
         public async Task<IActionResult> Get([FromRoute] int id)
@@ -50,6 +56,9 @@ namespace kore_api.Controllers
         }
 
 
+        /// <summary>
+        /// Update 'Status' of an Account (Admin only)
+        /// </summary>
         // PUT: api/Accounts/5
         [HttpPut("{id}")]
         [Authorize(Policy = "IsAdmin")]
@@ -70,9 +79,13 @@ namespace kore_api.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Delete an Account (Admin only)
+        /// </summary>
         // DELETE: api/Accounts/5
         //Admin only
         [HttpDelete("{id}")]
+        [Authorize(Policy = "IsAdmin")]
         public async Task<IActionResult> DeleteAccount([FromRoute] int id)
         {
             if (!ModelState.IsValid)

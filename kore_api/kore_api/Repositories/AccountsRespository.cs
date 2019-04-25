@@ -17,17 +17,6 @@ namespace kore_api.Repositories
             _context = context;
         }
 
-        public Task<Account> GetAccount(int id)
-        {
-            return _context.Account.FindAsync(id);
-        }
-
-        //public IEnumerable<Account> GetAccounts()
-        //{
-        //    var accounts = _context.Account.ToList();
-        //    return accounts;
-        //}
-
         public IEnumerable<AccountVM> GetAccounts()
         {
             var query = from x in _context.Account
@@ -46,6 +35,11 @@ namespace kore_api.Repositories
                             ModifiedBy = x.ModifiedBy
                         };
             return query;
+        }
+
+        public Task<Account> GetAccount(int id)
+        {
+            return _context.Account.FindAsync(id);
         }
 
         public async Task<bool> Update(int id, int status)
