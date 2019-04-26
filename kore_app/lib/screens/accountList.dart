@@ -13,8 +13,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 
 class AccountListState extends State<AccountList> {
-  final _user = User("Tina",
-      "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
+  final _user = User();
+ // ("Tina", "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   final _contracts = <Account>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _nameFont = const TextStyle(fontSize: 28.0);
@@ -30,18 +30,18 @@ class AccountListState extends State<AccountList> {
     _api = Api();
     // _contracts.add();
     /*dummy data*/
-    _contracts.add(Account("Contract 1", false, 20, null));
-    _contracts.add(Account("Contract 2", false, 50, null));
-    _contracts.add(Account("Contract 3", true, 100, null));
-    _contracts.add(Account("Contract 4", false, 40, null));
-    _contracts.add(Account("Contract 5", false, 50, null));
-    _contracts.add(Account("Contract 6", false, 60, null));
-    _contracts.add(Account("Contract 7", true, 70, null));
-    _contracts.add(Account("Contract 8", false, 80, null));
-    _contracts.add(Account("Contract 9", false, 100, null));
-    _contracts.add(Account("Contract 10", false, 100, null));
-    _contracts.add(Account("Contract 11", true, 100, null));
-    _contracts.add(Account("Contract 12", false, 100, null));
+    // _contracts.add(Account("Contract 1", false, 20, null));
+    // _contracts.add(Account("Contract 2", false, 50, null));
+    // _contracts.add(Account("Contract 3", true, 100, null));
+    // _contracts.add(Account("Contract 4", false, 40, null));
+    // _contracts.add(Account("Contract 5", false, 50, null));
+    // _contracts.add(Account("Contract 6", false, 60, null));
+    // _contracts.add(Account("Contract 7", true, 70, null));
+    // _contracts.add(Account("Contract 8", false, 80, null));
+    // _contracts.add(Account("Contract 9", false, 100, null));
+    // _contracts.add(Account("Contract 10", false, 100, null));
+    // _contracts.add(Account("Contract 11", true, 100, null));
+    // _contracts.add(Account("Contract 12", false, 100, null));
   }
 
   @override
@@ -82,7 +82,7 @@ class AccountListState extends State<AccountList> {
               height: 150.0,
               // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: new CachedNetworkImage(
-                imageUrl: _user.iconUrl,
+                imageUrl: _user.iconFileUrl,
                 placeholder: (context, url) => new CircularProgressIndicator(),
                 errorWidget: (context, url, error) => new Icon(Icons.error),
               ),
@@ -95,7 +95,7 @@ class AccountListState extends State<AccountList> {
                 new Text(_user.name, style: _nameFont),
                 new Container(
                   margin: const EdgeInsets.only(top: 5.0),
-                  child: new Text(_user.status),
+                  child: new Text(_user.status.toString()),
                 ),
               ],
             ),
@@ -123,7 +123,7 @@ class AccountListState extends State<AccountList> {
   Widget _buildRow(Account account) {
     return ListTile(
       title: Text(
-        account.title,
+        account.accountName,
         style: _biggerFont,
       ),
       trailing: Icon(
