@@ -15,7 +15,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class AccountListState extends State<AccountList> {
   final _user = User();
  // ("Tina", "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
-  final _contracts = <Account>[];
+  Future<List<Account>> _contracts;
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _nameFont = const TextStyle(fontSize: 28.0);
   Future<String> _token;
@@ -24,10 +24,11 @@ class AccountListState extends State<AccountList> {
   //one of the state lifecycle function, only load once
   //good place for dummydata loading
   @override
-  initState(){
+  initState() {
     super.initState();
-    _token = widget.userRepository.hasToken();
+    _token =  widget.userRepository.hasToken();
     _api = Api();
+    _contracts = _api.getAccountsById(_token);
     // _contracts.add();
     /*dummy data*/
     // _contracts.add(Account("Contract 1", false, 20, null));

@@ -31,7 +31,7 @@ class Task {
     this.status,
     this.createdBy,
     this.modifiedBy,
-    }
+    })
 
   {
     if (isCompleted == true) {

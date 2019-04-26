@@ -1,5 +1,3 @@
-import 'package:kore_app/models/task.dart';
-
 class Account {
   int id;
   String accountName;
