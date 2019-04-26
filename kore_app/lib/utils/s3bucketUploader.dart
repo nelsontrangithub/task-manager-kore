@@ -12,8 +12,7 @@ class S3bucketUploader {
     const _accessKeyId = 'AKIAI7VGATG6RF6KV6CA';
     const _secretKeyId = 'Ky8ImCeRiz5iBoFi0Zrgo5oB2JWPWuuRTc+q7spH';
     const _region = 'us-east-2';
-    const _s3Endpoint =
-        'https://koretaskmanagermediabucket.s3.amazonaws.com';
+    const _s3Endpoint = 'https://koretaskmanagermediabucket.s3.amazonaws.com';
 
     // final file = File(path.join(pathToFile, fileName));
     final stream = http.ByteStream(DelegatingStream.typed(file.openRead()));

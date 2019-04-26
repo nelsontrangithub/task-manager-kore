@@ -1,4 +1,3 @@
-import 'package:kore_app/models/task.dart';
 
 class Account {
   String orgName;

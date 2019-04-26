@@ -12,6 +12,7 @@ class User {
   String sid;
 
   User({
+    int i, 
     this.id,
     this.email,
     this.name, 
