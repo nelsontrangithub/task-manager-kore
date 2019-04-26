@@ -1,7 +1,9 @@
 import 'package:kore_app/models/task.dart';
 
 class Account {
+  String orgName;
   int id;
+  int orgId;
   String accountName;
   DateTime dateCreated;
   DateTime dateModified;
@@ -12,7 +14,9 @@ class Account {
   double percentage;
 
   Account({
+    this.orgName,
     this.id,
+    this.orgId,
     this.accountName, 
     this.dateCreated,
     this.dateModified,
@@ -25,7 +29,9 @@ class Account {
 
   factory Account.fromJson(Map<String, dynamic> json ) {
     return new Account(
+        orgName: json['orgName'] as String,
         id: json['id'] as int,
+        orgId: json['orgId'] as int,
         accountName: json['accountName'] as String,
         dateCreated: json['dateCreated'] as DateTime,
         dateModified: json['dateModified'] as DateTime,
