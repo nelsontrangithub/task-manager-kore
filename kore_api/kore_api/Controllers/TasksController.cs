@@ -51,10 +51,21 @@ namespace kore_api.Controllers
         /// </summary>
         // GET: api/Tasks/account/1
         [HttpGet("account/{accountID}")]
-        [Authorize(Policy = "IsAdmin")]
+        [Authorize(Policy = "IsAdminOrAgent")]
         public IEnumerable<TaskVM> GetTaskByAccount([FromRoute] int accountID)
         {
             return _tasksRepository.GetTasksByAccount(accountID);
+        }
+
+        /// <summary>
+        /// Gets number of Tasks in an Account.
+        /// </summary>
+        // GET: api/Tasks/number/1
+        [HttpGet("number/{accountID}")]
+        [Authorize(Policy = "IsAdmin")]
+        public int GetNumberOfTasksInAccount([FromRoute] int accountID)
+        {
+            return _tasksRepository.GetNumberOfTasks(accountID);
         }
 
         /// <summary>
