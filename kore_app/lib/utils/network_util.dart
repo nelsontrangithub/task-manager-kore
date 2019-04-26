@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class NetworkUtil {
@@ -10,8 +11,10 @@ class NetworkUtil {
 
   final JsonDecoder _decoder = new JsonDecoder();
 
-  Future<dynamic> get(String url) {
-    return http.get(url).then((http.Response response) {
+  Future<dynamic> get(String url, String token) {
+    return http.get(url,
+    headers: {HttpHeaders.authorizationHeader: "Bearer " + token})
+    .then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
 

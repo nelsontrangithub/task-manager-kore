@@ -4,10 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kore_app/auth/authentication_bloc.dart';
 import 'package:kore_app/auth/authentication_event.dart';
 import 'package:kore_app/auth/user_repository.dart';
+import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/screens/accountDetail.dart';
 import 'package:kore_app/utils/theme.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 
 class AccountListState extends State<AccountList> {
   final _user = User("Tina",
@@ -15,13 +18,16 @@ class AccountListState extends State<AccountList> {
   final _contracts = <Account>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _nameFont = const TextStyle(fontSize: 28.0);
-  final Map<String, dynamic> _claims = UserRepository.claims;
+  Future<String> _token;
+  Api _api;
   // final Set<ContractInfo> _saved = Set<ContractInfo>();
   //one of the state lifecycle function, only load once
   //good place for dummydata loading
   @override
   initState(){
     super.initState();
+    _token = widget.userRepository.hasToken();
+    _api = Api();
     // _contracts.add();
     /*dummy data*/
     _contracts.add(Account("Contract 1", false, 20, null));
@@ -136,6 +142,12 @@ class AccountListState extends State<AccountList> {
 }
 
 class AccountList extends StatefulWidget {
+  AccountList({Key key, @required this.userRepository})
+      : assert(userRepository != null),
+        super(key: key);
+
+  final UserRepository userRepository;
+  
   @override
   AccountListState createState() => new AccountListState();
 }

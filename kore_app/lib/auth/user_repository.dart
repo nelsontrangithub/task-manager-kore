@@ -4,8 +4,8 @@ import 'package:meta/meta.dart';
 
 class UserRepository {
   final storage = new FlutterSecureStorage();
-  // RestDatasource source = new RestDatasource();
   String token;
+  // RestDatasource source = new RestDatasource();
   static Map<String, dynamic> claims;
   Future<String> authenticate({
     @required String username,

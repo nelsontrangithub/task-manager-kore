@@ -3,7 +3,7 @@ import 'package:kore_app/utils/theme.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/task.dart';
-import 'package:kore_app/data/signin.dart';
+import 'package:kore_app/data/api.dart';
 import 'package:kore_app/screens/taskDetail.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../models/task.dart';
@@ -18,7 +18,7 @@ class AccountDetailState extends State<AccountDetail> {
   var completeIcon;
 
   //test
-  RestDatasource datasource = new RestDatasource();
+  // Api _api = Api();
 
   //one of the state lifecycle function, only load once
   //good place for dummydata loading
