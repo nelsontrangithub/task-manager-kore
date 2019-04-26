@@ -34,6 +34,7 @@ namespace kore_api.Repositories
                             CreatedBy = x.CreatedBy,
                             ModifiedBy = x.ModifiedBy
                         };
+
             return query;
         }
 
