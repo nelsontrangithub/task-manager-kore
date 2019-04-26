@@ -299,7 +299,10 @@ class TaskDetailState extends State<TaskDetail> {
       //       : _paths != null ? _paths.keys.toString() : '...';
       // });
     }
-    S3bucketUploader.uploadFile(file, "koretaskmanagermediabucket");
+    //in case user click on cancel
+    if (file != null) {
+      S3bucketUploader.uploadFile(file, "koretaskmanagermediabucket");
+    }
   }
 }
 

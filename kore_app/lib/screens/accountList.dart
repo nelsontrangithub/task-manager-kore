@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kore_app/auth/authentication_bloc.dart';
 import 'package:kore_app/auth/authentication_event.dart';
+import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/screens/accountDetail.dart';
@@ -14,11 +15,12 @@ class AccountListState extends State<AccountList> {
   final _contracts = <Account>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _nameFont = const TextStyle(fontSize: 28.0);
+  final Map<String, dynamic> _claims = UserRepository.claims;
   // final Set<ContractInfo> _saved = Set<ContractInfo>();
   //one of the state lifecycle function, only load once
   //good place for dummydata loading
   @override
-  initState() {
+  initState(){
     super.initState();
     // _contracts.add();
     /*dummy data*/
@@ -128,13 +130,6 @@ class AccountListState extends State<AccountList> {
             MaterialPageRoute(
               builder: (context) => AccountDetail(account: account),
             ));
-        setState(() {
-          // if (contact.isCompleted) {
-          //   _saved.remove(pair);
-          // } else {
-          //   _saved.add(pair);
-          // }
-        });
       },
     );
   }

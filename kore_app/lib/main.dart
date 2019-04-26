@@ -72,7 +72,7 @@ class _AppState extends State<MyApp> {
             if (state is AuthenticationUninitialized) {
               return Splash();
             }
-            if (state is AuthenticationAuthenticated) {
+            if (state is AuthenticationAuthenticatedAdmin) {
               return AccountList();
             }
             if (state is AuthenticationUnauthenticated) {

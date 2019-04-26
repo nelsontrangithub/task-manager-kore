@@ -6,6 +6,7 @@ class UserRepository {
   final storage = new FlutterSecureStorage();
   // RestDatasource source = new RestDatasource();
   String token;
+  static Map<String, dynamic> claims;
   Future<String> authenticate({
     @required String username,
     @required String password,
@@ -14,6 +15,7 @@ class UserRepository {
     return token;
     // return 'token';
   }
+
 
   Future<void> deleteToken() async {
     /// delete from keystore/keychain
@@ -27,10 +29,9 @@ class UserRepository {
     return;
   }
 
-  Future<bool> hasToken() async {
+  Future<String> hasToken() async {
     /// read from keystore/keychain
     String tokenFromKeyChain = await storage.read(key: 'token');
-    print(tokenFromKeyChain);
-    return token == tokenFromKeyChain;
+    return tokenFromKeyChain;
   }
 }
