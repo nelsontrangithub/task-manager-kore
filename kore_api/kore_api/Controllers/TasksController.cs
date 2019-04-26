@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using kore_api.koredb;
 using kore_api.Repositories.Interfaces;
+using kore_api.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,9 @@ namespace kore_api.Controllers
             _tasksRepository = tasksRepository;
         }
 
+        /// <summary>
+        /// Gets all Tasks.
+        /// </summary>
         // GET: api/Tasks
         [HttpGet]
 		[Authorize(Policy = "IsAdminOrAgent")]
@@ -31,6 +35,88 @@ namespace kore_api.Controllers
             return _tasksRepository.GetTasks();
         }
 
+        /// <summary>
+        /// Gets all Tasks with memberships.
+        /// </summary>
+        // GET: api/Tasks/memberships
+        [HttpGet("memberships/")]
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IEnumerable<TaskVM> GetTaskMemberships()
+        {
+            return _tasksRepository.GetTaskMemberships();
+        }
+
+        /// <summary>
+        /// Gets all Tasks by AccountID.
+        /// </summary>
+        // GET: api/Tasks/account/1
+        [HttpGet("account/{accountID}")]
+        [Authorize(Policy = "IsAdmin")]
+        public IEnumerable<TaskVM> GetTaskByAccount([FromRoute] int accountID)
+        {
+            return _tasksRepository.GetTasksByAccount(accountID);
+        }
+
+        /// <summary>
+        /// Gets all Tasks by OwnerID.
+        /// </summary>
+        // GET: api/Tasks/owner/1
+        [HttpGet("owner/{ownerID}")]
+        [Authorize(Policy = "IsAdmin")]
+        public IEnumerable<Task> GetTaskByOwner([FromRoute] int ownerID)
+        {
+            return _tasksRepository.GetTaskByOwner(ownerID);
+        }
+
+        /// <summary>
+        /// Gets Tasks assigned to a User
+        /// </summary>
+        //GET: api/Tasks/user/5
+        [HttpGet("user/{id}")]
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IActionResult GetUserAssignedTasks([FromRoute] int id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = _tasksRepository.GetUserAssignedTasks(id);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Gets Tasks by AccountID and UserID
+        /// </summary>
+        //GET: api/Tasks/account/5/user/5
+        [HttpGet("account/{accountID}/user/{userID}")]
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IActionResult GetTasksByAccountUser([FromRoute] int accountID, [FromRoute] int userID)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = _tasksRepository.GetTasksByAccountUser(accountID, userID);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Gets Task by Id
+        /// </summary>
         // GET: api/Tasks/5
         [HttpGet("{id}")]
 		[Authorize(Policy = "IsAdminOrAgent")]
@@ -51,26 +137,9 @@ namespace kore_api.Controllers
             return Ok(task);
         }
 
-        //GET: api/Tasks/user/5
-        [HttpGet("user/{id}")]
-        [Authorize(Policy = "IsAdminOrAgent")]
-        public async Task<IActionResult> GetByUser([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var task = await _tasksRepository.GetTaskByUser(id);
-
-            if (task == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(task);
-        }
-
+        /// <summary>
+        /// Update 'Status' of a Task by Id, 0 = Incomplete / 1 = Completed
+        /// </summary>
         // PUT: api/Tasks/5
         [HttpPut("{id}")]
 		[Authorize(Policy = "IsAdminOrAgent")]
@@ -91,6 +160,32 @@ namespace kore_api.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Assign a Task to a User
+        /// </summary>
+        // PUT: api/Tasks/5
+        [HttpPost("user/{id}")]
+        [Authorize(Policy = "IsAdmin")]
+        public async Task<IActionResult> AssignTask([FromRoute] int id, [FromBody] int userID)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _tasksRepository.AssignToUser(id, userID);
+
+            if (result == true)
+            {
+                return Ok(result);
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Delete a Task (Admin only)
+        /// </summary>
         // DELETE: api/Tasks/5
         //Admin only
         [HttpDelete("{id}")]

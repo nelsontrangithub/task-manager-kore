@@ -4,15 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kore_app/auth/authentication_bloc.dart';
 import 'package:kore_app/auth/authentication_event.dart';
 import 'package:kore_app/auth/user_repository.dart';
-import 'package:kore_app/models/contract.dart';
+import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/user.dart';
-import 'package:kore_app/screens/contractDetail.dart';
-import 'package:kore_app/utils/jwt_extractor.dart';
+import 'package:kore_app/screens/accountDetail.dart';
+import 'package:kore_app/utils/theme.dart';
 
-class ContractListState extends State<ContractList> {
+class AccountListState extends State<AccountList> {
   final _user = User("Tina",
       "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
-  final _contracts = <Contract>[];
+  final _contracts = <Account>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _nameFont = const TextStyle(fontSize: 28.0);
   final Map<String, dynamic> _claims = UserRepository.claims;
@@ -24,19 +24,18 @@ class ContractListState extends State<ContractList> {
     super.initState();
     // _contracts.add();
     /*dummy data*/
-    _contracts.add(Contract("Contract 1", false, 20, null));
-    _contracts.add(Contract("Contract 2", false, 50, null));
-    _contracts.add(Contract("Contract 3", true, 100, null));
-    _contracts.add(Contract("Contract 4", false, 40, null));
-    _contracts.add(Contract("Contract 5", false, 50, null));
-    _contracts.add(Contract("Contract 6", false, 60, null));
-    _contracts.add(Contract("Contract 7", true, 70, null));
-    _contracts.add(Contract("Contract 8", false, 80, null));
-    _contracts.add(Contract("Contract 9", false, 100, null));
-    _contracts.add(Contract("Contract 10", false, 100, null));
-    _contracts.add(Contract("Contract 11", true, 100, null));
-    _contracts.add(Contract("Contract 12", false, 100, null));
-
+    _contracts.add(Account("Contract 1", false, 20, null));
+    _contracts.add(Account("Contract 2", false, 50, null));
+    _contracts.add(Account("Contract 3", true, 100, null));
+    _contracts.add(Account("Contract 4", false, 40, null));
+    _contracts.add(Account("Contract 5", false, 50, null));
+    _contracts.add(Account("Contract 6", false, 60, null));
+    _contracts.add(Account("Contract 7", true, 70, null));
+    _contracts.add(Account("Contract 8", false, 80, null));
+    _contracts.add(Account("Contract 9", false, 100, null));
+    _contracts.add(Account("Contract 10", false, 100, null));
+    _contracts.add(Account("Contract 11", true, 100, null));
+    _contracts.add(Account("Contract 12", false, 100, null));
   }
 
   @override
@@ -64,7 +63,9 @@ class ContractListState extends State<ContractList> {
       // margin: const EdgeInsets.symmetric(vertical: 0.0),
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       decoration: BoxDecoration(
-        color: Colors.black12,
+         borderRadius:
+            BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
+        color: KorePrimaryColor,
       ),
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -113,28 +114,28 @@ class ContractListState extends State<ContractList> {
             }));
   }
 
-  Widget _buildRow(Contract contract) {
+  Widget _buildRow(Account account) {
     return ListTile(
       title: Text(
-        contract.title,
+        account.title,
         style: _biggerFont,
       ),
       trailing: Icon(
         // Add the lines from here...
-        contract.percentage >= 100 ? Icons.done : null,
+        account.percentage >= 100 ? Icons.done : null,
       ),
       onTap: () {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ContractDetail(contract: contract),
+              builder: (context) => AccountDetail(account: account),
             ));
       },
     );
   }
 }
 
-class ContractList extends StatefulWidget {
+class AccountList extends StatefulWidget {
   @override
-  ContractListState createState() => new ContractListState();
+  AccountListState createState() => new AccountListState();
 }

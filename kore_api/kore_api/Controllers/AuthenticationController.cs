@@ -30,6 +30,9 @@ namespace kore_api.Controllers
 			this._userRepository = _userRepository;
 		}
 
+        /// <summary>
+        /// Register a User
+        /// </summary>
         [HttpPost]
         [Route("api/register")]
         public async Task<ActionResult<string>> Register(UserVM user)
@@ -69,9 +72,12 @@ namespace kore_api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Sign in with 'admin@kore.com' and 'P@ssw0rd!'
+        /// </summary>
         [HttpPost]
         [Route("api/signin")]
-        public async Task<ActionResult<string>> SignIn(UserVM user)
+        public async Task<ActionResult<string>> SignIn(string username, string password)
         {
             var cognito = new AmazonCognitoIdentityProviderClient(_region);
 
@@ -82,16 +88,31 @@ namespace kore_api.Controllers
                 AuthFlow = AuthFlowType.ADMIN_NO_SRP_AUTH
             };
 
-            request.AuthParameters.Add("USERNAME", user.Username);
-            request.AuthParameters.Add("PASSWORD", user.Password);
+            request.AuthParameters.Add("USERNAME", username);
+            request.AuthParameters.Add("PASSWORD", password);
 
-			if (!_userRepository.UserExists(user.Username))
+			if (!_userRepository.UserExists(username))
 			{
 				return NotFound("User not found");
 			}
 			var response = await cognito.AdminInitiateAuthAsync(request);
 
             return Ok(response.AuthenticationResult.IdToken);
+        }
+
+        /// <summary>
+        /// Get User by Username
+        /// </summary>
+        [HttpGet]
+        [Route("api/getUser/{username}")]
+        public async Task<IActionResult> GetUser([FromRoute] string username)
+        {
+            var result = await _userRepository.GetUser(username);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
     }
 }
