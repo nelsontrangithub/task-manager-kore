@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Task {
   int id;
+  int ownerId;
   String title;
   bool isCompleted;
   String description;
