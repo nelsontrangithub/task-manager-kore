@@ -22,6 +22,7 @@ class AccountListState extends State<AccountList> {
   @override
   initState(){
     super.initState();
+    // fixed data
     // _contracts.add();
     /*dummy data*/
     _contracts.add(Account("Contract 1", false, 20, null));
