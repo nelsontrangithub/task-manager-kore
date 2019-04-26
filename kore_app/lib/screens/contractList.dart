@@ -3,9 +3,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kore_app/auth/authentication_bloc.dart';
 import 'package:kore_app/auth/authentication_event.dart';
+import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/models/contract.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/screens/contractDetail.dart';
+import 'package:kore_app/utils/jwt_extractor.dart';
 
 class ContractListState extends State<ContractList> {
   final _user = User("Tina",
@@ -13,11 +15,12 @@ class ContractListState extends State<ContractList> {
   final _contracts = <Contract>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _nameFont = const TextStyle(fontSize: 28.0);
+  final Map<String, dynamic> _claims = UserRepository.claims;
   // final Set<ContractInfo> _saved = Set<ContractInfo>();
   //one of the state lifecycle function, only load once
   //good place for dummydata loading
   @override
-  initState() {
+  initState(){
     super.initState();
     // _contracts.add();
     /*dummy data*/
@@ -33,6 +36,7 @@ class ContractListState extends State<ContractList> {
     _contracts.add(Contract("Contract 10", false, 100, null));
     _contracts.add(Contract("Contract 11", true, 100, null));
     _contracts.add(Contract("Contract 12", false, 100, null));
+
   }
 
   @override
@@ -125,13 +129,6 @@ class ContractListState extends State<ContractList> {
             MaterialPageRoute(
               builder: (context) => ContractDetail(contract: contract),
             ));
-        setState(() {
-          // if (contact.isCompleted) {
-          //   _saved.remove(pair);
-          // } else {
-          //   _saved.add(pair);
-          // }
-        });
       },
     );
   }

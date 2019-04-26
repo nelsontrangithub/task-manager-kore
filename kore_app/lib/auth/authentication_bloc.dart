@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:kore_app/utils/jwt_extractor.dart';
 import 'package:meta/meta.dart';
 import 'package:bloc/bloc.dart';
 import 'package:kore_app/auth/user_repository.dart';
@@ -21,11 +22,14 @@ class AuthenticationBloc
     // AuthenticationState currentState,
     AuthenticationEvent event,
   ) async* {
+    JwtExtractor _jwtExtractor = new JwtExtractor();
+    Map<String, dynamic> _claims = new Map<String, dynamic>();
     if (event is AppStarted) {
-      final bool hasToken = await userRepository.hasToken();
+      final String token = await userRepository.hasToken();
+      if (token != null) {
+        _claims = _jwtExtractor.parseJwt(token);
 
-      if (hasToken) {
-        yield AuthenticationAuthenticated();
+        yield AuthenticationAuthenticatedAdmin();
       } else {
         yield AuthenticationUnauthenticated();
       }
@@ -34,7 +38,14 @@ class AuthenticationBloc
     if (event is LoggedIn) {
       yield AuthenticationLoading();
       await userRepository.persistToken(event.token);
-      yield AuthenticationAuthenticated();
+      if (event.token != null) {
+        _claims = _jwtExtractor.parseJwt(event.token);
+        if (_claims["cognito:groups"][0] == "Admin") {
+          yield AuthenticationAuthenticatedAdmin();
+        } else {
+          yield AuthenticationAuthenticatedAdmin();
+        }
+      }
     }
 
     if (event is LoggedOut) {

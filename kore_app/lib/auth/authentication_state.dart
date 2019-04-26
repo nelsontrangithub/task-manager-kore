@@ -7,14 +7,19 @@ class AuthenticationUninitialized extends AuthenticationState {
   String toString() => 'AuthenticationUninitialized';
 }
 
-class AuthenticationAuthenticated extends AuthenticationState {
+class AuthenticationAuthenticatedAdmin extends AuthenticationState {
   @override
-  String toString() => 'AuthenticationAuthenticated';
+  String toString() => 'AuthenticationAuthenticatedAdmin';
 }
 
 class AuthenticationUnauthenticated extends AuthenticationState {
   @override
   String toString() => 'AuthenticationUnauthenticated';
+}
+
+class AuthenticationAuthenticatedRegular extends AuthenticationState {
+  @override
+  String toString() => 'AuthenticationAuthenticatedRegular';
 }
 
 class AuthenticationLoading extends AuthenticationState {
