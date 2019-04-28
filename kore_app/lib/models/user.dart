@@ -4,8 +4,8 @@ class User {
   String name;
   String iconFileUrl;
   String iconFileId;
-  DateTime lastLogin;
-  DateTime dateCreated;
+  String lastLogin;
+  String dateCreated;
   int status;
   String firstName;
   String lastName;
@@ -32,8 +32,8 @@ factory User.fromJson(Map<String, dynamic> json ) {
         name: json['name'] as String,
         iconFileUrl: json['iconFileUrl'] as String,
         iconFileId: json['iconFileId'] as String,
-        lastLogin: json['lastLogin'] as DateTime,
-        dateCreated: json['dateCreated'] as DateTime,
+        lastLogin: json['lastLogin'] as String,
+        dateCreated: json['dateCreated'] as String,
         status: json['status'] as int,
         firstName: json['firstName'] as String,
         lastName: json['LastName'] as String,

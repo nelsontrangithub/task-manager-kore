@@ -1,8 +1,8 @@
 class Account {
   int id;
   String accountName;
-  DateTime dateCreated;
-  DateTime dateModified;
+  String dateCreated;
+  String dateModified;
   int status;
   String description;
   int createdBy;
@@ -25,12 +25,13 @@ class Account {
     return new Account(
         id: json['id'] as int,
         accountName: json['accountName'] as String,
-        dateCreated: json['dateCreated'] as DateTime,
-        dateModified: json['dateModified'] as DateTime,
+        dateCreated: json['dateCreated'] as String,
+        dateModified: json['dateModified'] as String,
         status: json['status'] as int,
         description: json['description'] as String,
         createdBy: json['createdBy'] as int,
         modifiedBy: json['modifiedBy'] as int,
+        percentage: 100.0
     );
   }
 }

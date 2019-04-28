@@ -12,20 +12,24 @@ class NetworkUtil {
   final JsonDecoder _decoder = new JsonDecoder();
 
   Future<dynamic> get(String url, String token) {
-    return http.get(url,
-    headers: {HttpHeaders.authorizationHeader: "Bearer " + token})
-    .then((http.Response response) {
+    return http.get(url, headers: {
+      HttpHeaders.authorizationHeader: "Bearer " + token.trim()
+    }).then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
 
       if (statusCode < 200 || statusCode > 400 || json == null) {
-        throw new Exception("Error while fetching data");
+        throw new Exception("Error while fetching data" +
+            statusCode.toString() +
+            " token: " +
+            token);
       }
       return _decoder.convert(res);
     });
   }
 
-  Future<dynamic> post(String url, {Map headers, body, encoding}) {
+  Future<dynamic> post(String url, bool isSigin,
+      {Map headers, body, encoding}) {
     return http
         .post(url, body: body, headers: headers, encoding: encoding)
         .then((http.Response response) {
@@ -33,9 +37,13 @@ class NetworkUtil {
       final int statusCode = response.statusCode;
 
       if (statusCode < 200 || statusCode > 400 || json == null) {
-        throw new Exception("Error while fetching data");
+        throw new Exception(
+            "Error while fetching data" + statusCode.toString());
       }
-      return _decoder.convert(res);
+      if (!isSigin)
+        return _decoder.convert(res);
+      else
+        return res;
     });
   }
 }
