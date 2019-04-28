@@ -35,12 +35,12 @@ class AccountDetailState extends State<AccountDetail> {
     */
 
     /*dummy data*/
-    // _tasks.add(Task(
-    //     1,
-    //     "Task 1",
-    //     false,
-    //     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-    //     DateTime.utc(2019, 4, 26)));
+    _tasks.add(Task(
+        1,
+        "Task 1",
+        false,
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+        DateTime.utc(2019, 4, 26)));
     // _tasks.add(Task(2, "Task 2", false, "This is the description",
         // DateTime.utc(2019, 6, 6)));
     // _tasks.add(Task("Task 3", true));
@@ -156,7 +156,7 @@ class AccountDetailState extends State<AccountDetail> {
             foregroundColor: Colors.white,
           ),
           trailing: Icon(completeIcon),
-          title: new Text(task.subject),
+          title: new Text(task.title),
           subtitle: new Text('subtitle'),
           onTap: () {
             Navigator.push(
