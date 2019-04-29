@@ -42,7 +42,7 @@ class AuthenticationBloc
         if (_claims["cognito:groups"][0] == "Admin") {
           yield AuthenticationAuthenticatedAdmin();
         } else {
-          yield AuthenticationAuthenticatedAdmin();
+          yield AuthenticationAuthenticatedRegular();
         }
       }
     }

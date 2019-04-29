@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kore_app/models/user.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -11,8 +12,12 @@ import '../models/task.dart';
 
 class AccountDetailState extends State<AccountDetail> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
-  final _tasks = <Task>[];
-  int _count = 0;
+  Future<User> _user;
+  Future<List<Task>> _tasksAPI;
+  Future<String> _username;
+  Future<String> _token;
+  Api _api;
+
   var text;
   var color;
   var icon;
@@ -26,35 +31,11 @@ class AccountDetailState extends State<AccountDetail> {
   @override
   initState() {
     super.initState();
-
-    /*
-    if (task){
-       text = "Mark Not Complete";
-     } else {
-       text = 'Mark Complete';
-     }
-    */
-
-    /*dummy data*/
-    _tasks.add(Task(
-        1,
-        "Task 1",
-        false,
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-        DateTime.utc(2019, 4, 26)));
-    // _tasks.add(Task(2, "Task 2", false, "This is the description",
-        // DateTime.utc(2019, 6, 6)));
-    // _tasks.add(Task("Task 3", true));
-    // _tasks.add(Task("Task 4", false));
-    // _tasks.add(Task("Task 5", false));
-    // _tasks.add(Task("Task 6", false));
-    // _tasks.add(Task("Task 7", true));
-    //initialized the number of completed task
-    _tasks.map((task) => () {
-          if (task.isCompleted) {
-            _count++;
-          }
-        });
+    _token = widget.userRepository.hasToken();
+    _username = widget.userRepository.getUsername();
+    _api = Api();
+    _user = _api.getUserByUsername(_token, _username);
+    _tasksAPI = _api.getTasks(_token, _user);
   }
 
   @override
@@ -67,12 +48,19 @@ class AccountDetailState extends State<AccountDetail> {
         //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         //   ],
       ),
-      body: new Column(children: <Widget>[
-        _buildHeader(),
-       // _buildPercentIndicator(),
-        _buildList()
-      ]),
-    );
+        body: FutureBuilder<List<Task>>(
+          future: _tasksAPI,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return new Column(
+                  children: <Widget>[_buildHeader(), _buildList(snapshot.data)]);
+            } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+            }
+            // By default, show a loading spinner
+            return CircularProgressIndicator();
+          },
+        ));
   }
 
   Widget _buildHeader() {
@@ -129,20 +117,22 @@ class AccountDetailState extends State<AccountDetail> {
     );
   }
 
-  Widget _buildList() {
-    return Flexible(child: ListView.builder(
-        // padding: const EdgeInsets.symmetric(vertical: 25.0),
-        itemBuilder: (context, i) {
-      // if (i.isOdd) return Divider();
-      // final index = i ~/ 2;
-      if (_tasks.length > i) {
-        return _buildRow(_tasks[i], i);
-      }
-      return null;
-    }));
+  Widget _buildList(List<Task> _tasks) {
+    return Flexible(
+        child: ListView.builder(
+            padding: const EdgeInsets.all(25.0),
+            itemBuilder: (context, i) {
+              if (i.isOdd) return Divider();
+
+              final index = i ~/ 2;
+              if (_tasks.length > index) {
+                return _buildRow(_tasks[index], i);
+              }
+              return null;
+            }));
   }
 
-  Widget _buildRow(Task task, int index) {
+  Widget _buildRow(Task task, int i) {
     return new Slidable(
       delegate: new SlidableDrawerDelegate(),
       actionExtentRatio: 0.25,
@@ -153,12 +143,12 @@ class AccountDetailState extends State<AccountDetail> {
         child: new ListTile(
           leading: new CircleAvatar(
             backgroundColor: KorePrimaryColor,
-            child: new Text((index + 1).toString()),
+            child: new Text((i + 1).toString()),
             foregroundColor: Colors.white,
           ),
           trailing: Icon(completeIcon),
-          title: new Text(task.title),
-          subtitle: new Text('subtitle'),
+          title: new Text(task.description),
+          subtitle: new Text((task.dueDate).toString()),
           onTap: () {
             Navigator.push(
                 context,
