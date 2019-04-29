@@ -15,7 +15,7 @@ class AccountListState extends State<AccountList> {
       _user; // = User("Tina", "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   Future<List<Account>> _contracts;
   final _biggerFont = const TextStyle(fontSize: 18.0);
-  final _nameFont = const TextStyle(fontSize: 28.0);
+  final _nameFont = const TextStyle(color: Colors.white, fontSize: 28);
   static const PHOTO_PLACEHOLDER_PATH = "https://image.flaticon.com/icons/png/128/201/201570.png";
   Future<String> _username;
   Future<String> _token;
@@ -29,8 +29,8 @@ class AccountListState extends State<AccountList> {
     _token = widget.userRepository.hasToken();
     _username = widget.userRepository.getUsername();
     _api = Api();
-    _contracts = _api.getAccountsById(_token);
     _user = _api.getUserByUsername(_token, _username);
+    _contracts = _api.getAccountsById(_token);
     // _contracts.add();
     /*dummy data*/
     // _contracts.add(Account("Contract 1", false, 20, null));
@@ -67,7 +67,7 @@ class AccountListState extends State<AccountList> {
           future: _contracts,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return new Column(
+              return Column(
                   children: <Widget>[_profileRow(), _buildList(snapshot.data)]);
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
@@ -115,7 +115,8 @@ class AccountListState extends State<AccountList> {
                         new Text(snapshot.data.name, style: _nameFont),
                         new Container(
                           margin: const EdgeInsets.only(top: 5.0),
-                          child: new Text(snapshot.data.status.toString()),
+                          child: new Text(snapshot.data.status.toString(),
+                          style: TextStyle(color: Colors.white, fontSize: 16)),
                         ),
                       ],
                     ),
@@ -125,6 +126,7 @@ class AccountListState extends State<AccountList> {
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
             }
+            return CircularProgressIndicator();
           }),
     );
   }
