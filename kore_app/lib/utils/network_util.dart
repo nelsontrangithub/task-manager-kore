@@ -19,10 +19,8 @@ class NetworkUtil {
       final int statusCode = response.statusCode;
 
       if (statusCode < 200 || statusCode > 400 || json == null) {
-        throw new Exception("Error while fetching data" +
-            statusCode.toString() +
-            " token: " +
-            token);
+        throw new Exception(
+            "Error while fetching data " + statusCode.toString());
       }
       return _decoder.convert(res);
     });
@@ -38,7 +36,7 @@ class NetworkUtil {
 
       if (statusCode < 200 || statusCode > 400 || json == null) {
         throw new Exception(
-            "Error while fetching data" + statusCode.toString());
+            "Error while fetching data " + statusCode.toString());
       }
       if (!isSigin)
         return _decoder.convert(res);

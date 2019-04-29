@@ -85,11 +85,11 @@ class Task {
     this.dueDate = dueDate;
 
     if (isCompleted == true) {
-      this.color = Colors.green[800];
+      this.color = Colors.green;
       this.icon = Icons.done;
       this.label = "Complete";
     } else {
-      this.color = Colors.red[800];
+      this.color = Colors.redAccent;
       this.icon = Icons.cancel;
       this.label = "Not Complete";
     }
@@ -97,11 +97,11 @@ class Task {
 
   void setStatus(){
     if (isCompleted == true) {
-      this.color = Colors.green[800];
+      this.color = Colors.green;
       this.icon = Icons.done;
       this.label = "Complete";
     } else {
-      this.color = Colors.red[800];
+      this.color = Colors.redAccent;
       this.icon = Icons.cancel;
       this.label = "Not Complete";
     }

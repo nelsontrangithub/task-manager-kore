@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:kore_app/models/account.dart';
@@ -81,7 +82,7 @@ class AccountDetailState extends State<AccountDetail> {
       decoration: BoxDecoration(
         borderRadius:
             BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
-        color: KorePrimaryColor,
+        
       ),
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -112,18 +113,18 @@ class AccountDetailState extends State<AccountDetail> {
           percent: widget.account.percentage * 0.01,
           center: new Text(
             widget.account.percentage.toString() + "%",
-            style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
           ),
           footer: new Text(
             "Progress",
             style: new TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontWeight: FontWeight.bold, 
               fontSize: 17.0),
           ),
           circularStrokeCap: CircularStrokeCap.round,
-          backgroundColor: Colors.white,
-          progressColor: Colors.purple,
+          backgroundColor: Colors.grey,
+          progressColor: Colors.indigo,
         ),
     );
   }
@@ -151,7 +152,7 @@ class AccountDetailState extends State<AccountDetail> {
         ),
         child: new ListTile(
           leading: new CircleAvatar(
-            backgroundColor: Colors.indigo[700],
+            backgroundColor: KorePrimaryColor,
             child: new Text((index + 1).toString()),
             foregroundColor: Colors.white,
           ),
@@ -208,7 +209,8 @@ class AccountDetailState extends State<AccountDetail> {
 
 class AccountDetail extends StatefulWidget {
   final Account account;
-  const AccountDetail({Key key, this.account}) : super(key: key);
+  final UserRepository userRepository;
+  const AccountDetail({Key key, @required this.account, @required this.userRepository}) : super(key: key);
 
   @override
   AccountDetailState createState() => new AccountDetailState();
