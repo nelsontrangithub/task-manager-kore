@@ -43,10 +43,12 @@ class _MyHomePageState extends State<MyHomePage> {
       DeviceOrientation.portraitDown,
     ]);
 
-    // Email Field
+    String p =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp exp = new RegExp(p); // Email Field
     final emailField = TextFormField(
       validator: (value) {
-        if (value.isEmpty) {
+        if (value.isEmpty || !exp.hasMatch(value)) {
           return 'Invalid Email';
         }
       },
