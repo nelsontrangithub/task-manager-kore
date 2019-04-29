@@ -250,13 +250,13 @@ class TaskDetailState extends State<TaskDetail> {
       child: Card(
         elevation: 0,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             FutureBuilder<List<Asset>>(
                 future: assets,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Column(
-                        children: <Widget>[_buildAssetList(snapshot.data)]);
+                    return _buildAssetList(snapshot.data);
                   } else if (snapshot.hasError) {
                     return Text("${snapshot.error}");
                   }
@@ -274,6 +274,7 @@ Widget _buildAssetList(List<Asset> assets) {
     return Flexible(
         fit: FlexFit.loose,
         child: ListView.builder(
+          shrinkWrap: true,
             padding: const EdgeInsets.all(25.0),
             itemBuilder: (context, i) {
               if (i.isOdd) return Divider();
