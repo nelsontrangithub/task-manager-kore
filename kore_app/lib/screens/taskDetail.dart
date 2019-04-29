@@ -17,9 +17,8 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
 
 class TaskDetailState extends State<TaskDetail> {
-  final _user = User("Tina",
-      "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
-
+  final _user = User();
+   // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   var icon;
   var iconColor;
   final _biggerFont = const TextStyle(fontSize: 18.0);
@@ -58,7 +57,7 @@ class TaskDetailState extends State<TaskDetail> {
         children: <Widget>[
           Column(
             children: <Widget>[
-              _buildHeader(),
+              // _buildHeader(),
               _buildTaskDescription(),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
@@ -89,7 +88,7 @@ class TaskDetailState extends State<TaskDetail> {
               height: 150.0,
               // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
               child: new CachedNetworkImage(
-                imageUrl: _user.iconUrl,
+                imageUrl: _user.iconFileUrl,
               ),
             ),
           ),
