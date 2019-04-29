@@ -300,7 +300,7 @@ class TaskDetailState extends State<TaskDetail> {
     }
     //in case user click on cancel
     if (file != null) {
-      S3bucketUploader.uploadFile(file, "koretaskmanagermediabucket");
+      S3bucketUploader.uploadFile(file, "koretaskmanagermediabucket", "temp");
     }
   }
 }
