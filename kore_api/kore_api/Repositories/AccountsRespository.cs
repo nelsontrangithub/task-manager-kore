@@ -37,6 +37,28 @@ namespace kore_api.Repositories
             return query;
         }
 
+        public IEnumerable<AccountVM> GetAccountsByOrgId(int orgID)
+        {
+            var query = from x in _context.Account
+                        join y in _context.Organization on x.OrgId equals y.Id
+                        where x.OrgId.Equals(orgID)
+                        select new AccountVM
+                        {
+                            Id = x.Id,
+                            OrgId = x.OrgId,
+                            OrgName = y.Name,
+                            AccountName = x.AccountName,
+                            DateCreated = x.DateCreated,
+                            DateModified = x.DateModified,
+                            Status = x.Status,
+                            Description = x.Description,
+                            CreatedBy = x.CreatedBy,
+                            ModifiedBy = x.ModifiedBy
+                        };
+
+            return query;
+        }
+
         public IEnumerable<AccountVM> GetAccountsByUser(int userID)
         {
             var query = from x in _context.Account

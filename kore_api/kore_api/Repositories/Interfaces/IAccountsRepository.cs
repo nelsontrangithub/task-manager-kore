@@ -10,6 +10,7 @@ namespace kore_api.Repositories
     public interface IAccountsRepository
     {
         IEnumerable<AccountVM> GetAccounts();
+        IEnumerable<AccountVM> GetAccountsByOrgId(int orgID);
         IEnumerable<AccountVM> GetAccountsByUser(int userID);
         Task<Account> GetAccount(int id);
         Task<bool> Update(int id, int status);
