@@ -32,11 +32,19 @@ class TaskDetailState extends State<TaskDetail> {
   bool _hasValidMime = false;
   FileType _pickingType;
   TextEditingController _controller = new TextEditingController();
-  final _assets = <Asset>[];
+  Future<List<Account>> _assets;
+  Future<String> _username;
+  Future<String> _token;
 
   initState() {
     super.initState();
-  _assets.add(new Asset(1, "asset1", "assetFIleName", "mime", 2, "here","/here", 1));
+    //_assets.add(new Asset(1, "asset1", "assetFIleName", "mime", 2, "here","/here", 1));
+
+    _token = widget.userRepository.hasToken();
+    _username = widget.userRepository.getUsername();
+    _api = Api();
+    _user = _api.getUserByUsername(_token, _username);
+    _contracts = _api.getAccountsById(_token);
 
     if (widget.task.isCompleted == true) {
       icon = Icons.check;
@@ -62,7 +70,7 @@ class TaskDetailState extends State<TaskDetail> {
               _buildCalendar(widget.task),
               _buildTaskEnd(),
               _buildAssetList()
-              //  _buildTaskEnd(widget.task),
+              // _buildTaskEnd(widget.task),
             ],
           ),
         ],
@@ -368,7 +376,9 @@ Widget _buildAssetList() {
 
 class TaskDetail extends StatefulWidget {
   final Task task;
-  const TaskDetail({Key key, this.task}) : super(key: key);
+  const TaskDetail({Key key, this.task, @required this.userRepository}) 
+            : assert(userRepository != null), 
+            super(key: key);
 
   @override
   TaskDetailState createState() => new TaskDetailState();

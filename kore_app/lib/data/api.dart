@@ -13,6 +13,7 @@ class Api {
   static final TASK_URL = BASE_URL + "Task/";
   static final LOGIN_URL = BASE_URL + "signin";
   static final USER_URL = BASE_URL + "getUser/";
+  static final ASSET_URL = BASE_URL + "Files/"
   // static String token;
   // static final _API_KEY = "somerandomkey";
 
@@ -43,6 +44,14 @@ class Api {
     return _netUtil.get(USER_URL + _username, _token).then((dynamic res) {
       print(res.toString());
       return User.fromJson(res);
+    });
+  }
+
+  Future<List<Asset>> getAssets(Future<String> token) async {
+    String _token = await token;
+    return _netUtil.get(ACCOUNT_URL, _token).then((dynamic res) {
+      print(res.toString());
+      return res.map<Asset>((json) => new Asset.fromJson(json)).toList();
     });
   }
 

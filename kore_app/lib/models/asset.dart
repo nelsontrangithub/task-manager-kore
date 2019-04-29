@@ -8,7 +8,7 @@ class Asset {
   String url;
   int status;
 
-  Asset( 
+  Asset({ 
     this.id,
     this.title,
     this.fileName,
@@ -17,5 +17,18 @@ class Asset {
     this.location,
     this.url,
     this.status,
-  );
+  });
+
+  factory Asset.fromJson(Map<String, dynamic> json ) {
+    return new Asset(
+        id: json['id'] as int,
+        title: json['title'] as String,
+        fileName: json['fileName'] as String,
+        mimeType: json['mimeType'] as String,
+        size: json['size'] as int,
+        location: json['location'] as String,
+        url: json['url'] as int,
+        status: json['status'] as int
+    );
+  }
 }
