@@ -246,6 +246,7 @@ class TaskDetailState extends State<TaskDetail> {
   Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+      width: double.infinity,
       child: Card(
         elevation: 0,
         child: Column(
