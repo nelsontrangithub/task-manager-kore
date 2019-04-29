@@ -76,24 +76,24 @@ class Task {
 
   //Task(this.id, this.title, this.isCompleted, this.description, this.dueDate, this.color, this.icon, this.label);
 
-  Task(int id, String title, bool isCompleted, String description,
-      DateTime dueDate) {
-    this.id = id;
-    this.title = title;
-    this.isCompleted = isCompleted;
-    this.description = description;
-    this.dueDate = dueDate;
+  // Task(int id, String title, bool isCompleted, String description,
+  //     DateTime dueDate) {
+  //   this.id = id;
+  //   this.title = title;
+  //   this.isCompleted = isCompleted;
+  //   this.description = description;
+  //   this.dueDate = dueDate;
 
-    if (isCompleted == true) {
-      this.color = Colors.green[800];
-      this.icon = Icons.done;
-      this.label = "Complete";
-    } else {
-      this.color = Colors.red[800];
-      this.icon = Icons.cancel;
-      this.label = "Not Complete";
-    }
-  }
+  //   if (isCompleted == true) {
+  //     this.color = Colors.green[800];
+  //     this.icon = Icons.done;
+  //     this.label = "Complete";
+  //   } else {
+  //     this.color = Colors.red[800];
+  //     this.icon = Icons.cancel;
+  //     this.label = "Not Complete";
+  //   }
+  // }
 
   void setStatus(){
     if (isCompleted == true) {
@@ -105,5 +105,23 @@ class Task {
       this.icon = Icons.cancel;
       this.label = "Not Complete";
     }
+  }
+
+  Task({
+    this.id,
+    this.title,
+    this.isCompleted,
+    this.description,
+    this.dueDate
+    });
+
+  factory Task.fromJson(Map<String, dynamic> json ) {
+    return new Task(
+        id: json['id'] as int,
+        title: json['subject'] as String,
+        isCompleted: true,
+        description: json['description'] as String,
+        dueDate: json['DueDate'] as DateTime 
+    );
   }
 }

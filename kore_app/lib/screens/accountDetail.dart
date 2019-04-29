@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:kore_app/models/account.dart';
@@ -7,10 +8,18 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/screens/taskDetail.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../models/task.dart';
+import 'package:kore_app/auth/user_repository.dart';
 
 class AccountDetailState extends State<AccountDetail> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _tasks = <Task>[];
+  Future<User> _user;
+  Future<List<Task>> _tasksAPI;
+  Future<String> _username;
+  Future<String> _token;
+  Api _api;
+
+
   int _count = 0;
   var text;
   var color;
@@ -25,6 +34,11 @@ class AccountDetailState extends State<AccountDetail> {
   @override
   initState() {
     super.initState();
+    _token = widget.userRepository.hasToken();
+    _username = widget.userRepository.getUsername();
+    _api = Api();
+    _tasksAPI = _api.getTasks(_token);
+    _user = _api.getUserByUsername(_token, _username);
 
     /*
     if (task){
@@ -35,12 +49,12 @@ class AccountDetailState extends State<AccountDetail> {
     */
 
     /*dummy data*/
-    _tasks.add(Task(
-        1,
-        "Task 1",
-        false,
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-        DateTime.utc(2019, 4, 26)));
+    // _tasks.add(Task(
+    //     1,
+    //     "Task 1",
+    //     false,
+    //     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
+    //     DateTime.utc(2019, 4, 26)));
     // _tasks.add(Task(2, "Task 2", false, "This is the description",
         // DateTime.utc(2019, 6, 6)));
     // _tasks.add(Task("Task 3", true));
@@ -208,7 +222,11 @@ class AccountDetailState extends State<AccountDetail> {
 
 class AccountDetail extends StatefulWidget {
   final Account account;
-  const AccountDetail({Key key, this.account}) : super(key: key);
+  const AccountDetail({Key key, @required this.userRepository, this.account})
+      : assert(userRepository != null),
+        super(key: key);
+
+  final UserRepository userRepository;
 
   @override
   AccountDetailState createState() => new AccountDetailState();
