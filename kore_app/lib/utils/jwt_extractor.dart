@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class JwtExtractor {
-  Map<String, dynamic> parseJwt(String token) {
+  static Map<String, dynamic> parseJwt(String token) {
     final parts = token.split('.');
     if (parts.length != 3) {
       throw Exception('invalid token');
@@ -16,7 +16,7 @@ class JwtExtractor {
     return payloadMap;
   }
 
-  String _decodeBase64(String str) {
+  static String _decodeBase64(String str) {
     String output = str.replaceAll('-', '+').replaceAll('_', '/');
 
     switch (output.length % 4) {

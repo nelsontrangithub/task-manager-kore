@@ -34,6 +34,28 @@ namespace kore_api.Controllers
         }
 
         /// <summary>
+        /// Get all Accounts by OrgId
+        /// </summary>
+        [HttpGet("user/{orgID}")]
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IActionResult GetAccountsByOrgId([FromRoute] int orgID)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = _accountsRepository.GetAccountsByOrgId(orgID);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Get all Accounts by User
         /// </summary>
         [HttpGet("user/{userID}")]
