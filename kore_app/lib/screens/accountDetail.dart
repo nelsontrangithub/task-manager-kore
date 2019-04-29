@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:kore_app/models/account.dart';
@@ -208,7 +209,8 @@ class AccountDetailState extends State<AccountDetail> {
 
 class AccountDetail extends StatefulWidget {
   final Account account;
-  const AccountDetail({Key key, this.account}) : super(key: key);
+  final UserRepository userRepository;
+  const AccountDetail({Key key, @required this.account, @required this.userRepository}) : super(key: key);
 
   @override
   AccountDetailState createState() => new AccountDetailState();

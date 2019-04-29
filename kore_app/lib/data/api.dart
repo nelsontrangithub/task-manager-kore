@@ -16,7 +16,7 @@ class Api {
   // static String token;
   // static final _API_KEY = "somerandomkey";
 
-//try to make it a sigleton
+//make it a sigleton
   static Api _instance = new Api.internal();
   Api.internal();
   factory Api() => _instance;

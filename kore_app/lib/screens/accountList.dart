@@ -158,7 +158,7 @@ class AccountListState extends State<AccountList> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AccountDetail(account: account),
+              builder: (context) => AccountDetail(account: account, userRepository: widget.userRepository),
             ));
       },
     );
