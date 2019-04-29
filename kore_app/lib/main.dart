@@ -73,7 +73,10 @@ class _AppState extends State<MyApp> {
               return Splash();
             }
             if (state is AuthenticationAuthenticatedAdmin) {
-              return AccountList();
+              return AccountList(userRepository: UserRepository());
+            }
+            if (state is AuthenticationAuthenticatedRegular) {
+              return AccountList(userRepository: UserRepository());
             }
             if (state is AuthenticationUnauthenticated) {
               return MyHomePage(
