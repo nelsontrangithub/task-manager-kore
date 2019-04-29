@@ -45,7 +45,7 @@ class TaskDetailState extends State<TaskDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.task.title)),
+      appBar: AppBar(title: Text(widget.task.description)),
       body: new ListView(
         children: <Widget>[
           Column(
@@ -89,7 +89,7 @@ class TaskDetailState extends State<TaskDetail> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 new Text(
-                  widget.task.title,
+                  widget.task.description,
                   style: TextStyle(
                     fontSize: 21.0,
                     fontWeight: FontWeight.bold,

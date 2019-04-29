@@ -19,7 +19,6 @@ class AccountDetailState extends State<AccountDetail> {
   Future<String> _token;
   Api _api;
 
-
   int _count = 0;
   var text;
   var color;
