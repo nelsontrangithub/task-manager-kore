@@ -19,7 +19,6 @@ class UserRepository {
     // return 'token';
   }
 
-
   Future<void> deleteToken() async {
     /// delete from keystore/keychain
     await storage.delete(key: 'token');

@@ -7,6 +7,7 @@ import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/screens/accountList.dart';
 import 'package:kore_app/screens/loading_indicator.dart';
 import 'package:kore_app/auth/authentication_bloc.dart';
+import 'package:kore_app/screens/orgnization_list.dart';
 import 'package:kore_app/screens/splash.dart';
 import 'package:kore_app/screens/login.dart';
 
@@ -73,7 +74,7 @@ class _AppState extends State<MyApp> {
               return Splash();
             }
             if (state is AuthenticationAuthenticatedAdmin) {
-              return AccountList(userRepository: UserRepository());
+              return OrganizationList(userRepository: UserRepository());
             }
             if (state is AuthenticationAuthenticatedRegular) {
               return AccountList(userRepository: UserRepository());
