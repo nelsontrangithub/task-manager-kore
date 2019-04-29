@@ -153,7 +153,7 @@ class AccountDetailState extends State<AccountDetail> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TaskDetail(task: task),
+                  builder: (context) => TaskDetail(task: task, userRepository: widget.userRepository),
                 ));
           },
         ),

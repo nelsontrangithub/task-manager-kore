@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:kore_app/models/account.dart';
+import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/organization.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
@@ -13,6 +14,7 @@ class Api {
   static final TASK_URL = BASE_URL + "Tasks/";
   static final LOGIN_URL = BASE_URL + "signin";
   static final USER_URL = BASE_URL + "getUser/";
+  static final ASSET_URL = BASE_URL + "Files/";
   // static String token;
   // static final _API_KEY = "somerandomkey";
 
@@ -60,6 +62,14 @@ class Api {
     return _netUtil.get(USER_URL + _username, _token).then((dynamic res) {
       print(res.toString());
       return User.fromJson(res);
+    });
+  }
+
+  Future<List<Asset>> getAssets(Future<String> token) async {
+    String _token = await token;
+    return _netUtil.get(ASSET_URL, _token).then((dynamic res) {
+      print("File Get Result: " + res.toString());
+      return res.map<Asset>((json) => new Asset.fromJson(json)).toList();
     });
   }
 

@@ -3,6 +3,10 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:kore_app/auth/user_repository.dart';
+import 'package:kore_app/data/api.dart';
+import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/theme.dart';
@@ -15,10 +19,11 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
 
 class TaskDetailState extends State<TaskDetail> {
-  final _user = User();
+  Future<User> _user;
    // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   var icon;
   var iconColor;
+  final _biggerFont = const TextStyle(fontSize: 18.0);
 
   //file picker
   String _fileName;
@@ -29,9 +34,21 @@ class TaskDetailState extends State<TaskDetail> {
   bool _hasValidMime = false;
   FileType _pickingType;
   TextEditingController _controller = new TextEditingController();
+  Future<List<Asset>> _assets;
+  Future<String> _username;
+  Future<String> _token;
+  Api _api;
 
   initState() {
     super.initState();
+    //_assets.add(new Asset(1, "asset1", "assetFIleName", "mime", 2, "here","/here", 1));
+
+    _token = widget.userRepository.hasToken();
+    _username = widget.userRepository.getUsername();
+    _api = Api();
+    _user = _api.getUserByUsername(_token, _username);
+    _assets = _api.getAssets(_token);
+
     if (widget.task.isCompleted == true) {
       icon = Icons.check;
       iconColor = Colors.green;
@@ -40,6 +57,7 @@ class TaskDetailState extends State<TaskDetail> {
       iconColor = Colors.redAccent;
     }
     _controller.addListener(() => _extension = _controller.text);
+    
   }
 
   @override
@@ -53,8 +71,8 @@ class TaskDetailState extends State<TaskDetail> {
               // _buildHeader(),
               _buildTaskDescription(),
               _buildCalendar(widget.task),
-              _buildTaskEnd()
-              //  _buildTaskEnd(widget.task),
+              _buildTaskEnd(),
+              _buildAssetsListContainer(_assets)
             ],
           ),
         ],
@@ -79,9 +97,9 @@ class TaskDetailState extends State<TaskDetail> {
             child: new Container(
               height: 150.0,
               // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-              child: new CachedNetworkImage(
-                imageUrl: _user.iconFileUrl,
-              ),
+              // child: new CachedNetworkImage(
+              //   imageUrl: _user.iconFileUrl,
+              // ),
             ),
           ),
           Expanded(
@@ -225,6 +243,67 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
+  Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
+    return new Container(
+      padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+      width: double.infinity,
+      child: Card(
+        elevation: 0,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            FutureBuilder<List<Asset>>(
+                future: assets,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return _buildAssetList(snapshot.data);
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  // By default, show a loading spinner
+                  return CircularProgressIndicator();
+                },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+Widget _buildAssetList(List<Asset> assets) {
+    return Flexible(
+        fit: FlexFit.loose,
+        child: ListView.builder(
+          shrinkWrap: true,
+            padding: const EdgeInsets.all(25.0),
+            itemBuilder: (context, i) {
+              if (i.isOdd) return Divider();
+
+              final index = i ~/ 2;
+              if (assets.length > index) {
+                return _buildRow(assets[index]);
+              }
+              return null;
+            }));
+  }
+
+  Widget _buildRow(Asset asset) {
+    return ListTile(
+      title: Text(
+        asset.title,
+        style: _biggerFont,
+      ),
+      // trailing: Icon(
+      //   // Add the lines from here...
+      //   account.percentage >= 100 ? Icons.done : null,
+      // ),
+      onTap: () {
+      },
+    );
+  }
+
+
+
   void toggleCompleted(Task task) {
     task.isCompleted = !task.isCompleted;
     setState(() {
@@ -307,7 +386,11 @@ class TaskDetailState extends State<TaskDetail> {
 
 class TaskDetail extends StatefulWidget {
   final Task task;
-  const TaskDetail({Key key, this.task}) : super(key: key);
+  const TaskDetail({Key key, this.task, @required this.userRepository}) 
+            : assert(userRepository != null), 
+            super(key: key);
+
+  final UserRepository userRepository;
 
   @override
   TaskDetailState createState() => new TaskDetailState();
