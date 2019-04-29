@@ -6,6 +6,7 @@ import 'package:kore_app/auth/authentication_event.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/account.dart';
+import 'package:kore_app/models/organization.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/screens/accountDetail.dart';
 import 'package:kore_app/utils/theme.dart';
@@ -166,9 +167,13 @@ class AccountListState extends State<AccountList> {
 }
 
 class AccountList extends StatefulWidget {
-  AccountList({Key key, @required this.userRepository})
+  
+  final Organization organization;
+
+  AccountList({Key key, this.organization, @required this.userRepository})
       : assert(userRepository != null),
         super(key: key);
+
 
   final UserRepository userRepository;
 
