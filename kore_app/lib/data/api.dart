@@ -50,7 +50,7 @@ class Api {
 
   Future<List<Asset>> getAssets(Future<String> token) async {
     String _token = await token;
-    return _netUtil.get(ACCOUNT_URL, _token).then((dynamic res) {
+    return _netUtil.get(ASSET_URL, _token).then((dynamic res) {
       print("File Get Result: " + res.toString());
       return res.map<Asset>((json) => new Asset.fromJson(json)).toList();
     });
