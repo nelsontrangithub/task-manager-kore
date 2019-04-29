@@ -72,19 +72,7 @@ class TaskDetailState extends State<TaskDetail> {
               _buildTaskDescription(),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
-              FutureBuilder<List<Asset>>(
-                future: _assets,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Column(
-                        children: <Widget>[_buildAssetList(snapshot.data)]);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  // By default, show a loading spinner
-                  return CircularProgressIndicator();
-                },
-              )
+              _buildAssetsListContainer(_assets)
             ],
           ),
         ],
@@ -252,6 +240,32 @@ class TaskDetailState extends State<TaskDetail> {
             icon,
             color: Colors.white,
           )),
+    );
+  }
+
+  Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
+    return new Container(
+      padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+      child: Card(
+        elevation: 0,
+        child: Column(
+          children: <Widget>[
+            FutureBuilder<List<Asset>>(
+                future: assets,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                        children: <Widget>[_buildAssetList(snapshot.data)]);
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  // By default, show a loading spinner
+                  return CircularProgressIndicator();
+                },
+            ),
+          ],
+        ),
+      ),
     );
   }
 
