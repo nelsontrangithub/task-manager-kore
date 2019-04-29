@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:kore_app/models/account.dart';
+import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/network_util.dart';
 import 'package:kore_app/models/loginCredential.dart';
@@ -29,9 +30,10 @@ class Api {
     });
   }
 
-  Future<List<Account>> getAccountsById(Future<String> token) async {
+  Future<List<Account>> getAccountsById(Future<String> token, Future<User> user) async {
     String _token = await token;
-    return _netUtil.get(ACCOUNT_URL, _token).then((dynamic res) {
+    User _user = await user;
+    return _netUtil.get(ACCOUNT_URL + "user/" + _user.id.toString(), _token).then((dynamic res) {
       print(res.toString());
       return res.map<Account>((json) => new Account.fromJson(json)).toList();
     });
@@ -45,6 +47,15 @@ class Api {
       return User.fromJson(res);
     });
   }
+
+  // Future<Task> getTaskById(Future<String> token, Future<Task> task) async {
+  //   String _token = await token;
+  //   Task _task = await task;
+  //   return _netUtil.get(USER_URL + _task.id.toString(), _token).then((dynamic res) {
+  //     print(res.toString());
+  //     return User.fromJson(res);
+  //   });
+  // }
 
   Future<TestData> test(token) {
     return _netUtil.get(ORGANIZATION_URL, token).then((dynamic res) {
