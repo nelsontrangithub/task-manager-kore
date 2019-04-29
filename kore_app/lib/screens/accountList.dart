@@ -11,7 +11,7 @@ import 'package:kore_app/utils/theme.dart';
 
 class AccountListState extends State<AccountList> {
   final _user = User("Tina",
-      "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
+      "https://image.flaticon.com/icons/png/128/201/201570.png", "status");
   final _contracts = <Account>[];
   final _biggerFont = const TextStyle(fontSize: 18.0);
   final _nameFont = const TextStyle(fontSize: 28.0);
@@ -20,7 +20,7 @@ class AccountListState extends State<AccountList> {
   //one of the state lifecycle function, only load once
   //good place for dummydata loading
   @override
-  initState(){
+  initState() {
     super.initState();
     // _contracts.add();
     /*dummy data*/
@@ -63,7 +63,7 @@ class AccountListState extends State<AccountList> {
       // margin: const EdgeInsets.symmetric(vertical: 0.0),
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       decoration: BoxDecoration(
-         borderRadius:
+        borderRadius:
             BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
         color: KorePrimaryColor,
       ),
@@ -86,10 +86,12 @@ class AccountListState extends State<AccountList> {
             child: new Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new Text(_user.name, style: _nameFont),
+                new Text(_user.name,
+                    style: TextStyle(color: Colors.white, fontSize: 28)),
                 new Container(
                   margin: const EdgeInsets.only(top: 5.0),
-                  child: new Text(_user.status),
+                  child: new Text(_user.status,
+                      style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ],
             ),

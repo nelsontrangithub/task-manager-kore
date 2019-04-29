@@ -250,7 +250,7 @@ class TaskDetailState extends State<TaskDetail> {
       },
     );
     Widget continueButton = FlatButton(
-      child: Text("Done!!"),
+      child: Text("Done!"),
       onPressed: () {
         toggleCompleted(widget.task);
         Navigator.of(context).pop();
@@ -259,7 +259,7 @@ class TaskDetailState extends State<TaskDetail> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Notice"),
-      content: Text("Would you like to confirm the task?"),
+      content: Text("Confirm Status Change"),
       actions: [
         cancelButton,
         continueButton,
