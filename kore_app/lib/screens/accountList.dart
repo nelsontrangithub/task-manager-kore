@@ -169,13 +169,11 @@ class AccountListState extends State<AccountList> {
 class AccountList extends StatefulWidget {
   
   final Organization organization;
+  final UserRepository userRepository;
 
   AccountList({Key key, this.organization, @required this.userRepository})
       : assert(userRepository != null),
         super(key: key);
-
-
-  final UserRepository userRepository;
 
   @override
   AccountListState createState() => new AccountListState();

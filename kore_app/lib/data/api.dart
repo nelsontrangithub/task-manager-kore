@@ -37,7 +37,7 @@ class Api {
     });
   }
 
-  Future<List<Organization>>getOrganizationsById(Future<String> token) async {
+  Future<List<Organization>>getOrganizations(Future<String> token) async {
     String _token = await token;
     return _netUtil.get(ORGANIZATION_URL, _token).then((dynamic res) {
       return res.map<Organization>((json) => new Organization.fromJson(json)).toList();

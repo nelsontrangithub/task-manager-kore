@@ -28,7 +28,7 @@ class OrganizationListState extends State<OrganizationList> {
     _token = widget.userRepository.hasToken();
     _username = widget.userRepository.getUsername();
     _api = Api();
-    _organizations = _api.getOrganizationsById(_token);
+    _organizations = _api.getOrganizations(_token);
     _user = _api.getUserByUsername(_token, _username);
   }
 
