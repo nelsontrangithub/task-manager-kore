@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kore_app/models/user.dart';
+import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:kore_app/models/account.dart';
@@ -8,7 +9,6 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/screens/taskDetail.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import '../models/task.dart';
-import 'package:kore_app/auth/user_repository.dart';
 
 class AccountDetailState extends State<AccountDetail> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
@@ -39,35 +39,6 @@ class AccountDetailState extends State<AccountDetail> {
     _api = Api();
     _tasksAPI = _api.getTasks(_token);
     _user = _api.getUserByUsername(_token, _username);
-
-    /*
-    if (task){
-       text = "Mark Not Complete";
-     } else {
-       text = 'Mark Complete';
-     }
-    */
-
-    /*dummy data*/
-    // _tasks.add(Task(
-    //     1,
-    //     "Task 1",
-    //     false,
-    //     "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.",
-    //     DateTime.utc(2019, 4, 26)));
-    // _tasks.add(Task(2, "Task 2", false, "This is the description",
-        // DateTime.utc(2019, 6, 6)));
-    // _tasks.add(Task("Task 3", true));
-    // _tasks.add(Task("Task 4", false));
-    // _tasks.add(Task("Task 5", false));
-    // _tasks.add(Task("Task 6", false));
-    // _tasks.add(Task("Task 7", true));
-    //initialized the number of completed task
-    _tasks.map((task) => () {
-          if (task.isCompleted) {
-            _count++;
-          }
-        });
   }
 
   @override
@@ -80,12 +51,19 @@ class AccountDetailState extends State<AccountDetail> {
         //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         //   ],
       ),
-      body: new Column(children: <Widget>[
-        _buildHeader(),
-       // _buildPercentIndicator(),
-        _buildList()
-      ]),
-    );
+        body: FutureBuilder<List<Task>>(
+          future: _tasksAPI,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return new Column(
+                  children: <Widget>[_buildHeader(), _buildList(snapshot.data)]);
+            } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+            }
+            // By default, show a loading spinner
+            return CircularProgressIndicator();
+          },
+        ));
   }
 
   Widget _buildHeader() {
@@ -95,7 +73,7 @@ class AccountDetailState extends State<AccountDetail> {
       decoration: BoxDecoration(
         borderRadius:
             BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
-        color: KorePrimaryColor,
+        
       ),
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -126,36 +104,51 @@ class AccountDetailState extends State<AccountDetail> {
           percent: widget.account.percentage * 0.01,
           center: new Text(
             widget.account.percentage.toString() + "%",
-            style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+            style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
           ),
           footer: new Text(
             "Progress",
             style: new TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontWeight: FontWeight.bold, 
               fontSize: 17.0),
           ),
           circularStrokeCap: CircularStrokeCap.round,
-          backgroundColor: Colors.white,
-          progressColor: Colors.purple,
+          backgroundColor: Colors.grey,
+          progressColor: Colors.indigo,
         ),
     );
   }
 
-  Widget _buildList() {
-    return Flexible(child: ListView.builder(
-        // padding: const EdgeInsets.symmetric(vertical: 25.0),
-        itemBuilder: (context, i) {
-      // if (i.isOdd) return Divider();
-      // final index = i ~/ 2;
-      if (_tasks.length > i) {
-        return _buildRow(_tasks[i], i);
-      }
-      return null;
-    }));
+  // Widget _buildList(List<Task> _tasks) {
+  //   return Flexible(child: ListView.builder(
+  //       // padding: const EdgeInsets.symmetric(vertical: 25.0),
+  //       itemBuilder: (context, i) {
+  //     // if (i.isOdd) return Divider();
+  //     // final index = i ~/ 2;
+  //     if (_tasks.length > i) {
+  //       return _buildRow(_tasks[i], i);
+  //     }
+  //     return null;
+  //   }));
+  // }
+
+    Widget _buildList(List<Task> _tasks) {
+    return Flexible(
+        child: ListView.builder(
+            padding: const EdgeInsets.all(25.0),
+            itemBuilder: (context, i) {
+              if (i.isOdd) return Divider();
+
+              final index = i ~/ 2;
+              if (_tasks.length > index) {
+                return _buildRow(_tasks[index], i);
+              }
+              return null;
+            }));
   }
 
-  Widget _buildRow(Task task, int index) {
+  Widget _buildRow(Task task, int i) {
     return new Slidable(
       delegate: new SlidableDrawerDelegate(),
       actionExtentRatio: 0.25,
@@ -165,13 +158,13 @@ class AccountDetailState extends State<AccountDetail> {
         ),
         child: new ListTile(
           leading: new CircleAvatar(
-            backgroundColor: Colors.indigo[700],
-            child: new Text((index + 1).toString()),
+            backgroundColor: KorePrimaryColor,
+            child: new Text((i + 1).toString()),
             foregroundColor: Colors.white,
           ),
           trailing: Icon(completeIcon),
-          title: new Text(task.title),
-          subtitle: new Text('subtitle'),
+          title: new Text(task.description),
+          subtitle: new Text((task.dueDate).toString()),
           onTap: () {
             Navigator.push(
                 context,
@@ -222,11 +215,8 @@ class AccountDetailState extends State<AccountDetail> {
 
 class AccountDetail extends StatefulWidget {
   final Account account;
-  const AccountDetail({Key key, @required this.userRepository, this.account})
-      : assert(userRepository != null),
-        super(key: key);
-
   final UserRepository userRepository;
+  const AccountDetail({Key key, @required this.account, @required this.userRepository}) : super(key: key);
 
   @override
   AccountDetailState createState() => new AccountDetailState();
