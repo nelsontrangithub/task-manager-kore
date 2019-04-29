@@ -39,9 +39,10 @@ class Api {
     });
   }
 
-  Future<List<Task>> getTasks(Future<String> token) async {
+  Future<List<Task>> getTasks(Future<String> token, Future<User> user) async {
     String _token = await token;
-    return _netUtil.get(TASK_URL, _token).then((dynamic res) {
+    User _user = await user;
+    return _netUtil.get(TASK_URL + "user/" + _user.id.toString(), _token).then((dynamic res) {
       print(res.toString());
       return res.map<Task>((json) => new Task.fromJson(json)).toList();
     });

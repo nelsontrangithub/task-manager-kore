@@ -34,8 +34,8 @@ class AccountDetailState extends State<AccountDetail> {
     _token = widget.userRepository.hasToken();
     _username = widget.userRepository.getUsername();
     _api = Api();
-    _tasksAPI = _api.getTasks(_token);
     _user = _api.getUserByUsername(_token, _username);
+    _tasksAPI = _api.getTasks(_token, _user);
   }
 
   @override
