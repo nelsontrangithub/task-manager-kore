@@ -101,21 +101,6 @@ class AccountListState extends State<AccountList> {
     );
   }
 
-  Widget _buildList() {
-    return Flexible(
-        child: ListView.builder(
-            padding: const EdgeInsets.all(25.0),
-            itemBuilder: (context, i) {
-              if (i.isOdd) return Divider();
-
-              final index = i ~/ 2;
-              if (_contracts.length > index) {
-                return _buildRow(_contracts[index]);
-              }
-              return null;
-            }));
-  }
-
   Widget _buildRow(Account account) {
     return ListTile(
       title: Text(
@@ -134,6 +119,21 @@ class AccountListState extends State<AccountList> {
             ));
       },
     );
+  }
+
+  Widget _buildList() {
+    return Flexible(
+        child: ListView.builder(
+            padding: const EdgeInsets.all(25.0),
+            itemBuilder: (context, i) {
+              if (i.isOdd) return Divider();
+
+              final index = i ~/ 2;
+              if (_contracts.length > index) {
+                return _buildRow(_contracts[index]);
+              }
+              return null;
+            }));
   }
 }
 

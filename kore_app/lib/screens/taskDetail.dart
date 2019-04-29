@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/theme.dart';
@@ -20,6 +22,7 @@ class TaskDetailState extends State<TaskDetail> {
 
   var icon;
   var iconColor;
+  final _biggerFont = const TextStyle(fontSize: 18.0);
 
   //file picker
   String _fileName;
@@ -30,9 +33,12 @@ class TaskDetailState extends State<TaskDetail> {
   bool _hasValidMime = false;
   FileType _pickingType;
   TextEditingController _controller = new TextEditingController();
+  final _assets = <Asset>[];
 
   initState() {
     super.initState();
+  _assets.add(new Asset(1, "asset1", "assetFIleName", "mime", 2, "here","/here", 1));
+
     if (widget.task.isCompleted == true) {
       icon = Icons.check;
       iconColor = Colors.green;
@@ -41,6 +47,7 @@ class TaskDetailState extends State<TaskDetail> {
       iconColor = Colors.redAccent;
     }
     _controller.addListener(() => _extension = _controller.text);
+    
   }
 
   @override
@@ -54,7 +61,8 @@ class TaskDetailState extends State<TaskDetail> {
               _buildHeader(),
               _buildTaskDescription(),
               _buildCalendar(widget.task),
-              _buildTaskEnd()
+              _buildTaskEnd(),
+              _buildAssetList()
               //  _buildTaskEnd(widget.task),
             ],
           ),
@@ -225,6 +233,59 @@ class TaskDetailState extends State<TaskDetail> {
           )),
     );
   }
+
+Widget _buildAssetList() {
+    return Flexible(child: ListView.builder(
+        // padding: const EdgeInsets.symmetric(vertical: 25.0),
+        itemBuilder: (context, i) {
+      // if (i.isOdd) return Divider();
+      // final index = i ~/ 2;
+      if (_assets.length > i) {
+        return _buildRow(_assets[i], i);
+      }
+      return null;
+    }));
+  }
+
+  Widget _buildRow(Asset asset, int index) {
+    return new Slidable(
+      delegate: new SlidableDrawerDelegate(),
+      actionExtentRatio: 0.25,
+      child: new Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),
+        child: new ListTile(
+          leading: new CircleAvatar(
+            backgroundColor: KorePrimaryColor,
+            child: new Text((index + 1).toString()),
+            foregroundColor: Colors.white,
+          ),
+          title: new Text(asset.title),
+          subtitle: new Text('subtitle'),
+          onTap: () {
+          },
+        ),
+      ),
+      // secondaryActions: <Widget>[
+      //   new IconSlideAction(
+      //     caption: 'Upload',
+      //     color: Colors.blueAccent,
+      //     icon: Icons.file_upload,
+      //   ),
+      //   new IconSlideAction(
+      //     caption: task.label,
+      //     color: task.color,
+      //     icon: task.icon,
+      //     onTap: () {
+      //       task.isCompleted ? markNotCompleted(task) : markCompleted(task);
+      //     },
+      //   ),
+      // ],
+    );
+  }
+
+
 
   void toggleCompleted(Task task) {
     task.isCompleted = !task.isCompleted;
