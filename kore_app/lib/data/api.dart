@@ -3,7 +3,6 @@ import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/network_util.dart';
-import 'package:kore_app/models/loginCredential.dart';
 
 class Api {
   NetworkUtil _netUtil = new NetworkUtil();
@@ -56,11 +55,4 @@ class Api {
   //     return User.fromJson(res);
   //   });
   // }
-
-  Future<TestData> test(token) {
-    return _netUtil.get(ORGANIZATION_URL, token).then((dynamic res) {
-      print(res.toString());
-      return new TestData.constructList(res);
-    });
-  }
 }
