@@ -15,7 +15,6 @@ class OrganizationListState extends State<OrganizationList> {
   static const PHOTO_PLACEHOLDER_PATH =
       "https://image.flaticon.com/icons/png/128/201/201570.png";
   
-  UserRepository userRepository;
   Future<User> _user;
   Future<List<Organization>> _organizations;
   Future<String> _username;
@@ -137,7 +136,7 @@ class OrganizationListState extends State<OrganizationList> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AccountList(organization: organization, userRepository: userRepository),
+                builder: (context) => AccountList(organization: organization, userRepository: widget.userRepository),
               ));
         });
   }

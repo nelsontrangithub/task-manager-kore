@@ -9,7 +9,7 @@ class Api {
   NetworkUtil _netUtil = new NetworkUtil();
   static final BASE_URL = "https://w4c7snxw32.execute-api.us-east-2.amazonaws.com/Prod/api/";
   static final ACCOUNT_URL = BASE_URL + "Accounts/";
-  static final ORGANIZATION_URL = BASE_URL + "Organiztion/";
+  static final ORGANIZATION_URL = BASE_URL + "Organization/";
   static final TASK_URL = BASE_URL + "Task/";
   static final LOGIN_URL = BASE_URL + "signin";
   static final USER_URL = BASE_URL + "getUser/";
