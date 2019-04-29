@@ -257,6 +257,7 @@ class TaskDetailState extends State<TaskDetail> {
 
 Widget _buildAssetList(List<Asset> assets) {
     return Flexible(
+        fit: FlexFit.loose,
         child: ListView.builder(
             padding: const EdgeInsets.all(25.0),
             itemBuilder: (context, i) {
