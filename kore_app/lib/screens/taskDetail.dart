@@ -247,8 +247,6 @@ class TaskDetailState extends State<TaskDetail> {
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
       width: double.infinity,
-      height: double.infinity,
-      
       child: Card(
         elevation: 0,
         child: Column(
