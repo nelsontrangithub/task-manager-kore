@@ -8,7 +8,7 @@ import 'package:path/path.dart';
 import './s3bucketPolicy.dart';
 
 class S3bucketUploader {
-  static void uploadFile(File file, String bucketName) async {
+  static void uploadFile(File file, String bucketName, String taskId) async {
     const _accessKeyId = 'AKIAI7VGATG6RF6KV6CA';
     const _secretKeyId = 'Ky8ImCeRiz5iBoFi0Zrgo5oB2JWPWuuRTc+q7spH';
     const _region = 'us-east-2';
@@ -26,7 +26,7 @@ class S3bucketUploader {
     final multipartFile = http.MultipartFile('file', stream, length,
         filename: path.basename(file.path));
 
-    final policy = S3bucketPolicy.fromS3PresignedPost('temp/' + fileName,
+    final policy = S3bucketPolicy.fromS3PresignedPost(taskId + "/" + fileName,
         bucketName, _accessKeyId, 15, length,
         region: _region);
     final key =
