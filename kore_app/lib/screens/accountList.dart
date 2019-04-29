@@ -30,7 +30,7 @@ class AccountListState extends State<AccountList> {
     _username = widget.userRepository.getUsername();
     _api = Api();
     _user = _api.getUserByUsername(_token, _username);
-    _contracts = _api.getAccountsById(_token);
+    _contracts = _api.getAccountsById(_token, _user);
     // _contracts.add();
     /*dummy data*/
     // _contracts.add(Account("Contract 1", false, 20, null));
@@ -99,23 +99,23 @@ class AccountListState extends State<AccountList> {
                     child: new Container(
                       height: 150.0,
                       // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-                      child: new CachedNetworkImage(
+                      child: CachedNetworkImage(
                         imageUrl: snapshot.data.iconFileUrl==null? PHOTO_PLACEHOLDER_PATH:snapshot.data.iconFileUrl,
                         placeholder: (context, url) =>
-                            new CircularProgressIndicator(),
+                            CircularProgressIndicator(),
                         errorWidget: (context, url, error) =>
-                            new Icon(Icons.error),
+                            Icon(Icons.error),
                       ),
                     ),
                   ),
                   Expanded(
-                    child: new Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        new Text(snapshot.data.name, style: _nameFont),
-                        new Container(
+                        Text(snapshot.data.name, style: _nameFont),
+                        Container(
                           margin: const EdgeInsets.only(top: 5.0),
-                          child: new Text(snapshot.data.status.toString(),
+                          child: Text(snapshot.data.status.toString(),
                           style: TextStyle(color: Colors.white, fontSize: 16)),
                         ),
                       ],
