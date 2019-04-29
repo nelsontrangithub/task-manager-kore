@@ -12,14 +12,12 @@ import '../models/task.dart';
 
 class AccountDetailState extends State<AccountDetail> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
-  final _tasks = <Task>[];
   Future<User> _user;
   Future<List<Task>> _tasksAPI;
   Future<String> _username;
   Future<String> _token;
   Api _api;
 
-  int _count = 0;
   var text;
   var color;
   var icon;

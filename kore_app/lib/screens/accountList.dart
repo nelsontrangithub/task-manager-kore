@@ -31,20 +31,6 @@ class AccountListState extends State<AccountList> {
     _api = Api();
     _user = _api.getUserByUsername(_token, _username);
     _contracts = _api.getAccountsById(_token);
-    // _contracts.add();
-    /*dummy data*/
-    // _contracts.add(Account("Contract 1", false, 20, null));
-    // _contracts.add(Account("Contract 2", false, 50, null));
-    // _contracts.add(Account("Contract 3", true, 100, null));
-    // _contracts.add(Account("Contract 4", false, 40, null));
-    // _contracts.add(Account("Contract 5", false, 50, null));
-    // _contracts.add(Account("Contract 6", false, 60, null));
-    // _contracts.add(Account("Contract 7", true, 70, null));
-    // _contracts.add(Account("Contract 8", false, 80, null));
-    // _contracts.add(Account("Contract 9", false, 100, null));
-    // _contracts.add(Account("Contract 10", false, 100, null));
-    // _contracts.add(Account("Contract 11", true, 100, null));
-    // _contracts.add(Account("Contract 12", false, 100, null));
   }
 
   @override
