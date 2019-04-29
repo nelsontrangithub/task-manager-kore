@@ -117,20 +117,7 @@ class AccountDetailState extends State<AccountDetail> {
     );
   }
 
-  // Widget _buildList(List<Task> _tasks) {
-  //   return Flexible(child: ListView.builder(
-  //       // padding: const EdgeInsets.symmetric(vertical: 25.0),
-  //       itemBuilder: (context, i) {
-  //     // if (i.isOdd) return Divider();
-  //     // final index = i ~/ 2;
-  //     if (_tasks.length > i) {
-  //       return _buildRow(_tasks[i], i);
-  //     }
-  //     return null;
-  //   }));
-  // }
-
-    Widget _buildList(List<Task> _tasks) {
+  Widget _buildList(List<Task> _tasks) {
     return Flexible(
         child: ListView.builder(
             padding: const EdgeInsets.all(25.0),
