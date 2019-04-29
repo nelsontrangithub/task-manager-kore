@@ -27,7 +27,7 @@ class Asset {
         mimeType: json['mimeType'] as String,
         size: json['size'] as int,
         location: json['location'] as String,
-        url: json['url'] as int,
+        url: json['url'] as String,
         status: json['status'] as int
     );
   }
