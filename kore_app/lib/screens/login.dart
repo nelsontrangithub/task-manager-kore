@@ -43,10 +43,12 @@ class _MyHomePageState extends State<MyHomePage> {
       DeviceOrientation.portraitDown,
     ]);
 
-    // Email Field
+    String p =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp exp = new RegExp(p); // Email Field
     final emailField = TextFormField(
       validator: (value) {
-        if (value.isEmpty) {
+        if (value.isEmpty || !exp.hasMatch(value)) {
           return 'Invalid Email';
         }
       },
@@ -88,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             // Navigator.pushNamed(context, '/contractList');
             if (_formKey.currentState.validate()) {
-            state is! LoginLoading ? _onLoginButtonPressed() : null;
+              state is! LoginLoading ? _onLoginButtonPressed() : null;
             }
           },
           child: Text(
@@ -100,6 +102,30 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     }
 
+    _showAlertDialog(BuildContext context) {
+      Widget continueButton = FlatButton(
+        child: Text("Try Again"),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      );
+      // set up the AlertDialog
+      AlertDialog alert = AlertDialog(
+        title: Text("Notice"),
+        content: Text("Please make sure your password and username correct."),
+        actions: [
+          continueButton,
+        ],
+      );
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alert;
+        },
+      );
+    }
+
     return BlocBuilder<LoginEvent, LoginState>(
       bloc: _loginBloc,
       builder: (
@@ -108,14 +134,16 @@ class _MyHomePageState extends State<MyHomePage> {
       ) {
         if (state is LoginFailure) {
           _onWidgetDidBuild(() {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text('${state.error}'),
-                backgroundColor: Colors.red,
-              ),
-            );
+            // Scaffold.of(context).showSnackBar(
+            //   SnackBar(
+            //     content: Text('${state.error}'),
+            //     backgroundColor: Colors.red,
+            //   ),
+            // );
+            _showAlertDialog(context);
           });
         }
+
         return Scaffold(
           body: Center(
             child: Container(
@@ -124,31 +152,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: const EdgeInsets.all(36.0),
                   child: Form(
                     key: _formKey,
-                    child:Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 155.0,
-                        child: Image.asset(
-                          "assets/KORE-Logo.png",
-                          fit: BoxFit.contain,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(
+                          height: 155.0,
+                          child: Image.asset(
+                            "assets/KORE-Logo.png",
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 45.0),
-                      emailField,
-                      SizedBox(height: 25.0),
-                      passwordField,
-                      SizedBox(height: 35.0),
-                      _buildLoginButton(state),
-                      SizedBox(height: 15.0),
-                      Container(
-                        child: state is LoginLoading
-                            ? CircularProgressIndicator()
-                            : null,
-                      ),
-                    ],
-                  ),
+                        SizedBox(height: 45.0),
+                        emailField,
+                        SizedBox(height: 25.0),
+                        passwordField,
+                        SizedBox(height: 35.0),
+                        _buildLoginButton(state),
+                        SizedBox(height: 15.0),
+                        Container(
+                          child: state is LoginLoading
+                              ? CircularProgressIndicator()
+                              : null,
+                        ),
+                      ],
+                    ),
                   ),
                 )),
           ),
