@@ -12,7 +12,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import '../models/task.dart';
 
 class AccountDetailState extends State<AccountDetail> {
-  final _biggerFont = const TextStyle(fontSize: 18.0);
   Future<User> _user;
   Future<List<Task>> _tasksAPI;
   Future<String> _username;

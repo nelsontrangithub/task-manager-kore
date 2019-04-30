@@ -73,12 +73,11 @@ class Api {
     });
   }
 
-  // Future<Task> getTaskById(Future<String> token, Future<Task> task) async {
-  //   String _token = await token;
-  //   Task _task = await task;
-  //   return _netUtil.get(USER_URL + _task.id.toString(), _token).then((dynamic res) {
-  //     print(res.toString());
-  //     return User.fromJson(res);
-  //   });
-  // }
+  Future<List<Account>> getAccountsByOrgId(Future<String> token, Organization org) async {
+    String _token = await token;
+    return _netUtil.get(ACCOUNT_URL + 'user/' + org.id.toString(), _token).then((dynamic res) {
+      print(res.toString());
+      return res.map<Account>((json) => new Account.fromJson(json)).toList();
+    });
+  }
 }
