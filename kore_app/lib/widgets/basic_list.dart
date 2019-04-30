@@ -59,13 +59,13 @@ class BasicListState extends State<BasicList> {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AccountDetail(account: item, userRepository: widget.userRepository),
+              builder: (context) => AccountDetail(account: item, userRepository: widget.userRepository, role: widget.role),
             ));
       } else {
         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AccountList(organization: item, userRepository: widget.userRepository),
+              builder: (context) => AccountList(organization: item, userRepository: widget.userRepository, role: widget.role),
             ));
       }
       },
@@ -78,8 +78,9 @@ class BasicList extends StatefulWidget {
   final Future<User> user;
   final Future<List<dynamic>> list;
   final UserRepository userRepository;
+  final String role;
 
-  BasicList({Key key, @required this.user, @required this.list, @required this.userRepository}) : super(key: key);
+  BasicList({Key key, @required this.user, @required this.list, @required this.userRepository, @required this.role}) : super(key: key);
 
   @override
   BasicListState createState() => new BasicListState();

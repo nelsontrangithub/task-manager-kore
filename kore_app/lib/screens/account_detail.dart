@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/auth/user_repository.dart';
+import 'package:kore_app/utils/constant.dart';
 import 'package:kore_app/widgets/loading_indicator.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -34,8 +35,12 @@ class AccountDetailState extends State<AccountDetail> {
     _token = widget.userRepository.hasToken();
     _username = widget.userRepository.getUsername();
     _api = Api();
-    _user = _api.getUserByUsername(_token, _username);
-    _tasksAPI = _api.getTasks(_token, _user);
+    if (widget.role == Constant.RegularRole) {
+      _user = _api.getUserByUsername(_token, _username);
+      _tasksAPI = _api.getTasks(_token, _user);
+    } else {
+      _tasksAPI = _api.getAllTasksByAccountId(_token, widget.account);
+    }
   }
 
   @override
@@ -199,9 +204,15 @@ class AccountDetailState extends State<AccountDetail> {
 class AccountDetail extends StatefulWidget {
   final Account account;
   final UserRepository userRepository;
+  final String role;
   const AccountDetail(
-      {Key key, @required this.account, @required this.userRepository})
-      : super(key: key);
+      {Key key,
+      @required this.account,
+      @required this.userRepository,
+      @required this.role})
+      : assert(userRepository != null),
+        assert(role != null),
+        super(key: key);
 
   @override
   AccountDetailState createState() => new AccountDetailState();
