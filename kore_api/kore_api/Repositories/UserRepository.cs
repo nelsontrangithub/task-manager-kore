@@ -50,6 +50,12 @@ namespace kore_api.Repositories
 			return _context.User.ToList();
 		}
 
+        public IEnumerable<User> SearchUsersByEmail(string search)
+        {
+            var query = _context.User.Where(u => u.Email.Contains(search));
+            return query;
+        }
+
 		public bool UserExists(string email)
 		{
 			if (_context.User.Where(u => u.Email == email).FirstOrDefault() != null)
