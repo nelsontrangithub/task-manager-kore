@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/auth/user_repository.dart';
-import 'package:kore_app/screens/loading_indicator.dart';
+import 'package:kore_app/widgets/loading_indicator.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:kore_app/models/account.dart';
