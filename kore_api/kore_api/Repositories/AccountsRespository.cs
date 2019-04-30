@@ -124,5 +124,66 @@ namespace kore_api.Repositories
                 return false;
             }
         }
+
+        public double GetProgressPercentage(int userID, int accountID)
+        {
+            var query = from x in _context.Taskmembership
+                        join y in _context.Task on x.TaskId equals y.Id
+                        where x.AccountId.Equals(accountID) && x.UserId.Equals(userID)
+                        select new TaskVM
+                        {
+                            Id = x.Id,
+                            TaskId = x.TaskId,
+                            AccountId = x.AccountId,
+                            UserId = x.UserId,
+                            OrgId = x.OrgId,
+                            DateCreated = x.DateCreated,
+                            DateModified = x.DateModified,
+                            Status = x.Status,
+                            CreatedBy = x.CreatedBy,
+                            ModifiedBy = x.ModifiedBy,
+                            OwnerId = y.OwnerId,
+                            TaskStatus = y.Status,
+                            Description = y.Description,
+                            DueDate = y.DueDate,
+                            CompletedOn = y.CompletedOn,
+                            Subject = y.Subject,
+                            Department = y.Department
+                        };
+
+            var query2 = from x in _context.Taskmembership
+                         join y in _context.Task on x.TaskId equals y.Id
+                         where x.AccountId.Equals(accountID) && x.UserId.Equals(userID) && y.Status.Equals(1)
+                         select new TaskVM
+                         {
+                             Id = x.Id,
+                             TaskId = x.TaskId,
+                             AccountId = x.AccountId,
+                             UserId = x.UserId,
+                             OrgId = x.OrgId,
+                             DateCreated = x.DateCreated,
+                             DateModified = x.DateModified,
+                             Status = x.Status,
+                             CreatedBy = x.CreatedBy,
+                             ModifiedBy = x.ModifiedBy,
+                             OwnerId = y.OwnerId,
+                             TaskStatus = y.Status,
+                             Description = y.Description,
+                             DueDate = y.DueDate,
+                             CompletedOn = y.CompletedOn,
+                             Subject = y.Subject,
+                             Department = y.Department
+                         };
+
+            if (query.Count() != 0 && query2.Count() != 0)
+            {
+                double result = query2.Count() / query.Count();
+                return result;
+            }
+            else
+            {
+                return 0.0;
+            }
+        }
     }
 }
