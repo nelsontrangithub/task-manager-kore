@@ -26,9 +26,10 @@ class NetworkUtil {
     });
   }
 
-  Future<dynamic> post(String url, bool isSigin,
-      {Map headers, body, encoding}) {
-    return http.post(url, body: body, headers: headers, encoding: encoding).then((http.Response response) {
+  Future<dynamic> post(String url, bool isSigin, {Map headers, body, encoding}) {
+    return http
+        .post(url, body: body, headers: headers, encoding: encoding)
+        .then((http.Response response) {
       final String res = response.body;
       final int statusCode = response.statusCode;
 

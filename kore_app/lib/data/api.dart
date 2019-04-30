@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/organization.dart';
@@ -81,14 +82,15 @@ class Api {
     String _token = await token;
 
     var headers = {
-      "content-type": "application/json",      
+      "Content-Type": "application/json",      
       HttpHeaders.authorizationHeader: "Bearer " + _token.trim()
     };
 
     var body =  asset.toJson(user);
+    var bodyEncoded = json.encode(body);
 
     try {
-    _netUtil.post(ASSET_URL, false, headers: headers, body: body).then((dynamic res) {
+    _netUtil.post(ASSET_URL, false, headers: headers, body: bodyEncoded).then((dynamic res) {
       print("File Post Result: " + res.toString());        
     });
     } catch (e){

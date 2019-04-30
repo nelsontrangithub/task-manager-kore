@@ -368,8 +368,9 @@ class TaskDetailState extends State<TaskDetail> {
         size: _length,
         location: _location,
         url: _path,
-        taskId: taskId,
-        accountId: accountId
+        taskId: taskId.toString(),
+        accountId: accountId.toString(),
+        status: 0
     );
     return asset;
   }
