@@ -69,7 +69,7 @@ class TaskDetailState extends State<TaskDetail> {
           Column(
             children: <Widget>[
               Padding(padding: EdgeInsets.only(top: 12)),
-              _asignTask(),
+              _assignTask(),
               _buildTaskDescription(),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
@@ -81,11 +81,11 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  Widget _asignTask() {
+  Widget _assignTask() {
     return FloatingActionButton.extended(
       onPressed: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AsignTask()));
+            context, MaterialPageRoute(builder: (context) => AssignTask()));
       },
       icon: Icon(Icons.account_circle),
       label: Text("Assign Task"),
