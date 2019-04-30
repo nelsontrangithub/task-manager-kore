@@ -45,7 +45,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
     String p =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp exp = new RegExp(p); // Email Field
+    RegExp exp = new RegExp(p);
+
+    // Email Field
     final emailField = TextFormField(
       validator: (value) {
         if (value.isEmpty || !exp.hasMatch(value)) {
@@ -145,40 +147,42 @@ class _MyHomePageState extends State<MyHomePage> {
         }
 
         return Scaffold(
-          body: Center(
-            child: Container(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(36.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SizedBox(
-                          height: 155.0,
-                          child: Image.asset(
-                            "assets/KORE-Logo.png",
-                            fit: BoxFit.contain,
+          body: ListView(
+            children: <Widget>[
+              Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(36.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 155.0,
+                            child: Image.asset(
+                              "assets/KORE-Logo.png",
+                              fit: BoxFit.contain,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 45.0),
-                        emailField,
-                        SizedBox(height: 25.0),
-                        passwordField,
-                        SizedBox(height: 35.0),
-                        _buildLoginButton(state),
-                        SizedBox(height: 15.0),
-                        Container(
-                          child: state is LoginLoading
-                              ? CircularProgressIndicator()
-                              : null,
-                        ),
-                      ],
+                          SizedBox(height: 45.0),
+                          emailField,
+                          SizedBox(height: 25.0),
+                          passwordField,
+                          SizedBox(height: 35.0),
+                          _buildLoginButton(state),
+                          SizedBox(height: 15.0),
+                          Container(
+                            child: state is LoginLoading
+                                ? CircularProgressIndicator()
+                                : null,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                )),
+                  )),
+            ],
           ),
         );
       },
