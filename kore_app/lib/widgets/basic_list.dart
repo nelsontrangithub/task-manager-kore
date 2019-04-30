@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/user.dart';
-import 'package:kore_app/screens/accountDetail.dart';
-import 'package:kore_app/screens/accountList.dart';
-import 'package:kore_app/utils/theme.dart';
+import 'package:kore_app/screens/account_detail.dart';
+import 'package:kore_app/screens/account_list.dart';
 
 class BasicListState extends State<BasicList> {
   final _biggerFont = const TextStyle(fontSize: 18.0);

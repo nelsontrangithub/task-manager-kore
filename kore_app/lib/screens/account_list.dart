@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kore_app/auth/authentication_bloc.dart';
 import 'package:kore_app/auth/authentication_event.dart';
@@ -8,7 +7,7 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/organization.dart';
 import 'package:kore_app/models/user.dart';
-import 'package:kore_app/utils/theme.dart';
+import 'package:kore_app/utils/constant.dart';
 import 'package:kore_app/widgets/basic_list.dart';
 import 'package:kore_app/widgets/profile_header.dart';
 
@@ -16,7 +15,6 @@ class AccountListState extends State<AccountList> {
   Future<User>
       _user; // = User("Tina", "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   Future<List<Account>> _contracts;
-  final _nameFont = const TextStyle(color: Colors.white, fontSize: 28);
   static const PHOTO_PLACEHOLDER_PATH =
       "https://image.flaticon.com/icons/png/128/201/201570.png";
   Future<String> _username;
@@ -32,7 +30,11 @@ class AccountListState extends State<AccountList> {
     _username = widget.userRepository.getUsername();
     _api = Api();
     _user = _api.getUserByUsername(_token, _username);
-    _contracts = _api.getAccountsById(_token, _user);
+    if (widget.role == Constant.AdminRole) {
+      _contracts = _api.getAccountsByOrgId(_token, widget.organization);
+    } else {
+      _contracts = _api.getAccountsById(_token, _user);
+    }
   }
 
   @override
@@ -54,7 +56,9 @@ class AccountListState extends State<AccountList> {
           ],
         ),
         body: Column(children: <Widget>[
-          ProfileHeader(user: _user),
+          widget.role == Constant.RegularRole
+              ? ProfileHeader(user: _user)
+              : Container(height: 0, width: 0),
           BasicList(
               user: _user,
               list: _contracts,
@@ -66,9 +70,15 @@ class AccountListState extends State<AccountList> {
 class AccountList extends StatefulWidget {
   final Organization organization;
   final UserRepository userRepository;
+  final String role;
 
-  AccountList({Key key, this.organization, @required this.userRepository})
+  AccountList(
+      {Key key,
+      this.organization,
+      @required this.userRepository,
+      @required this.role})
       : assert(userRepository != null),
+        assert(role != null),
         super(key: key);
 
   @override

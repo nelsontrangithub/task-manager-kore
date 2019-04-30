@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:kore_app/auth/authentication_event.dart';
 import 'package:kore_app/auth/authentication_state.dart';
 import 'package:kore_app/auth/user_repository.dart';
-import 'package:kore_app/screens/accountList.dart';
+import 'package:kore_app/screens/account_list.dart';
 import 'package:kore_app/screens/loading_indicator.dart';
 import 'package:kore_app/auth/authentication_bloc.dart';
 import 'package:kore_app/screens/orgnization_list.dart';
 import 'package:kore_app/screens/splash.dart';
 import 'package:kore_app/screens/login.dart';
+import 'package:kore_app/utils/constant.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
@@ -74,14 +75,13 @@ class _AppState extends State<MyApp> {
               return Splash();
             }
             if (state is AuthenticationAuthenticatedAdmin) {
-              return OrganizationList(userRepository: UserRepository());
+              return OrganizationList(userRepository: UserRepository(), role: Constant.AdminRole);
             }
             if (state is AuthenticationAuthenticatedRegular) {
-              return AccountList(userRepository: UserRepository());
+              return AccountList(userRepository: UserRepository(), role: Constant.RegularRole);
             }
             if (state is AuthenticationUnauthenticated) {
               return MyHomePage(
-                  title: 'Flutter Demo Home Page',
                   userRepository: UserRepository());
             }
             if (state is AuthenticationLoading) {

@@ -8,12 +8,11 @@ import 'package:kore_app/auth/authentication_bloc.dart';
 import 'package:kore_app/auth/login_bloc.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, @required this.userRepository})
+  MyHomePage({Key key, @required this.userRepository})
       : assert(userRepository != null),
         super(key: key);
 
   final UserRepository userRepository;
-  final String title;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
