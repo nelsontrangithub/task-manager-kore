@@ -50,7 +50,7 @@ namespace kore_api.Repositories
 			return _context.User.ToList();
 		}
 
-        public IEnumerable<User> SearchUsers(string search)
+        public IEnumerable<User> SearchUsersByEmail(string search)
         {
             var query = _context.User.Where(u => u.Email.Contains(search));
             return query;

@@ -36,6 +36,7 @@ namespace kore_api.Controllers
         /// Get User by Username
         /// </summary>
         [HttpGet]
+        [Authorize(Policy = "IsAdminOrAgent")]
         [Route("api/getUser/{username}")]
         public async Task<IActionResult> GetUser([FromRoute] string username)
         {
@@ -51,6 +52,7 @@ namespace kore_api.Controllers
         /// Search user by email/username
         /// </summary>
         [HttpGet]
+        [Authorize(Policy = "IsAdminOrAgent")]
         [Route("api/search/{username}")]
         public IEnumerable<User> SearchUser([FromRoute] string username)
         {
