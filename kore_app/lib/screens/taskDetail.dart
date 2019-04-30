@@ -17,7 +17,7 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
 
 class TaskDetailState extends State<TaskDetail> {
   Future<User> _user;
-   // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
+  // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   var icon;
   var iconColor;
   final _biggerFont = const TextStyle(fontSize: 18.0);
@@ -54,7 +54,6 @@ class TaskDetailState extends State<TaskDetail> {
       iconColor = Colors.redAccent;
     }
     _controller.addListener(() => _extension = _controller.text);
-    
   }
 
   @override
@@ -62,22 +61,37 @@ class TaskDetailState extends State<TaskDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.task.description),
-        ),
+      ),
       body: new ListView(
         children: <Widget>[
           Column(
             children: <Widget>[
-              // _buildHeader(),
+              Padding(padding: EdgeInsets.only(top: 12)),
+              _asignTask(),
               _buildTaskDescription(),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
-              _buildAssetsListContainer(_assets)
+              _buildAssetsListContainer(_assets),
+             
             ],
           ),
         ],
       ),
     );
   }
+  
+
+  Widget _asignTask() {
+    return FloatingActionButton.extended(
+      onPressed: () {},
+      icon: Icon(Icons.account_circle),
+      label: Text("Assign Task"),
+    );
+  }
+
+
+
+
 
   Widget _buildHeader() {
     return Container(
@@ -252,16 +266,16 @@ class TaskDetailState extends State<TaskDetail> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             FutureBuilder<List<Asset>>(
-                future: assets,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return _buildAssetList(snapshot.data);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  // By default, show a loading spinner
-                  return CircularProgressIndicator();
-                },
+              future: assets,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return _buildAssetList(snapshot.data);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                // By default, show a loading spinner
+                return CircularProgressIndicator();
+              },
             ),
           ],
         ),
@@ -269,11 +283,11 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-Widget _buildAssetList(List<Asset> assets) {
+  Widget _buildAssetList(List<Asset> assets) {
     return Flexible(
         fit: FlexFit.loose,
         child: ListView.builder(
-          shrinkWrap: true,
+            shrinkWrap: true,
             padding: const EdgeInsets.all(25.0),
             itemBuilder: (context, i) {
               if (i.isOdd) return Divider();
@@ -296,12 +310,9 @@ Widget _buildAssetList(List<Asset> assets) {
       //   // Add the lines from here...
       //   account.percentage >= 100 ? Icons.done : null,
       // ),
-      onTap: () {
-      },
+      onTap: () {},
     );
   }
-
-
 
   void toggleCompleted(Task task) {
     task.isCompleted = !task.isCompleted;
@@ -385,9 +396,9 @@ Widget _buildAssetList(List<Asset> assets) {
 
 class TaskDetail extends StatefulWidget {
   final Task task;
-  const TaskDetail({Key key, this.task, @required this.userRepository}) 
-            : assert(userRepository != null), 
-            super(key: key);
+  const TaskDetail({Key key, this.task, @required this.userRepository})
+      : assert(userRepository != null),
+        super(key: key);
 
   final UserRepository userRepository;
 
