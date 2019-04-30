@@ -8,6 +8,7 @@ import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/organization.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/constant.dart';
+import 'package:kore_app/widgets/account_title_header.dart';
 import 'package:kore_app/widgets/basic_list.dart';
 import 'package:kore_app/widgets/profile_header.dart';
 
@@ -43,9 +44,7 @@ class AccountListState extends State<AccountList> {
         BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
         appBar: AppBar(
-          title: widget.organization == null
-              ? Text('Accounts')
-              : Text(widget.organization.name),
+          title: Text('Accounts'),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.exit_to_app),
@@ -58,7 +57,7 @@ class AccountListState extends State<AccountList> {
         body: Column(children: <Widget>[
           widget.role == Constant.RegularRole
               ? ProfileHeader(user: _user)
-              : Container(height: 0, width: 0),
+              : AccountTitleHeader(organization: widget.organization),
           BasicList(
               user: _user,
               list: _contracts,
