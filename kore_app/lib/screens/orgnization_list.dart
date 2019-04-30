@@ -65,55 +65,6 @@ class OrganizationListState extends State<OrganizationList> {
             }));
   }
 
-  Widget _adminProfileRow() {
-    return Container(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        decoration: BoxDecoration(
-          borderRadius:
-              BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
-          color: KorePrimaryColor,
-        ),
-        child: FutureBuilder<User>(
-            future: _user,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                        child: new Container(
-                      height: 150.0,
-                      child: new CachedNetworkImage(
-                        imageUrl: snapshot.data.iconFileUrl == null
-                            ? PHOTO_PLACEHOLDER_PATH
-                            : snapshot.data.iconFileUrl,
-                        placeholder: (context, url) =>
-                            new CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                            new Icon(Icons.error),
-                      ),
-                    )),
-                    Expanded(
-                      child: new Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          new Text(snapshot.data.name),
-                          new Container(
-                            margin: const EdgeInsets.only(top: 5.0),
-                            child: new Text(snapshot.data.status.toString()),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                );
-              } else if (snapshot.error) {
-                return Text("${snapshot.error}");
-              }
-              return Center(child:CircularProgressIndicator());
-            }));
-  }
-
   Widget _buildList(List<Organization> organizations) {
     return Flexible(
         child: ListView.builder(
