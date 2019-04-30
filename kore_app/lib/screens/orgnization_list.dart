@@ -10,6 +10,7 @@ import 'package:kore_app/models/user.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:kore_app/screens/accountList.dart';
+import 'package:kore_app/widgets/loading_indicator.dart';
 import 'package:kore_app/widgets/profile_header.dart';
 
 class OrganizationListState extends State<OrganizationList> {
@@ -61,7 +62,7 @@ class OrganizationListState extends State<OrganizationList> {
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
-              return Center(child:CircularProgressIndicator());
+              return LoadingIndicator();
             }));
   }
 
