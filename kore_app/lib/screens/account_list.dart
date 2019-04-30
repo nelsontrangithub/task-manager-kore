@@ -21,9 +21,7 @@ class AccountListState extends State<AccountList> {
   Future<String> _username;
   Future<String> _token;
   Api _api;
-  // final Set<ContractInfo> _saved = Set<ContractInfo>();
-  //one of the state lifecycle function, only load once
-  //good place for dummydata loading
+  
   @override
   initState() {
     super.initState();
@@ -46,12 +44,14 @@ class AccountListState extends State<AccountList> {
         appBar: AppBar(
           title: Text('Accounts'),
           actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.exit_to_app),
-              onPressed: () {
-                authenticationBloc.dispatch(LoggedOut());
-              },
-            ),
+            widget.role == Constant.RegularRole
+                ? IconButton(
+                    icon: Icon(Icons.exit_to_app),
+                    onPressed: () {
+                      authenticationBloc.dispatch(LoggedOut());
+                    },
+                  )
+                : Container(height:0, width: 0,),
           ],
         ),
         body: Column(children: <Widget>[
