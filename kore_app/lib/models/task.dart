@@ -64,6 +64,7 @@ import 'package:flutter/material.dart';
 
 class Task {
   int id;
+  int accountId;
   String title;
   bool isCompleted;
   String description;
@@ -109,6 +110,7 @@ class Task {
 
   Task({
     this.id,
+    this.accountId,
     this.title,
     this.isCompleted,
     this.description,
@@ -118,6 +120,7 @@ class Task {
   factory Task.fromJson(Map<String, dynamic> json ) {
     return new Task(
         id: json['id'] as int,
+        accountId: json['accountId'] as int,
         title: json['subject'] as String,
         isCompleted: true,
         description: json['description'] as String,
