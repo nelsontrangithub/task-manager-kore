@@ -396,7 +396,7 @@ class TaskDetailState extends State<TaskDetail> {
     if (file != null) {
       //Create Asset Object and assign a title.
       Asset asset = await createAsset(file);
-      asset.title = "title"; //await setFileTitle(context, path.basename(file.path));
+      asset.title = "dog"; //await setFileTitle(context, path.basename(file.path));
 
       //If user did not hit cancel while assigning a file title.
       if (asset.title != "/") {
@@ -408,7 +408,7 @@ class TaskDetailState extends State<TaskDetail> {
 
           if (dbSuccess) {
             setState(() {
-              _buildAssetsListContainer(_assets);
+              _assets = _api.getAssets(_token);
             });
           }
         }
