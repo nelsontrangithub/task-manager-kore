@@ -24,6 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   UserRepository get _userRepository => widget.userRepository;
+  bool firstRender = true;
 
   @override
   void initState() {
@@ -139,7 +140,10 @@ class _MyHomePageState extends State<MyHomePage> {
             //     backgroundColor: Colors.red,
             //   ),
             // );
+            if(firstRender == true){
             _showAlertDialog(context);
+            firstRender = false;
+            }
           });
         }
 
@@ -195,6 +199,7 @@ class _MyHomePageState extends State<MyHomePage> {
       username: _usernameController.text,
       password: _passwordController.text,
     ));
+    firstRender = true;
   }
 
   @override
@@ -203,3 +208,17 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 }
+
+// class Login extends StatelessWidget {
+//   Login({Key key, @required this.userRepository})
+//       : assert(userRepository != null),
+//         super(key: key);
+
+//   final UserRepository userRepository;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return null;
+//   }
+  
+// }
