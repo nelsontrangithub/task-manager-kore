@@ -1,16 +1,13 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/theme.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import '../models/task.dart';
 import '../utils/theme.dart';
@@ -63,7 +60,9 @@ class TaskDetailState extends State<TaskDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.task.description)),
+      appBar: AppBar(
+        title: Text(widget.task.description),
+        ),
       body: new ListView(
         children: <Widget>[
           Column(

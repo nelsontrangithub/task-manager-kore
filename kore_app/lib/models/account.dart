@@ -1,6 +1,6 @@
 class Account {
   int id;
-  String accountName;
+  String name;
   String dateCreated;
   String dateModified;
   int status;
@@ -11,7 +11,7 @@ class Account {
 
   Account({
     this.id,
-    this.accountName, 
+    this.name, 
     this.dateCreated,
     this.dateModified,
     this.status,
@@ -24,7 +24,7 @@ class Account {
   factory Account.fromJson(Map<String, dynamic> json ) {
     return new Account(
         id: json['id'] as int,
-        accountName: json['accountName'] as String,
+        name: json['accountName'] as String,
         dateCreated: json['dateCreated'] as String,
         dateModified: json['dateModified'] as String,
         status: json['status'] as int,

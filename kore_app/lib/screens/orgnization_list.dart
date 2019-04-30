@@ -27,8 +27,8 @@ class OrganizationListState extends State<OrganizationList> {
     _token = widget.userRepository.hasToken();
     _username = widget.userRepository.getUsername();
     _api = Api();
-    _organizations = _api.getOrganizations(_token);
     _user = _api.getUserByUsername(_token, _username);
+    _organizations = _api.getOrganizations(_token);
   }
 
   @override
@@ -37,7 +37,7 @@ class OrganizationListState extends State<OrganizationList> {
         BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
         appBar: AppBar(
-          title: Text('Organization List'),
+          title: Text('Organizations'),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.exit_to_app),
@@ -60,7 +60,7 @@ class OrganizationListState extends State<OrganizationList> {
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
-              return CircularProgressIndicator();
+              return Center(child:CircularProgressIndicator());
             }));
   }
 
@@ -109,6 +109,7 @@ class OrganizationListState extends State<OrganizationList> {
               } else if (snapshot.error) {
                 return Text("${snapshot.error}");
               }
+              return Center(child:CircularProgressIndicator());
             }));
   }
 
