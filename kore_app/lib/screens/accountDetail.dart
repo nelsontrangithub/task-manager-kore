@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/auth/user_repository.dart';
+import 'package:kore_app/screens/loading_indicator.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:kore_app/models/account.dart';
@@ -41,30 +42,26 @@ class AccountDetailState extends State<AccountDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
-      appBar: AppBar(
-        title: Text(widget.account.name),
-        // actions: <Widget>[      // Add 3 lines from here...
-        //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
-        //   ],
-      ),
+        resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          title: Text(widget.account.name),
+          // actions: <Widget>[      // Add 3 lines from here...
+          //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
+          //   ],
+        ),
         body: FutureBuilder<List<Task>>(
           future: _tasksAPI,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return new Column(
-                  children: <Widget>[_buildHeader(), _buildList(snapshot.data)]);
+              return new Column(children: <Widget>[
+                _buildHeader(),
+                _buildList(snapshot.data)
+              ]);
             } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
+              return Text("${snapshot.error}");
             }
             // By default, show a loading spinner
-            return new Center(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [CircularProgressIndicator()],
-              ),
-            ); 
+            return LoadingIndicator();
           },
         ));
   }
@@ -76,22 +73,20 @@ class AccountDetailState extends State<AccountDetail> {
       decoration: BoxDecoration(
         borderRadius:
             BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
-        
       ),
       child: new Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           //Using expanded to ensure the image is always sized with contraint
           Expanded(
-            child: new Container(
-              height: 150.0,
-              child: Column(
-                children: <Widget>[
-                  _buildPercentIndicator(),
-                ],
-              ),
-            )
-          ),
+              child: new Container(
+            height: 150.0,
+            child: Column(
+              children: <Widget>[
+                _buildPercentIndicator(),
+              ],
+            ),
+          )),
         ],
       ),
     );
@@ -99,27 +94,25 @@ class AccountDetailState extends State<AccountDetail> {
 
   Widget _buildPercentIndicator() {
     return new Container(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        child: new CircularPercentIndicator(
-          radius: 95.0,
-          lineWidth: 13.0,
-          animation: true,
-          percent: widget.account.percentage * 0.01,
-          center: new Text(
-            widget.account.percentage.toString() + "%",
-            style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
-          ),
-          footer: new Text(
-            "Progress",
-            style: new TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold, 
-              fontSize: 17.0),
-          ),
-          circularStrokeCap: CircularStrokeCap.round,
-          backgroundColor: Colors.grey,
-          progressColor: Colors.indigo,
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
+      child: new CircularPercentIndicator(
+        radius: 95.0,
+        lineWidth: 13.0,
+        animation: true,
+        percent: widget.account.percentage * 0.01,
+        center: new Text(
+          widget.account.percentage.toString() + "%",
+          style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
         ),
+        footer: new Text(
+          "Progress",
+          style: new TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 17.0),
+        ),
+        circularStrokeCap: CircularStrokeCap.round,
+        backgroundColor: Colors.grey,
+        progressColor: Colors.indigo,
+      ),
     );
   }
 
@@ -159,7 +152,8 @@ class AccountDetailState extends State<AccountDetail> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => TaskDetail(task: task, userRepository: widget.userRepository),
+                  builder: (context) => TaskDetail(
+                      task: task, userRepository: widget.userRepository),
                 ));
           },
         ),
@@ -206,7 +200,9 @@ class AccountDetailState extends State<AccountDetail> {
 class AccountDetail extends StatefulWidget {
   final Account account;
   final UserRepository userRepository;
-  const AccountDetail({Key key, @required this.account, @required this.userRepository}) : super(key: key);
+  const AccountDetail(
+      {Key key, @required this.account, @required this.userRepository})
+      : super(key: key);
 
   @override
   AccountDetailState createState() => new AccountDetailState();
