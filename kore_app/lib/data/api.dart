@@ -6,6 +6,7 @@ import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/network_util.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
 
 
@@ -76,14 +77,15 @@ class Api {
     });
   }
 
-  Future<bool> postAsset(Future<String> token, Asset asset) async {
+  Future<bool> postAsset(Future<String> token, Asset asset, User user) async {
     String _token = await token;
 
     var headers = {      
       HttpHeaders.authorizationHeader: "Bearer " + _token.trim()
     };
 
-    var body =  asset.toJson();
+    var body =  asset.toJson(user);
+
     try {
     _netUtil.post(ASSET_URL, false, headers: headers, body: body).then((dynamic res) {
       print("File Post Result: " + res.toString());        

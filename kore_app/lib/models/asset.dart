@@ -1,5 +1,9 @@
+import 'package:kore_app/models/user.dart';
+
 class Asset {
-  int id;
+  String id;
+  int taskId;
+  int accountId;
   String title;
   String fileName;
   String mimeType;
@@ -8,7 +12,10 @@ class Asset {
   String url;
   int status;
 
-  Asset({ 
+  Asset({
+    this.id,
+    this.accountId,
+    this.taskId,
     this.title,
     this.fileName,
     this.mimeType,
@@ -21,6 +28,8 @@ class Asset {
   factory Asset.fromJson(Map<String, dynamic> json ) {
     return new Asset(
         title: json['title'] as String,
+        accountId: json['accountId'] as int,
+        taskId: json ['taskId'] as int,
         fileName: json['fileName'] as String,
         mimeType: json['mimeType'] as String,
         size: json['size'] as int,
@@ -30,13 +39,21 @@ class Asset {
     );
   }
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson(User user) => {
+        'fileId': this.id,
         'title': this.title,
+        'accountId': this.accountId,
+        'taskId': this.taskId,
         'fileName': this.fileName,
         'mimeType': this.mimeType,
         'size': this.size,
         'location': this.location,
         'url': this.url,
-        'status': this.status
+        'status': this.status,
+        'createdBy': user.name,
+        'createdById': user.id, 
+        'fileKey': '',
+        'dateCreated': DateTime.now(),
+        'dateModified': DateTime.now()
     };
 }

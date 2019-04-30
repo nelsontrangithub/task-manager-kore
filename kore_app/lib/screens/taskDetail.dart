@@ -19,7 +19,7 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
 
 class TaskDetailState extends State<TaskDetail> {
   Future<User> _user;
-   // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
+  // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   var icon;
   var iconColor;
   final _biggerFont = const TextStyle(fontSize: 18.0);
@@ -32,7 +32,11 @@ class TaskDetailState extends State<TaskDetail> {
   bool _multiPick = false;
   bool _hasValidMime = false;
   FileType _pickingType;
+  
   TextEditingController _controller = new TextEditingController();
+  TextEditingController _nameFieldController = TextEditingController();
+  String _nameField;
+  
   Future<List<Asset>> _assets;
   Future<String> _username;
   Future<String> _token;
@@ -56,7 +60,6 @@ class TaskDetailState extends State<TaskDetail> {
       iconColor = Colors.redAccent;
     }
     _controller.addListener(() => _extension = _controller.text);
-    
   }
 
   @override
@@ -64,7 +67,7 @@ class TaskDetailState extends State<TaskDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.task.description),
-        ),
+      ),
       body: new ListView(
         children: <Widget>[
           Column(
@@ -246,6 +249,7 @@ class TaskDetailState extends State<TaskDetail> {
 
   /* Start of Assets Functionality */
 
+
   Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
@@ -256,16 +260,16 @@ class TaskDetailState extends State<TaskDetail> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             FutureBuilder<List<Asset>>(
-                future: assets,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return _buildAssetList(snapshot.data);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  // By default, show a loading spinner
-                  return CircularProgressIndicator();
-                },
+              future: assets,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return _buildAssetList(snapshot.data);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                // By default, show a loading spinner
+                return CircularProgressIndicator();
+              },
             ),
           ],
         ),
@@ -273,11 +277,11 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-Widget _buildAssetList(List<Asset> assets) {
+  Widget _buildAssetList(List<Asset> assets) {
     return Flexible(
         fit: FlexFit.loose,
         child: ListView.builder(
-          shrinkWrap: true,
+            shrinkWrap: true,
             padding: const EdgeInsets.all(25.0),
             itemBuilder: (context, i) {
               if (i.isOdd) return Divider();
@@ -300,28 +304,30 @@ Widget _buildAssetList(List<Asset> assets) {
       //   // Add the lines from here...
       //   account.percentage >= 100 ? Icons.done : null,
       // ),
-      onTap: () {
-      },
+      onTap: () {},
     );
   }
 
-  //Alert box with input feild to allow users to assing a title to the selected file
-  Future<String> setFileTitle(BuildContext context) async {
+  _setNameField(){
+    this._nameField = _nameFieldController.text;
+  }
 
-    TextEditingController _nameFieldController = TextEditingController();
+  //Alert box with input feild to allow users to assing a title to the selected file
+  Future<String> setFileTitle(BuildContext context, String filename) async {
+
+    _nameFieldController.addListener(_setNameField);
 
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('TextField in Dialog'),
+            title: Text("Selected: " + filename),
             content: TextField(
               inputFormatters: [
                 BlacklistingTextInputFormatter(RegExp("[/\\\\]")),
-
               ],
               controller: _nameFieldController,
-              decoration: InputDecoration(hintText: "TextField in Dialog"),
+              decoration: InputDecoration(hintText: "file title"),
             ),
             actions: <Widget>[
               new FlatButton(
@@ -344,20 +350,27 @@ Widget _buildAssetList(List<Asset> assets) {
   }
 
   Future<Asset> createAsset(File file) async {
-
     final _fileName = path.basename(file.path);
-    final _mimeType =lookupMimeType(file.path);
+    final _mimeType = lookupMimeType(file.path);
     final _length = await file.length();
     final _location = widget.task.id.toString();
-    final _path = "https://s3.us-east-2.amazonaws.com/koretaskmanagermediabucket/";
+    final _path =
+        "https://s3.us-east-2.amazonaws.com/koretaskmanagermediabucket/";
+    final taskId = widget.task.id;
+    final accountId = widget.task.accountId;
+    final User user = await _user;
 
-    Asset asset = new Asset(title: "", 
-                            fileName: _fileName,
-                            mimeType: _mimeType,
-                            size: _length,
-                            location: _location,
-                            url: _path
-                            );
+    Asset asset = new Asset(
+        id: _fileName + user.id.toString(),
+        title: "",
+        fileName: _fileName,
+        mimeType: _mimeType,
+        size: _length,
+        location: _location,
+        url: _path,
+        taskId: taskId,
+        accountId: accountId
+    );
     return asset;
   }
 
@@ -379,23 +392,30 @@ Widget _buildAssetList(List<Asset> assets) {
       if (!mounted) return;
     }
 
-    if (file != null ){
+    if (file != null) {
       //Create Asset Object and assign a title.
       Asset asset = await createAsset(file);
-      asset.title = await setFileTitle(context);
+      asset.title = "title"; //await setFileTitle(context, path.basename(file.path));
 
       //If user did not hit cancel while assigning a file title.
       if (asset.title != "/") {
-        bool s3success = await S3bucketUploader.uploadFile(file, "koretaskmanagermediabucket", widget.task.id.toString());
+        bool s3success = await S3bucketUploader.uploadFile(
+            file, "koretaskmanagermediabucket", widget.task.id.toString());
         if (s3success) {
-          bool dbSuccess = await _api.postAsset(_token, asset);
+          User user = await _user;
+          bool dbSuccess = await _api.postAsset(_token, asset, user);
+
+          if (dbSuccess) {
+            setState(() {
+              _buildAssetsListContainer(_assets);
+            });
+          }
         }
       }
     }
   }
 
   /* End of Assets Functionality */
-
 
   void toggleCompleted(Task task) {
     task.isCompleted = !task.isCompleted;
@@ -444,14 +464,13 @@ Widget _buildAssetList(List<Asset> assets) {
       },
     );
   }
-
 }
 
 class TaskDetail extends StatefulWidget {
   final Task task;
-  const TaskDetail({Key key, this.task, @required this.userRepository}) 
-            : assert(userRepository != null), 
-            super(key: key);
+  const TaskDetail({Key key, this.task, @required this.userRepository})
+      : assert(userRepository != null),
+        super(key: key);
 
   final UserRepository userRepository;
 
