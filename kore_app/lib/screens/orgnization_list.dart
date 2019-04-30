@@ -10,6 +10,7 @@ import 'package:kore_app/models/user.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:kore_app/screens/accountList.dart';
+import 'package:kore_app/widgets/profile_header.dart';
 
 class OrganizationListState extends State<OrganizationList> {
   static const PHOTO_PLACEHOLDER_PATH =
@@ -27,8 +28,8 @@ class OrganizationListState extends State<OrganizationList> {
     _token = widget.userRepository.hasToken();
     _username = widget.userRepository.getUsername();
     _api = Api();
-    _organizations = _api.getOrganizations(_token);
     _user = _api.getUserByUsername(_token, _username);
+    _organizations = _api.getOrganizations(_token);
   }
 
   @override
@@ -37,7 +38,7 @@ class OrganizationListState extends State<OrganizationList> {
         BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
         appBar: AppBar(
-          title: Text('Organization List'),
+          title: Text('Organizations'),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.exit_to_app),
@@ -53,62 +54,14 @@ class OrganizationListState extends State<OrganizationList> {
               if (snapshot.hasData) {
                 return new Column(
                   children: <Widget>[
-                    _adminProfileRow(),
+                    ProfileHeader(user: _user),
                     _buildList(snapshot.data)
                   ],
                 );
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
-              return CircularProgressIndicator();
-            }));
-  }
-
-  Widget _adminProfileRow() {
-    return Container(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        decoration: BoxDecoration(
-          borderRadius:
-              BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
-          color: KorePrimaryColor,
-        ),
-        child: FutureBuilder<User>(
-            future: _user,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Expanded(
-                        child: new Container(
-                      height: 150.0,
-                      child: new CachedNetworkImage(
-                        imageUrl: snapshot.data.iconFileUrl == null
-                            ? PHOTO_PLACEHOLDER_PATH
-                            : snapshot.data.iconFileUrl,
-                        placeholder: (context, url) =>
-                            new CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                            new Icon(Icons.error),
-                      ),
-                    )),
-                    Expanded(
-                      child: new Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          new Text(snapshot.data.name),
-                          new Container(
-                            margin: const EdgeInsets.only(top: 5.0),
-                            child: new Text(snapshot.data.status.toString()),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                );
-              } else if (snapshot.error) {
-                return Text("${snapshot.error}");
-              }
+              return Center(child:CircularProgressIndicator());
             }));
   }
 

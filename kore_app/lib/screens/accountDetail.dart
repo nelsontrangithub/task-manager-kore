@@ -43,7 +43,7 @@ class AccountDetailState extends State<AccountDetail> {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: Text(widget.account.accountName),
+        title: Text(widget.account.name),
         // actions: <Widget>[      // Add 3 lines from here...
         //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         //   ],
