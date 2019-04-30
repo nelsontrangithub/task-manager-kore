@@ -10,6 +10,7 @@ import 'package:kore_app/models/user.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:kore_app/screens/accountList.dart';
+import 'package:kore_app/widgets/profile_header.dart';
 
 class OrganizationListState extends State<OrganizationList> {
   static const PHOTO_PLACEHOLDER_PATH =
@@ -53,7 +54,7 @@ class OrganizationListState extends State<OrganizationList> {
               if (snapshot.hasData) {
                 return new Column(
                   children: <Widget>[
-                    _adminProfileRow(),
+                    ProfileHeader(user: _user),
                     _buildList(snapshot.data)
                   ],
                 );
