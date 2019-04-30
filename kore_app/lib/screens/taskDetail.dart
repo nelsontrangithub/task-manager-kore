@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:mime/mime.dart';
+import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/data/api.dart';
@@ -242,6 +244,8 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
+  /* Start of Assets Functionality */
+
   Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
@@ -301,6 +305,96 @@ Widget _buildAssetList(List<Asset> assets) {
     );
   }
 
+  //Alert box with input feild to allow users to assing a title to the selected file
+  Future<String> setFileTitle(BuildContext context) async {
+
+    TextEditingController _nameFieldController = TextEditingController();
+
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('TextField in Dialog'),
+            content: TextField(
+              inputFormatters: [
+                BlacklistingTextInputFormatter(RegExp("[/\\\\]")),
+
+              ],
+              controller: _nameFieldController,
+              decoration: InputDecoration(hintText: "TextField in Dialog"),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('CANCEL'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  return "/";
+                },
+              ),
+              new FlatButton(
+                child: new Text('SUBMIT'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  return _nameFieldController.text;
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future<Asset> createAsset(File file) async {
+
+    final _fileName = path.basename(file.path);
+    final _mimeType =lookupMimeType(file.path);
+    final _length = await file.length();
+    final _location = widget.task.id.toString();
+    final _path = "https://s3.us-east-2.amazonaws.com/koretaskmanagermediabucket/";
+
+    Asset asset = new Asset(title: "", 
+                            fileName: _fileName,
+                            mimeType: _mimeType,
+                            size: _length,
+                            location: _location,
+                            url: _path
+                            );
+    return asset;
+  }
+
+  void openFileExplorer() async {
+    File file;
+    if (_pickingType != FileType.CUSTOM || _hasValidMime) {
+      try {
+        if (_multiPick) {
+          _path = null;
+          _paths = await FilePicker.getMultiFilePath(
+              type: _pickingType, fileExtension: _extension);
+        } else {
+          _paths = null;
+          file = await FilePicker.getFile(type: FileType.ANY);
+        }
+      } on PlatformException catch (e) {
+        print("Unsupported operation" + e.toString());
+      }
+      if (!mounted) return;
+    }
+
+    if (file != null ){
+      //Create Asset Object and assign a title.
+      Asset asset = await createAsset(file);
+      asset.title = await setFileTitle(context);
+
+      //If user did not hit cancel while assigning a file title.
+      if (asset.title != "/") {
+        bool success = await S3bucketUploader.uploadFile(file, "koretaskmanagermediabucket", widget.task.id.toString());
+        if (success) {
+          //upload to database
+        }
+      }
+    }
+  }
+
+  /* End of Assets Functionality */
 
 
   void toggleCompleted(Task task) {
@@ -351,36 +445,6 @@ Widget _buildAssetList(List<Asset> assets) {
     );
   }
 
-  void openFileExplorer() async {
-    File file;
-    if (_pickingType != FileType.CUSTOM || _hasValidMime) {
-      try {
-        if (_multiPick) {
-          _path = null;
-          _paths = await FilePicker.getMultiFilePath(
-              type: _pickingType, fileExtension: _extension);
-        } else {
-          _paths = null;
-          file = await FilePicker.getFile(type: FileType.ANY);
-          // _path = await FilePicker.getFilePath(
-          //     type: _pickingType, fileExtension: _extension);
-        }
-      } on PlatformException catch (e) {
-        print("Unsupported operation" + e.toString());
-      }
-      if (!mounted) return;
-
-      // setState(() {
-      //   _fileName = _path != null
-      //       ? _path.split('/').last
-      //       : _paths != null ? _paths.keys.toString() : '...';
-      // });
-    }
-    //in case user click on cancel
-    if (file != null) {
-      S3bucketUploader.uploadFile(file, "koretaskmanagermediabucket", "temp");
-    }
-  }
 }
 
 class TaskDetail extends StatefulWidget {

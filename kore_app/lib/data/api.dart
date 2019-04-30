@@ -5,6 +5,9 @@ import 'package:kore_app/models/organization.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/network_util.dart';
+import 'dart:io';
+
+
 
 class Api {
   NetworkUtil _netUtil = new NetworkUtil();
@@ -71,6 +74,21 @@ class Api {
       print("File Get Result: " + res.toString());
       return res.map<Asset>((json) => new Asset.fromJson(json)).toList();
     });
+  }
+
+  Future<bool> postAsset(Future<String> token, Asset asset) async {
+    String _token = await token;
+
+    var headers = {      
+      HttpHeaders.authorizationHeader: "Bearer " + _token.trim()
+    };
+
+    var body =  asset.toJson();
+
+    _netUtil.post(ASSET_URL, false, headers: headers, body: body).then((dynamic res) {
+      print("File Post Result: " + res.toString());        
+    });
+    return true;
   }
 
   // Future<Task> getTaskById(Future<String> token, Future<Task> task) async {

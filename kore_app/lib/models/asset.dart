@@ -9,7 +9,6 @@ class Asset {
   int status;
 
   Asset({ 
-    this.id,
     this.title,
     this.fileName,
     this.mimeType,
@@ -21,7 +20,6 @@ class Asset {
 
   factory Asset.fromJson(Map<String, dynamic> json ) {
     return new Asset(
-        id: json['id'] as int,
         title: json['title'] as String,
         fileName: json['fileName'] as String,
         mimeType: json['mimeType'] as String,
@@ -31,4 +29,14 @@ class Asset {
         status: json['status'] as int
     );
   }
+
+  Map<String, dynamic> toJson() => {
+        'title': this.title,
+        'fileName': this.fileName,
+        'mimeType': this.mimeType,
+        'size': this.size,
+        'location': this.location,
+        'url': this.url,
+        'status': this.status
+    };
 }
