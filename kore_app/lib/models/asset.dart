@@ -41,19 +41,19 @@ class Asset {
 
   Map<String, dynamic> toJson(User user) => {
         'fileId': this.id,
-        'title': this.title,
         'accountId': this.accountId.toString(),
         'taskId': this.taskId.toString(),
-        'fileName': this.fileName,
+        'title': this.title,
         'mimeType': this.mimeType,
         'size': this.size,
+        'fileName': this.fileName,
         'location': this.location,
+        'fileKey': '',
         'url': this.url,
         'status': this.status,
+        'dateCreated': DateTime.now().toString(),
+        'dateModified': DateTime.now().toString(),
         'createdBy': user.name,
-        'createdById': user.id, 
-        'fileKey': '',
-        'dateCreated': DateTime.now(),
-        'dateModified': DateTime.now()
+        'createdById': user.id 
     };
 }

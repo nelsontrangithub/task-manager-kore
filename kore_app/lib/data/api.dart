@@ -80,7 +80,8 @@ class Api {
   Future<bool> postAsset(Future<String> token, Asset asset, User user) async {
     String _token = await token;
 
-    var headers = {      
+    var headers = {
+      "content-type": "application/json",      
       HttpHeaders.authorizationHeader: "Bearer " + _token.trim()
     };
 
