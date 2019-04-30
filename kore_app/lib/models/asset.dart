@@ -42,8 +42,8 @@ class Asset {
   Map<String, dynamic> toJson(User user) => {
         'fileId': this.id,
         'title': this.title,
-        'accountId': this.accountId,
-        'taskId': this.taskId,
+        'accountId': this.accountId.toString(),
+        'taskId': this.taskId.toString(),
         'fileName': this.fileName,
         'mimeType': this.mimeType,
         'size': this.size,
