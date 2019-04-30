@@ -386,9 +386,9 @@ Widget _buildAssetList(List<Asset> assets) {
 
       //If user did not hit cancel while assigning a file title.
       if (asset.title != "/") {
-        bool success = await S3bucketUploader.uploadFile(file, "koretaskmanagermediabucket", widget.task.id.toString());
-        if (success) {
-          //upload to database
+        bool s3success = await S3bucketUploader.uploadFile(file, "koretaskmanagermediabucket", widget.task.id.toString());
+        if (s3success) {
+          bool dbSuccess = await _api.postAsset(_token, asset);
         }
       }
     }

@@ -84,10 +84,14 @@ class Api {
     };
 
     var body =  asset.toJson();
-
+    try {
     _netUtil.post(ASSET_URL, false, headers: headers, body: body).then((dynamic res) {
       print("File Post Result: " + res.toString());        
     });
+    } catch (e){
+        print(e);
+        return false;
+    }
     return true;
   }
 
