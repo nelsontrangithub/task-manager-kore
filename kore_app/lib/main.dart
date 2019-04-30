@@ -5,7 +5,6 @@ import 'package:kore_app/auth/authentication_event.dart';
 import 'package:kore_app/auth/authentication_state.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/screens/account_list.dart';
-import 'package:kore_app/screens/loading_indicator.dart';
 import 'package:kore_app/auth/authentication_bloc.dart';
 import 'package:kore_app/screens/orgnization_list.dart';
 import 'package:kore_app/screens/splash.dart';

@@ -4,6 +4,7 @@ import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/screens/account_detail.dart';
 import 'package:kore_app/screens/account_list.dart';
+import 'package:kore_app/widgets/loading_indicator.dart';
 
 class BasicListState extends State<BasicList> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
@@ -23,7 +24,7 @@ class BasicListState extends State<BasicList> {
               return Text("${snapshot.error}");
             }
             // By default, show a loading spinner
-            return Center(child:CircularProgressIndicator());
+            return LoadingIndicator();
           },
         );
   }

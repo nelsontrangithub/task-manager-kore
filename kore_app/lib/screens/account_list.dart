@@ -7,6 +7,7 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/organization.dart';
 import 'package:kore_app/models/user.dart';
+import 'package:kore_app/screens/login.dart';
 import 'package:kore_app/utils/constant.dart';
 import 'package:kore_app/widgets/account_title_header.dart';
 import 'package:kore_app/widgets/basic_list.dart';
@@ -21,7 +22,7 @@ class AccountListState extends State<AccountList> {
   Future<String> _username;
   Future<String> _token;
   Api _api;
-  
+
   @override
   initState() {
     super.initState();
@@ -49,6 +50,9 @@ class AccountListState extends State<AccountList> {
                     icon: Icon(Icons.exit_to_app),
                     onPressed: () {
                       authenticationBloc.dispatch(LoggedOut());
+        //               Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(
+        // builder: (BuildContext context) =>
+        // new MyHomePage(userRepository: widget.userRepository)), (Route<dynamic> route) => false);
                     },
                   )
                 : Container(height:0, width: 0,),
