@@ -58,7 +58,13 @@ class AccountDetailState extends State<AccountDetail> {
                 return Text("${snapshot.error}");
             }
             // By default, show a loading spinner
-            return CircularProgressIndicator();
+            return new Center(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [CircularProgressIndicator()],
+              ),
+            ); 
           },
         ));
   }
