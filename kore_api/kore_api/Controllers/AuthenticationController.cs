@@ -99,20 +99,5 @@ namespace kore_api.Controllers
 
             return Ok(response.AuthenticationResult.IdToken);
         }
-
-        /// <summary>
-        /// Get User by Username
-        /// </summary>
-        [HttpGet]
-        [Route("api/getUser/{username}")]
-        public async Task<IActionResult> GetUser([FromRoute] string username)
-        {
-            var result = await _userRepository.GetUser(username);
-            if (result == null)
-            {
-                return NotFound();
-            }
-            return Ok(result);
-        }
     }
 }

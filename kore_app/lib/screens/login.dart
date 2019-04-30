@@ -8,12 +8,11 @@ import 'package:kore_app/auth/authentication_bloc.dart';
 import 'package:kore_app/auth/login_bloc.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, @required this.userRepository})
+  MyHomePage({Key key, @required this.userRepository})
       : assert(userRepository != null),
         super(key: key);
 
   final UserRepository userRepository;
-  final String title;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -25,6 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   UserRepository get _userRepository => widget.userRepository;
+  bool firstRender = true;
 
   @override
   void initState() {
@@ -142,7 +142,10 @@ class _MyHomePageState extends State<MyHomePage> {
             //     backgroundColor: Colors.red,
             //   ),
             // );
+            if(firstRender == true){
             _showAlertDialog(context);
+            firstRender = false;
+            }
           });
         }
 
@@ -200,6 +203,7 @@ class _MyHomePageState extends State<MyHomePage> {
       username: _usernameController.text,
       password: _passwordController.text,
     ));
+    firstRender = true;
   }
 
   @override

@@ -7,8 +7,10 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
+import 'package:kore_app/screens/user_list.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:flutter/services.dart';
+import 'package:kore_app/widgets/loading_indicator.dart';
 import '../models/task.dart';
 import '../utils/theme.dart';
 import '../utils/s3bucketUploader.dart';
@@ -72,26 +74,23 @@ class TaskDetailState extends State<TaskDetail> {
               _buildCalendar(widget.task),
               _buildTaskEnd(),
               _buildAssetsListContainer(_assets),
-             
             ],
           ),
         ],
       ),
     );
   }
-  
 
   Widget _asignTask() {
     return FloatingActionButton.extended(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => AsignTask()));
+      },
       icon: Icon(Icons.account_circle),
       label: Text("Assign Task"),
     );
   }
-
-
-
-
 
   Widget _buildHeader() {
     return Container(
@@ -274,7 +273,7 @@ class TaskDetailState extends State<TaskDetail> {
                   return Text("${snapshot.error}");
                 }
                 // By default, show a loading spinner
-                return CircularProgressIndicator();
+                return LoadingIndicator();
               },
             ),
           ],
