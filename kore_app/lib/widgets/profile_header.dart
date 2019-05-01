@@ -7,7 +7,7 @@ class ProfileHeader extends StatelessWidget {
   final Future<User> user;
 
   ProfileHeader({Key key, this.user}) : super(key: key);
-  final _nameFont = const TextStyle(color: Colors.white, fontSize: 28);
+  final _nameFont = THEME_TEXTSTYLE.copyWith(fontSize: 28, color: Colors.white, fontWeight: FontWeight.w600);
   static const PHOTO_PLACEHOLDER_PATH =
       "https://image.flaticon.com/icons/png/128/201/201570.png";
 
@@ -58,8 +58,7 @@ class ProfileHeader extends StatelessWidget {
                           Container(
                             margin: const EdgeInsets.only(top: 5.0),
                             child: Text(snapshot.data.status.toString(),
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16)),
+                                style: THEME_TEXTSTYLE.copyWith(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w200)),
                           ),
                         ],
                       ),

@@ -9,7 +9,8 @@ class AccountTitleHeader extends StatelessWidget {
   final Organization organization;
 
   AccountTitleHeader({Key key, @required this.organization}) : super(key: key);
-  final _orgTitleFont = const TextStyle(color: Colors.white, fontSize: 38);
+  final _orgTitleFont = THEME_TEXTSTYLE.copyWith(fontSize: 48, color: Colors.white, fontWeight: FontWeight.w600);
+  // const TextStyle(color: Colors.white, fontSize: 38);
 
   @override
   Widget build(BuildContext context) {

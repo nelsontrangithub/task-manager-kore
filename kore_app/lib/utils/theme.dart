@@ -8,9 +8,14 @@
 */
 import 'package:flutter/material.dart';
 
-final ThemeData koreThemeData = new ThemeData(
+final ThemeData koreThemeData = ThemeData(
   brightness: Brightness.dark,
   primaryColor: KorePrimaryColor
+);
+
+const TextStyle THEME_TEXTSTYLE = TextStyle(
+  color: Color(0xff1282c5),
+  fontFamily: 'Poppins',
 );
 
 const KorePrimaryColor = const Color(0x203064);

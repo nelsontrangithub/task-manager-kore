@@ -150,6 +150,7 @@ class AccountDetailState extends State<AccountDetail> {
             foregroundColor: Colors.white,
           ),
           trailing: Icon(completeIcon),
+          // trailing: Icon(Icons.check),
           title: new Text(task.description),
           subtitle: new Text((task.dueDate).toString()),
           onTap: () {
