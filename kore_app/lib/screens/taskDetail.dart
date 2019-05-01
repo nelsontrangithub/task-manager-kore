@@ -85,7 +85,9 @@ class TaskDetailState extends State<TaskDetail> {
     return FloatingActionButton.extended(
       onPressed: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AssignTask()));
+            context, MaterialPageRoute(builder: (context) => AssignTask(
+              userRepository: widget.userRepository,
+            )));
       },
       icon: Icon(Icons.account_circle),
       label: Text("Assign Task"),
