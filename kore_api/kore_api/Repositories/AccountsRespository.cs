@@ -177,7 +177,8 @@ namespace kore_api.Repositories
 
             if (query.Count() != 0 && query2.Count() != 0)
             {
-                double result = query2.Count() / query.Count();
+                
+                double result = (double)query2.Count() / query.Count();
                 return result;
             }
             else

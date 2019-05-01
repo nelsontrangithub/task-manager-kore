@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/organization.dart';
@@ -41,6 +42,16 @@ class Api {
         .then((dynamic res) {
       print(res.toString());
       return res.map<Account>((json) => new Account.fromJson(json)).toList();
+    });
+  }
+
+  Future<double> getPercentageOfTasksCompleted
+    (Future<String> token, Future<User> user, Account account) async {
+    String _token = await token;
+    User _user = await user;
+    return _netUtil.get(ACCOUNT_URL + "account/" + account.id.toString() + "/user/" + _user.id.toString(), _token).then((dynamic res) {
+      print("HELLO THERE NELSON " + res.toString());
+      return res;
     });
   }
 
