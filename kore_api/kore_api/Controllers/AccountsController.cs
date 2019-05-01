@@ -141,5 +141,22 @@ namespace kore_api.Controllers
 
             return Ok(result);
         }
+
+        /// <summary>
+        /// Get percentage of tasks completed in an account
+        /// </summary>
+        [HttpGet("account/{accountID}/user/{userID}")]
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IActionResult GetPercentage([FromRoute] int userID, [FromRoute] int accountID)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = _accountsRepository.GetProgressPercentage(userID, accountID);
+
+            return Ok(result);
+        }
     }
 }
