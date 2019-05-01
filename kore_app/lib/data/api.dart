@@ -13,7 +13,7 @@ class Api {
   static final ORGANIZATION_URL = BASE_URL + "Organization/";
   static final TASK_URL = BASE_URL + "Tasks/";
   static final LOGIN_URL = BASE_URL + "signin";
-  static final USER_URL = BASE_URL + "getUser/";
+  static final USER_URL = BASE_URL + "Users/api/getUser/";
   static final ASSET_URL = BASE_URL + "Files/";
   // static String token;
   // static final _API_KEY = "somerandomkey";
