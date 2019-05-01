@@ -446,15 +446,19 @@ class TaskDetailState extends State<TaskDetail> {
   /* End of Assets Functionality */
 
   void toggleCompleted(Task task) {
-    task.isCompleted = !task.isCompleted;
+    if( task.status == 0){
+      task.status = 1;
+    }else{
+      task.status = 0;
+    }
     setState(() {
-      if (task.isCompleted == true) {
-        icon = Icons.check;
-        iconColor = Colors.green;
-      } else {
-        icon = Icons.block;
-        iconColor = Colors.redAccent;
-      }
+      // if (task.status == 1) {
+      //   icon = Icons.check;
+      //   iconColor = Colors.green;
+      // } else {
+      //   icon = Icons.block;
+      //   iconColor = Colors.redAccent;
+      // }
       task.setStatus();
     });
   }

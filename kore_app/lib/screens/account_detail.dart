@@ -173,7 +173,7 @@ class AccountDetailState extends State<AccountDetail> {
           color: task.color,
           icon: task.icon,
           onTap: () {
-            task.status ==1 ? markNotCompleted(task) : markCompleted(task);
+            task.status == 1 ? markNotCompleted(task) : markCompleted(task);
           },
         ),
       ],
