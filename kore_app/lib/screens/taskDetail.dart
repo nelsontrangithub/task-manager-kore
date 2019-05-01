@@ -409,6 +409,7 @@ class TaskDetailState extends State<TaskDetail> {
           if (dbSuccess) {
             setState(() {
               _assets = _api.getAssets(_token);
+              _buildAssetsListContainer(_assets);
             });
           }
         }
