@@ -9,8 +9,8 @@
 import 'package:flutter/material.dart';
 
 final ThemeData koreThemeData = new ThemeData(
-  brightness: Brightness.light,
+  brightness: Brightness.dark,
   primaryColor: KorePrimaryColor
 );
 
-const KorePrimaryColor = const Color(0xff1282c5);
+const KorePrimaryColor = const Color(0x203064);
