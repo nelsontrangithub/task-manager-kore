@@ -169,7 +169,7 @@ class AccountDetailState extends State<AccountDetail> {
 
               final index = i ~/ 2;
               if (_tasks.length > index) {
-                return _buildRow(_tasks[index], i);
+                return _buildRow(_tasks[index], index);
               }
               return null;
             }));
