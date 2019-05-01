@@ -13,19 +13,24 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<User>(
-        future: user,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Container(
-                // margin: const EdgeInsets.symmetric(vertical: 0.0),
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: const Radius.circular(30.0)),
-                  color: KorePrimaryColor,
-                ),
-                child: new Row(
+    return Container(
+        // margin: const EdgeInsets.symmetric(vertical: 0.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        height: 200,
+        decoration: BoxDecoration(
+          borderRadius:
+              BorderRadius.only(bottomLeft: const Radius.circular(70.0)),
+          // color: KorePrimaryColor,
+          image: new DecorationImage(
+            image: new AssetImage("assets/header_background2.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: FutureBuilder<User>(
+            future: user,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return new Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     //Using expanded to ensure the image is always sized with contraint
@@ -47,6 +52,7 @@ class ProfileHeader extends StatelessWidget {
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(snapshot.data.name, style: _nameFont),
                           Container(
@@ -59,14 +65,14 @@ class ProfileHeader extends StatelessWidget {
                       ),
                     ),
                   ],
-                ));
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-          return Center(
-            heightFactor: 0,
-            widthFactor: 0,
-          );
-        });
+                );
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+              return Center(
+                heightFactor: 0,
+                widthFactor: 0,
+              );
+            }));
   }
 }

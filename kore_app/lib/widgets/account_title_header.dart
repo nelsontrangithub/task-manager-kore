@@ -14,13 +14,16 @@ class AccountTitleHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 150.0,
+        height: 200.0,
         // margin: const EdgeInsets.symmetric(vertical: 0.0),
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         decoration: BoxDecoration(
-          borderRadius:
-              BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
-          color: KorePrimaryColor,
+          // borderRadius:
+          //     BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
+          image: new DecorationImage(
+            image: new AssetImage("assets/header_background2.jpg"),
+            fit: BoxFit.cover,
+          ),
         ),
         child: new Row(
           mainAxisAlignment: MainAxisAlignment.center,
