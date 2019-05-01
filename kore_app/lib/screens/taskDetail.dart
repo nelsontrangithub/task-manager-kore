@@ -61,7 +61,7 @@ class TaskDetailState extends State<TaskDetail> {
       iconColor = Colors.redAccent;
     }
     _controller.addListener(() => _extension = _controller.text);
-    _nameFieldController.addListener(() => _nameField = _nameFieldController.text);
+    //_nameFieldController.addListener(() => _nameField = _nameFieldController.text);
   }
 
   @override
@@ -390,6 +390,7 @@ class TaskDetailState extends State<TaskDetail> {
       //Create Asset Object and assign a title.
       Asset asset = await createAsset(file);
       setFileTitle(context, path.basename(file.path));
+      _nameFieldController.addListener(() => _nameField = _nameFieldController.text);
       asset.title = _nameField;
 
 
@@ -407,7 +408,6 @@ class TaskDetailState extends State<TaskDetail> {
               _assets = newAssets;
               // _assets = _api.getAssets(_token);
               // _buildAssetsListContainer(_assets);
-              print("SET STATE FIRED!");
             });
           }
         }
