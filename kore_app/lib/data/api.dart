@@ -18,7 +18,7 @@ class Api {
   static final ORGANIZATION_URL = BASE_URL + "Organization/";
   static final TASK_URL = BASE_URL + "Tasks/";
   static final LOGIN_URL = BASE_URL + "signin";
-  static final USER_URL = BASE_URL + "getUser/";
+  static final USER_URL = BASE_URL + "Users/api/getUser/";
   static final ASSET_URL = BASE_URL + "Files/";
   // static String token;
   // static final _API_KEY = "somerandomkey";
@@ -49,6 +49,14 @@ class Api {
     String _token = await token;
     User _user = await user;
     return _netUtil.get(TASK_URL + "user/" + _user.id.toString(), _token).then((dynamic res) {
+      print(res.toString());
+      return res.map<Task>((json) => new Task.fromJson(json)).toList();
+    });
+  }
+
+    Future<List<Task>> getAllTasksByAccountId(Future<String> token, Account account) async {
+    String _token = await token;
+    return _netUtil.get(TASK_URL + "account/" + account.id.toString(), _token).then((dynamic res) {
       print(res.toString());
       return res.map<Task>((json) => new Task.fromJson(json)).toList();
     });
@@ -108,4 +116,11 @@ class Api {
   //     return User.fromJson(res);
   //   });
   // }
+  Future<List<Account>> getAccountsByOrgId(Future<String> token, Organization org) async {
+    String _token = await token;
+    return _netUtil.get(ACCOUNT_URL + 'user/' + org.id.toString(), _token).then((dynamic res) {
+      print(res.toString());
+      return res.map<Account>((json) => new Account.fromJson(json)).toList();
+    });
+  }
 }

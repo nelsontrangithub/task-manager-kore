@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,14 +7,14 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/organization.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/auth/user_repository.dart';
-import 'package:kore_app/utils/theme.dart';
-import 'package:kore_app/screens/accountList.dart';
+import 'package:kore_app/screens/account_list.dart';
+import 'package:kore_app/utils/constant.dart';
 import 'package:kore_app/widgets/profile_header.dart';
 
 class OrganizationListState extends State<OrganizationList> {
   static const PHOTO_PLACEHOLDER_PATH =
       "https://image.flaticon.com/icons/png/128/201/201570.png";
-  
+
   Future<User> _user;
   Future<List<Organization>> _organizations;
   Future<String> _username;
@@ -61,7 +60,7 @@ class OrganizationListState extends State<OrganizationList> {
               } else if (snapshot.hasError) {
                 return Text("${snapshot.error}");
               }
-              return Center(child:CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator());
             }));
   }
 
@@ -89,18 +88,24 @@ class OrganizationListState extends State<OrganizationList> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AccountList(organization: organization, userRepository: widget.userRepository),
+                builder: (context) => AccountList(
+                    organization: organization,
+                    userRepository: widget.userRepository,
+                    role: Constant.AdminRole),
               ));
         });
   }
 }
 
 class OrganizationList extends StatefulWidget {
-  OrganizationList({Key key, @required this.userRepository})
+  OrganizationList(
+      {Key key, @required this.userRepository, @required this.role})
       : assert(userRepository != null),
+        assert(role != null),
         super(key: key);
 
   final UserRepository userRepository;
+  final String role;
 
   @override
   OrganizationListState createState() => new OrganizationListState();

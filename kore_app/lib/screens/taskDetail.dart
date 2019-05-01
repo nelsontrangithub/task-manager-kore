@@ -11,6 +11,7 @@ import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:flutter/services.dart';
+import 'package:kore_app/widgets/loading_indicator.dart';
 import '../models/task.dart';
 import '../utils/theme.dart';
 import '../utils/s3bucketUploader.dart';
@@ -260,16 +261,16 @@ class TaskDetailState extends State<TaskDetail> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             FutureBuilder<List<Asset>>(
-              future: assets,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return _buildAssetList(snapshot.data);
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-                // By default, show a loading spinner
-                return CircularProgressIndicator();
-              },
+                future: assets,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return _buildAssetList(snapshot.data);
+                  } else if (snapshot.hasError) {
+                    return Text("${snapshot.error}");
+                  }
+                  // By default, show a loading spinner
+                  return LoadingIndicator();
+                },
             ),
           ],
         ),

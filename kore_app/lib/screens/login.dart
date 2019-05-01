@@ -8,12 +8,11 @@ import 'package:kore_app/auth/authentication_bloc.dart';
 import 'package:kore_app/auth/login_bloc.dart';
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, @required this.userRepository})
+  MyHomePage({Key key, @required this.userRepository})
       : assert(userRepository != null),
         super(key: key);
 
   final UserRepository userRepository;
-  final String title;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -25,6 +24,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   UserRepository get _userRepository => widget.userRepository;
+  bool firstRender = true;
 
   @override
   void initState() {
@@ -45,10 +45,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     String p =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp exp = new RegExp(p); // Email Field
+    RegExp exp = new RegExp(p);
+
+    // Email Field
     final emailField = TextFormField(
       validator: (value) {
-        if (value.isEmpty || !exp.hasMatch(value)) {
+        if (value.isEmpty || !exp.hasMatch(value.trim())) {
           return 'Invalid Email';
         }
       },
@@ -140,45 +142,50 @@ class _MyHomePageState extends State<MyHomePage> {
             //     backgroundColor: Colors.red,
             //   ),
             // );
+            if(firstRender == true){
             _showAlertDialog(context);
+            firstRender = false;
+            }
           });
         }
 
         return Scaffold(
-          body: Center(
-            child: Container(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(36.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        SizedBox(
-                          height: 155.0,
-                          child: Image.asset(
-                            "assets/KORE-Logo.png",
-                            fit: BoxFit.contain,
+          body: ListView(
+            children: <Widget>[
+              Container(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(36.0),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          SizedBox(
+                            height: 155.0,
+                            child: Image.asset(
+                              "assets/KORE-Logo.png",
+                              fit: BoxFit.contain,
+                            ),
                           ),
-                        ),
-                        SizedBox(height: 45.0),
-                        emailField,
-                        SizedBox(height: 25.0),
-                        passwordField,
-                        SizedBox(height: 35.0),
-                        _buildLoginButton(state),
-                        SizedBox(height: 15.0),
-                        Container(
-                          child: state is LoginLoading
-                              ? CircularProgressIndicator()
-                              : null,
-                        ),
-                      ],
+                          SizedBox(height: 45.0),
+                          emailField,
+                          SizedBox(height: 25.0),
+                          passwordField,
+                          SizedBox(height: 35.0),
+                          _buildLoginButton(state),
+                          SizedBox(height: 15.0),
+                          Container(
+                            child: state is LoginLoading
+                                ? CircularProgressIndicator()
+                                : null,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                )),
+                  )),
+            ],
           ),
         );
       },
@@ -193,9 +200,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _onLoginButtonPressed() {
     _loginBloc.dispatch(LoginButtonPressed(
-      username: _usernameController.text,
-      password: _passwordController.text,
+      username: _usernameController.text.trim(),
+      password: _passwordController.text.trim(),
     ));
+    firstRender = true;
   }
 
   @override
