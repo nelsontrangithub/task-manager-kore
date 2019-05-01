@@ -32,11 +32,11 @@ class TaskDetailState extends State<TaskDetail> {
   bool _multiPick = false;
   bool _hasValidMime = false;
   FileType _pickingType;
-  
+
   TextEditingController _controller = new TextEditingController();
   TextEditingController _nameFieldController = TextEditingController();
   String _nameField;
-  
+
   Future<List<Asset>> _assets;
   Future<String> _username;
   Future<String> _token;
@@ -249,7 +249,6 @@ class TaskDetailState extends State<TaskDetail> {
 
   /* Start of Assets Functionality */
 
-
   Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
@@ -308,13 +307,12 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  _setNameField(){
+  _setNameField() {
     this._nameField = _nameFieldController.text;
   }
 
   //Alert box with input feild to allow users to assing a title to the selected file
   Future<String> setFileTitle(BuildContext context, String filename) async {
-
     _nameFieldController.addListener(_setNameField);
 
     return showDialog(
@@ -370,8 +368,7 @@ class TaskDetailState extends State<TaskDetail> {
         url: _path,
         taskId: taskId.toString(),
         accountId: accountId.toString(),
-        status: 0
-    );
+        status: 0);
     return asset;
   }
 
@@ -396,7 +393,8 @@ class TaskDetailState extends State<TaskDetail> {
     if (file != null) {
       //Create Asset Object and assign a title.
       Asset asset = await createAsset(file);
-      asset.title = "dog"; //await setFileTitle(context, path.basename(file.path));
+      asset.title =
+          "dog"; //await setFileTitle(context, path.basename(file.path));
 
       //If user did not hit cancel while assigning a file title.
       if (asset.title != "/") {
@@ -407,9 +405,12 @@ class TaskDetailState extends State<TaskDetail> {
           bool dbSuccess = await _api.postAsset(_token, asset, user);
 
           if (dbSuccess) {
+            var newAssets = _api.getAssets(_token); 
             setState(() {
-              _assets = _api.getAssets(_token);
-              _buildAssetsListContainer(_assets);
+              _assets = newAssets;
+              // _assets = _api.getAssets(_token);
+              // _buildAssetsListContainer(_assets);
+              print("SET STATE FIRED!");
             });
           }
         }
