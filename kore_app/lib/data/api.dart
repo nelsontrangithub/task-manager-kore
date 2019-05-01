@@ -8,6 +8,7 @@ import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/network_util.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:kore_app/utils/s3bucketUploader.dart';
 
 
 
@@ -106,6 +107,24 @@ class Api {
         return false;
     }
     return true;
+  }
+
+  Future<bool> deleteAsset(Future<String> token, Asset asset, String taskId) async {
+    
+    //File file = 
+
+    //bool s3success = await S3bucketUploader.removeFile(file, "koretaskmanagermediabucket", taskId)
+
+    // String _token = await token;
+    // try {
+    //   _netUtil.delete(ASSET_URL + fileId, _token).then((dynamic res) {
+    //   print("File Delete Result: " + res.toString());        
+    // });
+    // } catch (e) {
+    //   print(e);
+    //   return false;
+    // }
+    // return true;
   }
 
   // Future<Task> getTaskById(Future<String> token, Future<Task> task) async {

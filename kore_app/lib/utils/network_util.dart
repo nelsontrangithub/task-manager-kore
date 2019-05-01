@@ -42,6 +42,23 @@ class NetworkUtil {
       else
         return res;
     });
-
   }
+
+  Future<dynamic> delete(String url, String token) {
+    
+    return http.delete(url, headers: {
+      HttpHeaders.authorizationHeader: "Bearer " + token.trim()
+    }).then((http.Response response) {
+
+      final int statusCode = response.statusCode;
+      final String res = response.body;
+
+      if (statusCode < 200 || statusCode > 400 || json == null) {
+        throw new Exception("Error while deleting data " + statusCode.toString());         
+      }
+      return res;
+    });
+
+
+  } 
 }

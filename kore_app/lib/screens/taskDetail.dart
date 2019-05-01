@@ -326,7 +326,7 @@ class TaskDetailState extends State<TaskDetail> {
           color: Colors.blueAccent,
           icon: Icons.file_upload,
           onTap: () {
-            //Update Method
+            //_api.deleteAsset(_token, asset.id);
           },
         ),
         new IconSlideAction(
