@@ -45,9 +45,6 @@
 //     }
 //   }
 
-  
-
-
 //   void setStatus(){
 //     if (isCompleted == true) {
 //       this.color = Colors.green[800];
@@ -96,8 +93,8 @@ class Task {
   //   }
   // }
 
-  void setStatus(){
-    if (isCompleted == true) {
+  void setStatus() {
+    if (status == 1) {
       this.color = Colors.green;
       this.icon = Icons.done;
       this.label = "Complete";
@@ -108,23 +105,25 @@ class Task {
     }
   }
 
-  Task({
-    this.id,
-    this.accountId,
-    this.title,
-    this.isCompleted,
-    this.description,
-    this.dueDate
-    });
+  Task(
+      {this.id,
+      this.accountId,
+      this.title,
+      this.isCompleted,
+      this.description,
+      this.dueDate,
+      this.status}) {
+    this.setStatus();
+  }
 
-  factory Task.fromJson(Map<String, dynamic> json ) {
+  factory Task.fromJson(Map<String, dynamic> json) {
     return new Task(
         id: json['id'] as int,
         accountId: json['accountId'] as int,
         title: json['subject'] as String,
         isCompleted: true,
+        status: json['status'] as int,
         description: json['description'] as String,
-        dueDate: json['DueDate'] as DateTime 
-    );
+        dueDate: json['DueDate'] as DateTime);
   }
 }
