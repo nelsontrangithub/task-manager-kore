@@ -54,6 +54,11 @@ namespace kore_api.Repositories
             return _context.File;
         }
 
+        public IEnumerable<File> GetFilesByTaskId(string taskId)
+        {
+            return _context.File.Where(f => f.TaskId == taskId);
+        }
+
         public async Task<bool> Update(string id, File file)
         {
             if (id != file.FileId)
