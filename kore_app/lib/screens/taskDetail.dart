@@ -326,7 +326,7 @@ class TaskDetailState extends State<TaskDetail> {
           color: Colors.blueAccent,
           icon: Icons.file_upload,
           onTap: () {
-            //_api.deleteAsset(_token, asset.id);
+            //update file
           },
         ),
         new IconSlideAction(
@@ -334,7 +334,7 @@ class TaskDetailState extends State<TaskDetail> {
           color: Colors.redAccent,
           icon: Icons.delete_forever,
           onTap: () {
-            //Delete method
+            _api.deleteAsset(_token, asset);
           },
         ),
       ],

@@ -21,6 +21,7 @@ class Api {
   static final LOGIN_URL = BASE_URL + "signin";
   static final USER_URL = BASE_URL + "Users/api/getUser/";
   static final ASSET_URL = BASE_URL + "Files/";
+  static final S3_URL = BASE_URL + "S3Bucket/";
   // static String token;
   // static final _API_KEY = "somerandomkey";
 
@@ -109,23 +110,37 @@ class Api {
     return true;
   }
 
-  Future<bool> deleteAsset(Future<String> token, Asset asset, String taskId) async {
+  Future<bool> deleteAsset(Future<String> token, Asset asset) async {
     
-    //File file = 
+    String _token = await token;
 
-    //bool s3success = await S3bucketUploader.removeFile(file, "koretaskmanagermediabucket", taskId)
-
-    // String _token = await token;
-    // try {
-    //   _netUtil.delete(ASSET_URL + fileId, _token).then((dynamic res) {
-    //   print("File Delete Result: " + res.toString());        
-    // });
-    // } catch (e) {
-    //   print(e);
-    //   return false;
-    // }
-    // return true;
+    //Delete File From S3
+    bool s3Success = false;
+    try {
+      _netUtil.delete(S3_URL + asset.location + "/" + asset.fileName, _token).then((dynamic res) {
+      print("File S3 Delete Result: " + res.toString());
+      s3Success = true;        
+    });
+    } catch (e) {
+      print(e);
+      s3Success = false;
+    }
+    if (s3Success){
+      //Delete File From DB
+      try {
+        _netUtil.delete(ASSET_URL + asset.id, _token).then((dynamic res) {
+        print("File MySql Delete Result: " + res.toString());        
+      });
+      } catch (e) {
+        print(e);
+        return false;
+      }
+      return true;
+    } else {
+      return false;
+    }
   }
+
 
   // Future<Task> getTaskById(Future<String> token, Future<Task> task) async {
   //   String _token = await token;
