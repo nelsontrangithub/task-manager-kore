@@ -15,6 +15,7 @@ class Api {
   static final LOGIN_URL = BASE_URL + "signin";
   static final USER_URL = BASE_URL + "getUser/";
   static final ASSET_URL = BASE_URL + "Files/";
+  static final ALLUSERS_URL = BASE_URL + "Users/";
   // static String token;
   // static final _API_KEY = "somerandomkey";
 
@@ -28,6 +29,13 @@ class Api {
     String url = LOGIN_URL + "?username=" + username + "&password=" + password;
     return _netUtil.post(url, true).then((dynamic res) {
       return res;
+    });
+  }
+
+  Future<List<User>> getAllUsers(Future<String> token) async {
+    String _token = await token;
+    return _netUtil.get(ALLUSERS_URL, _token).then((dynamic res) {
+      return res.map<User>((json) => new User.fromJson(json)).toList();
     });
   }
 
