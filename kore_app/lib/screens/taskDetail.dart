@@ -51,7 +51,7 @@ class TaskDetailState extends State<TaskDetail> {
     _username = widget.userRepository.getUsername();
     _api = Api();
     _user = _api.getUserByUsername(_token, _username);
-    _assets = _api.getAssets(_token);
+    _assets = _api.getAssets(_token, widget.task.id.toString());
 
     if (widget.task.isCompleted == true) {
       icon = Icons.check;
@@ -404,14 +404,14 @@ class TaskDetailState extends State<TaskDetail> {
           User user = await _user;
           bool dbSuccess = await _api.postAsset(_token, asset, user);
 
-          if (dbSuccess) {
-            var newAssets = _api.getAssets(_token); 
-            setState(() {
-              _assets = newAssets;
-              // _assets = _api.getAssets(_token);
-              // _buildAssetsListContainer(_assets);
-            });
-          }
+          // if (dbSuccess) {
+          //   // var newAssets = _api.getAssets(_token); 
+          //   setState(() {
+          //     // _assets = newAssets;
+          //     // _assets = _api.getAssets(_token);
+          //     // _buildAssetsListContainer(_assets);
+          //   });
+          // }
         }
       }
     }
