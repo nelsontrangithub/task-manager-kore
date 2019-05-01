@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
@@ -265,16 +266,16 @@ class TaskDetailState extends State<TaskDetail> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             FutureBuilder<List<Asset>>(
-                future: assets,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return _buildAssetList(snapshot.data);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  // By default, show a loading spinner
-                  return LoadingIndicator();
-                },
+              future: assets,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return _buildAssetList(snapshot.data);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                // By default, show a loading spinner
+                return LoadingIndicator();
+              },
             ),
           ],
         ),
@@ -300,22 +301,48 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   Widget _buildRow(Asset asset) {
-    return ListTile(
-      title: Text(
-        asset.title,
-        style: _biggerFont,
+    return new Slidable(
+      delegate: new SlidableDrawerDelegate(),
+      actionExtentRatio: 0.25,
+      child: new Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),
+        child: ListTile(
+          title: Text(
+            asset.title,
+            style: _biggerFont,
+          ),
+          // trailing: Icon(
+          //   // Add the lines from here...
+          //   account.percentage >= 100 ? Icons.done : null,
+          // ),
+          onTap: () {},
+        ),
       ),
-      // trailing: Icon(
-      //   // Add the lines from here...
-      //   account.percentage >= 100 ? Icons.done : null,
-      // ),
-      onTap: () {},
+      secondaryActions: <Widget>[
+            new IconSlideAction(
+          caption: "Update",
+          color: Colors.blueAccent,
+          icon: Icons.file_upload,
+          onTap: () {
+            //Update Method
+          },
+        ),
+        new IconSlideAction(
+          caption: "Delete",
+          color: Colors.redAccent,
+          icon: Icons.delete_forever,
+          onTap: () {
+            //Delete method
+          },
+        ),
+      ],
     );
   }
 
   //Alert box with input feild to allow users to assing a title to the selected file
   setFileTitle(BuildContext context, File file) async {
-
     return showDialog(
         context: context,
         builder: (context) {
@@ -339,7 +366,6 @@ class TaskDetailState extends State<TaskDetail> {
                 child: new Text('SUBMIT'),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  
                 },
               )
             ],
@@ -392,10 +418,10 @@ class TaskDetailState extends State<TaskDetail> {
 
     if (file != null) {
       //Create Asset Object and assign a title.
-      
+
       await setFileTitle(context, file);
       Asset asset = await createAsset(file, _nameField);
-      
+
       //If user did not hit cancel while assigning a file title.
       if (asset != null) {
         bool s3success = await S3bucketUploader.uploadFile(
@@ -405,7 +431,7 @@ class TaskDetailState extends State<TaskDetail> {
           bool dbSuccess = await _api.postAsset(_token, asset, user);
 
           // if (dbSuccess) {
-          //   // var newAssets = _api.getAssets(_token); 
+          //   // var newAssets = _api.getAssets(_token);
           //   setState(() {
           //     // _assets = newAssets;
           //     // _assets = _api.getAssets(_token);
