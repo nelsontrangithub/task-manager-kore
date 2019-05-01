@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/organization.dart';
@@ -45,7 +46,7 @@ class Api {
     String _token = await token;
     User _user = await user;
     return _netUtil.get(ACCOUNT_URL + "account/" + account.id.toString() + "/user/" + _user.id.toString(), _token).then((dynamic res) {
-      print("HELLO THERE NELSON" + res);
+      print("HELLO THERE NELSON " + res.toString());
       return res;
     });
   }
