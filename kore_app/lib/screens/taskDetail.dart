@@ -61,7 +61,11 @@ class TaskDetailState extends State<TaskDetail> {
       iconColor = Colors.redAccent;
     }
     _controller.addListener(() => _extension = _controller.text);
-    //_nameFieldController.addListener(() => _nameField = _nameFieldController.text);
+    _nameFieldController.addListener(() {
+      print("CONTROLLER: $_nameFieldController");
+      _nameField = _nameFieldController.text;
+      print("_nameField" + _nameField);
+    });
   }
 
   @override
@@ -310,13 +314,13 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   //Alert box with input feild to allow users to assing a title to the selected file
-  setFileTitle(BuildContext context, String filename) {
+  setFileTitle(BuildContext context, File file) async {
 
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Selected: " + filename),
+            title: Text("Selected: " + path.basename(file.path)),
             content: TextField(
               inputFormatters: [
                 BlacklistingTextInputFormatter(RegExp("[/\\\\]")),
@@ -329,13 +333,13 @@ class TaskDetailState extends State<TaskDetail> {
                 child: new Text('CANCEL'),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  return "/";
                 },
               ),
               new FlatButton(
                 child: new Text('SUBMIT'),
                 onPressed: () {
                   Navigator.of(context).pop();
+                  
                 },
               )
             ],
@@ -343,7 +347,7 @@ class TaskDetailState extends State<TaskDetail> {
         });
   }
 
-  Future<Asset> createAsset(File file) async {
+  Future<Asset> createAsset(File file, String title) async {
     final _fileName = path.basename(file.path);
     final _mimeType = lookupMimeType(file.path);
     final _length = await file.length();
@@ -356,7 +360,7 @@ class TaskDetailState extends State<TaskDetail> {
 
     Asset asset = new Asset(
         id: _fileName + user.id.toString(),
-        title: "",
+        title: title,
         fileName: _fileName,
         mimeType: _mimeType,
         size: _length,
@@ -388,14 +392,12 @@ class TaskDetailState extends State<TaskDetail> {
 
     if (file != null) {
       //Create Asset Object and assign a title.
-      Asset asset = await createAsset(file);
-      setFileTitle(context, path.basename(file.path));
-      _nameFieldController.addListener(() => _nameField = _nameFieldController.text);
-      asset.title = _nameField;
-
-
+      
+      await setFileTitle(context, file);
+      Asset asset = await createAsset(file, _nameField);
+      
       //If user did not hit cancel while assigning a file title.
-      if (asset.title != "/") {
+      if (asset != null) {
         bool s3success = await S3bucketUploader.uploadFile(
             file, "koretaskmanagermediabucket", widget.task.id.toString());
         if (s3success) {
