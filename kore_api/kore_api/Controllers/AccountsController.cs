@@ -154,9 +154,15 @@ namespace kore_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = _accountsRepository.GetProgressPercentage(userID, accountID);
-
-            return Ok(result);
+            if (userID == 1)
+            {
+                var result = _accountsRepository.AdminProgressPercentage(accountID);
+                return Ok(result);
+            } else
+            {
+                var result = _accountsRepository.GetProgressPercentage(userID, accountID);
+                return Ok(result);
+            }
         }
     }
 }

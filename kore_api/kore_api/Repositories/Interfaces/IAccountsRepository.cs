@@ -16,6 +16,6 @@ namespace kore_api.Repositories
         Task<bool> Update(int id, int status);
         Task<bool> Delete(int id);
         double GetProgressPercentage(int userID, int accountID);
-
+        double AdminProgressPercentage(int accountID);
     }
 }
