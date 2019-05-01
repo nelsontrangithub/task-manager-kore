@@ -37,10 +37,9 @@ class OrganizationListState extends State<OrganizationList> {
         BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
         appBar: AppBar(
-          title: Text('Accounts'),
+          title: Text('Origanizations'),
           actions: <Widget>[
-            widget.role == Constant.RegularRole
-                ? IconButton(
+            IconButton(
                     icon: Icon(Icons.exit_to_app),
                     onPressed: () {
                       authenticationBloc.dispatch(LoggedOut());
@@ -48,8 +47,7 @@ class OrganizationListState extends State<OrganizationList> {
         // builder: (BuildContext context) =>
         // new MyHomePage(userRepository: widget.userRepository)), (Route<dynamic> route) => false);
                     },
-                  )
-                : Container(height:0, width: 0,),
+                  ),
           ],
         ),
         body: Column(children: <Widget>[
