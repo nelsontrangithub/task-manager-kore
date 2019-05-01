@@ -50,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // Email Field
     final emailField = TextFormField(
       validator: (value) {
-        if (value.isEmpty || !exp.hasMatch(value)) {
+        if (value.isEmpty || !exp.hasMatch(value.trim())) {
           return 'Invalid Email';
         }
       },
@@ -200,8 +200,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   _onLoginButtonPressed() {
     _loginBloc.dispatch(LoginButtonPressed(
-      username: _usernameController.text,
-      password: _passwordController.text,
+      username: _usernameController.text.trim(),
+      password: _passwordController.text.trim(),
     ));
     firstRender = true;
   }

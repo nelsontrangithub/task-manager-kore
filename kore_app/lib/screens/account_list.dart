@@ -7,7 +7,6 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/organization.dart';
 import 'package:kore_app/models/user.dart';
-import 'package:kore_app/screens/login.dart';
 import 'package:kore_app/utils/constant.dart';
 import 'package:kore_app/widgets/account_title_header.dart';
 import 'package:kore_app/widgets/basic_list.dart';
@@ -17,8 +16,6 @@ class AccountListState extends State<AccountList> {
   Future<User>
       _user; // = User("Tina", "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   Future<List<Account>> _contracts;
-  static const PHOTO_PLACEHOLDER_PATH =
-      "https://image.flaticon.com/icons/png/128/201/201570.png";
   Future<String> _username;
   Future<String> _token;
   Api _api;
@@ -65,7 +62,8 @@ class AccountListState extends State<AccountList> {
           BasicList(
               user: _user,
               list: _contracts,
-              userRepository: widget.userRepository)
+              userRepository: widget.userRepository,
+              role: widget.role)
         ]));
   }
 }
