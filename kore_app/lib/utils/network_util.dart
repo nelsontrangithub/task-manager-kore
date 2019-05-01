@@ -47,6 +47,7 @@ class NetworkUtil {
   Future<dynamic> delete(String url, String token) {
     
     return http.delete(url, headers: {
+      "Content-Type": "application/json",
       HttpHeaders.authorizationHeader: "Bearer " + token.trim()
     }).then((http.Response response) {
 

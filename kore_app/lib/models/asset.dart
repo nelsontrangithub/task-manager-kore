@@ -27,6 +27,7 @@ class Asset {
 
   factory Asset.fromJson(Map<String, dynamic> json ) {
     return new Asset(
+        id: json['fileId'],
         title: json['title'] as String,
         accountId: json['accountId'] as String,
         taskId: json ['taskId'] as String,

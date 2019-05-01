@@ -333,8 +333,12 @@ class TaskDetailState extends State<TaskDetail> {
           caption: "Delete",
           color: Colors.redAccent,
           icon: Icons.delete_forever,
-          onTap: () {
-            _api.deleteAsset(_token, asset);
+          onTap: () async {
+           bool s3Success = await _api.deleteAssetS3(_token, asset);
+           if (s3Success){
+             bool dbSuccess = await _api.deleteAssetDb(_token, asset);
+             print (dbSuccess);
+           } 
           },
         ),
       ],

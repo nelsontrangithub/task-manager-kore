@@ -110,25 +110,32 @@ class Api {
     return true;
   }
 
-  Future<bool> deleteAsset(Future<String> token, Asset asset) async {
+  Future<bool> deleteAssetS3(Future<String> token, Asset asset) async {
     
     String _token = await token;
 
     //Delete File From S3
     bool s3Success = false;
     try {
-      _netUtil.delete(S3_URL + asset.location + "/" + asset.fileName, _token).then((dynamic res) {
+      await _netUtil.delete(S3_URL + asset.location + "/" + asset.fileName, _token).then((dynamic res) {
       print("File S3 Delete Result: " + res.toString());
-      s3Success = true;        
+      s3Success = true;
+      print ("S3 Success v");
+      print (s3Success);        
     });
     } catch (e) {
       print(e);
       s3Success = false;
     }
-    if (s3Success){
-      //Delete File From DB
+    return s3Success;
+  }
+
+
+  Future<bool> deleteAssetDb(Future<String> token, Asset asset) async {
+    String _token = await token;
+
       try {
-        _netUtil.delete(ASSET_URL + asset.id, _token).then((dynamic res) {
+        await _netUtil.delete(ASSET_URL + asset.id, _token).then((dynamic res) {
         print("File MySql Delete Result: " + res.toString());        
       });
       } catch (e) {
@@ -136,10 +143,8 @@ class Api {
         return false;
       }
       return true;
-    } else {
-      return false;
-    }
   }
+
 
 
   // Future<Task> getTaskById(Future<String> token, Future<Task> task) async {
