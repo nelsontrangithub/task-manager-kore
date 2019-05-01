@@ -60,6 +60,7 @@ class TaskDetailState extends State<TaskDetail> {
       iconColor = Colors.redAccent;
     }
     _controller.addListener(() => _extension = _controller.text);
+    _nameFieldController.addListener(() => _nameField = _nameFieldController.text);
   }
 
   @override
@@ -307,13 +308,8 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  _setNameField() {
-    this._nameField = _nameFieldController.text;
-  }
-
   //Alert box with input feild to allow users to assing a title to the selected file
-  Future<String> setFileTitle(BuildContext context, String filename) async {
-    _nameFieldController.addListener(_setNameField);
+  setFileTitle(BuildContext context, String filename) {
 
     return showDialog(
         context: context,
@@ -339,7 +335,6 @@ class TaskDetailState extends State<TaskDetail> {
                 child: new Text('SUBMIT'),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  return _nameFieldController.text;
                 },
               )
             ],
@@ -393,8 +388,9 @@ class TaskDetailState extends State<TaskDetail> {
     if (file != null) {
       //Create Asset Object and assign a title.
       Asset asset = await createAsset(file);
-      asset.title =
-          "dog"; //await setFileTitle(context, path.basename(file.path));
+      setFileTitle(context, path.basename(file.path));
+      asset.title = _nameField;
+
 
       //If user did not hit cancel while assigning a file title.
       if (asset.title != "/") {
