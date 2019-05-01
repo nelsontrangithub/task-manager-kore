@@ -17,15 +17,14 @@ class AccountDetailState extends State<AccountDetail> {
   Future<List<Task>> _tasksAPI;
   Future<String> _username;
   Future<String> _token;
+  Future<double> _percent;
+  double newPercent;
   Api _api;
 
   var text;
   var color;
   var icon;
   var completeIcon;
-
-  //test
-  // Api _api = Api();
 
   //one of the state lifecycle function, only load once
   //good place for dummydata loading
@@ -38,10 +37,19 @@ class AccountDetailState extends State<AccountDetail> {
     if (widget.role == Constant.RegularRole) {
       _user = _api.getUserByUsername(_token, _username);
       _tasksAPI = _api.getTasks(_token, _user);
+      _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
     } else {
+      _user = _api.getUserByUsername(_token, _username);
       _tasksAPI = _api.getAllTasksByAccountId(_token, widget.account);
+      _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
     }
   }
+
+  // Future<void> foo() async {
+  //   newPercent = await _percent;
+  //   print("BOOM" + newPercent.toString());
+  //   return newPercent;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -72,40 +80,72 @@ class AccountDetailState extends State<AccountDetail> {
 
   Widget _buildHeader() {
     return Container(
-      // margin: const EdgeInsets.symmetric(vertical: 0.0),
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
-      ),
-      child: new Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          //Using expanded to ensure the image is always sized with contraint
-          Expanded(
-              child: new Container(
-            height: 150.0,
-            child: Column(
-              children: <Widget>[
-                _buildPercentIndicator(),
-              ],
-            ),
-          )),
-        ],
-      ),
-    );
+        // margin: const EdgeInsets.symmetric(vertical: 0.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        decoration: BoxDecoration(
+          borderRadius:
+              BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
+        ),
+        child: FutureBuilder<double>(
+          future: _percent,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return new Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    //Using expanded to ensure the image is always sized with contraint
+                    Expanded(
+                        child: new Container(
+                            height: 150.0,
+                            child: Column(children: <Widget>[
+                              _buildPercentIndicator(snapshot.data),
+                            ])))
+                  ]);
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            // By default, show a loading spinner
+            return LoadingIndicator();
+          },
+        ));
   }
 
-  Widget _buildPercentIndicator() {
+  // Widget _buildHeader() {
+  //   return Container(
+  //     // margin: const EdgeInsets.symmetric(vertical: 0.0),
+  //     padding: const EdgeInsets.symmetric(vertical: 10.0),
+  //     decoration: BoxDecoration(
+  //       borderRadius:
+  //           BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
+  //     ),
+  //     child: new Row(
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       children:
+  //       <Widget>[
+  //         Expanded(
+  //             child: new Container(
+  //           height: 150.0,
+  //           child: Column(
+  //             children: <Widget>[
+  //               _buildPercentIndicator(),
+  //             ],
+  //           ),
+  //         )),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  Widget _buildPercentIndicator(double _percent) {
     return new Container(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: new CircularPercentIndicator(
         radius: 95.0,
         lineWidth: 13.0,
         animation: true,
-        percent: widget.account.percentage * 0.01,
+        percent: _percent * 0.1,
         center: new Text(
-          widget.account.percentage.toString() + "%",
+          _percent.toString() + "%",
           style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
         ),
         footer: new Text(
@@ -129,7 +169,7 @@ class AccountDetailState extends State<AccountDetail> {
 
               final index = i ~/ 2;
               if (_tasks.length > index) {
-                return _buildRow(_tasks[index], i);
+                return _buildRow(_tasks[index], index);
               }
               return null;
             }));
