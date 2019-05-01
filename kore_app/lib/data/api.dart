@@ -40,6 +40,16 @@ class Api {
     });
   }
 
+  Future<double> getPercentageOfTasksCompleted
+    (Future<String> token, Future<User> user, Account account) async {
+    String _token = await token;
+    User _user = await user;
+    return _netUtil.get(ACCOUNT_URL + "account/" + account.id.toString() + "/user/" + _user.id.toString(), _token).then((dynamic res) {
+      print("HELLO THERE NELSON" + res);
+      return res;
+    });
+  }
+
   Future<List<Task>> getTasks(Future<String> token, Future<User> user) async {
     String _token = await token;
     User _user = await user;

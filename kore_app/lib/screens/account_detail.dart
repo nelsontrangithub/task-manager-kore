@@ -17,15 +17,13 @@ class AccountDetailState extends State<AccountDetail> {
   Future<List<Task>> _tasksAPI;
   Future<String> _username;
   Future<String> _token;
+  Future<double> _percent;
   Api _api;
 
   var text;
   var color;
   var icon;
   var completeIcon;
-
-  //test
-  // Api _api = Api();
 
   //one of the state lifecycle function, only load once
   //good place for dummydata loading
@@ -38,6 +36,7 @@ class AccountDetailState extends State<AccountDetail> {
     if (widget.role == Constant.RegularRole) {
       _user = _api.getUserByUsername(_token, _username);
       _tasksAPI = _api.getTasks(_token, _user);
+      _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
     } else {
       _tasksAPI = _api.getAllTasksByAccountId(_token, widget.account);
     }
