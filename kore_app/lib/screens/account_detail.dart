@@ -24,9 +24,6 @@ class AccountDetailState extends State<AccountDetail> {
   var icon;
   var completeIcon;
 
-  //test
-  // Api _api = Api();
-
   //one of the state lifecycle function, only load once
   //good place for dummydata loading
   @override
