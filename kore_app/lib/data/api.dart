@@ -78,9 +78,9 @@ class Api {
     });
   }
 
-  Future<List<Asset>> getAssets(Future<String> token) async {
+  Future<List<Asset>> getAssets(Future<String> token, String taskId) async {
     String _token = await token;
-    return _netUtil.get(ASSET_URL, _token).then((dynamic res) {
+    return _netUtil.get(ASSET_URL + "task/" + taskId, _token).then((dynamic res) {
       print("File Get Result: " + res.toString());
       return res.map<Asset>((json) => new Asset.fromJson(json)).toList();
     });
