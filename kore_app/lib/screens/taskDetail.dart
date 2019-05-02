@@ -374,6 +374,8 @@ class TaskDetailState extends State<TaskDetail> {
 
   //Alert box with input feild to allow users to assing a title to the selected file
   setFileTitle(BuildContext context, File file) async {
+    _nameField = "";
+
     return showDialog(
         context: context,
         builder: (context) {
@@ -391,6 +393,7 @@ class TaskDetailState extends State<TaskDetail> {
                 child: new Text('CANCEL'),
                 onPressed: () {
                   Navigator.of(context).pop();
+                  _nameField = "/";
                 },
               ),
               new FlatButton(
@@ -405,6 +408,14 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   Future<Asset> createAsset(File file, String title) async {
+
+    String checkTitle;
+    if (title == "") {
+      checkTitle = "[Empty]";
+    } else {
+      checkTitle = title;
+    }
+    final _title = checkTitle;
     final _fileName = path.basename(file.path);
     final _mimeType = lookupMimeType(file.path);
     final _length = await file.length();
@@ -416,7 +427,7 @@ class TaskDetailState extends State<TaskDetail> {
 
     Asset asset = new Asset(
         id: _fileName,
-        title: title,
+        title: _title,
         fileName: _fileName,
         mimeType: _mimeType,
         size: _length,
@@ -450,8 +461,10 @@ class TaskDetailState extends State<TaskDetail> {
       //Create Asset Object and assign a title.
 
       await setFileTitle(context, file);
-      Asset asset = await createAsset(file, _nameField);
-
+      Asset asset;
+      if(_nameField != "/") {
+        asset = await createAsset(file, _nameField);
+      }
       //If user did not hit cancel while assigning a file title.
       if (asset != null) {
         bool s3success = await S3bucketUploader.uploadFile(
