@@ -39,9 +39,13 @@ namespace kore_api.Repositories
             return file;
         }
 
-        public Task<bool> FileExists(string id)
+        public bool FileExists(string id)
         {
-            throw new NotImplementedException();
+            if (_context.File.Where(f => f.FileId == id).FirstOrDefault() != null)
+            {
+                return true;
+            }
+            return false;
         }
 
         public Task<File> GetFile(string id)
@@ -54,6 +58,11 @@ namespace kore_api.Repositories
             return _context.File;
         }
 
+        public IEnumerable<File> GetFilesByTaskId(string taskId)
+        {
+            return _context.File.Where(f => f.TaskId == taskId);
+        }
+
         public async Task<bool> Update(string id, File file)
         {
             if (id != file.FileId)
@@ -61,17 +70,22 @@ namespace kore_api.Repositories
                 return false;
             }
 
-            _context.Entry(file).State = EntityState.Modified;
+            //_context.Entry(file).State = EntityState.Modified;
+
+            var _file = _context.File.Where(f => f.FileId == id).FirstOrDefault();
+            _file.Title = file.Title;
+
+            _context.File.Update(_file);
 
             try
             {
                 await _context.SaveChangesAsync();
+                return true;
             }
             catch (DbUpdateConcurrencyException)
             {
                 return false;
             }
-            return false;
         }
     }
 }
