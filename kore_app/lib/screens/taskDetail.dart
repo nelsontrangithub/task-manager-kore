@@ -40,7 +40,7 @@ class TaskDetailState extends State<TaskDetail> {
   String _nameField;
 
   Future<List<Asset>> _assets;
-  int _assetsLenght;
+  int _assetsLength;
   Future<String> _username;
   Future<String> _token;
   Api _api;
@@ -285,13 +285,13 @@ class TaskDetailState extends State<TaskDetail> {
 
   Widget _buildAssetList(List<Asset> assets) {
 
-    _assetsLenght = assets.length + 1;
+    _assetsLength = assets.length * 2;
     return Flexible(
         fit: FlexFit.loose,
         child: ListView.builder(
             shrinkWrap: true,
             padding: const EdgeInsets.all(25.0),
-            itemCount: _assetsLenght,
+            itemCount: _assetsLength,
             itemBuilder: (context, i) {
               if (i.isOdd) return Divider();
 
