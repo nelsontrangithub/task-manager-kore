@@ -313,7 +313,7 @@ Widget _buildAssetList(List<Asset> assets) {
         icon = Icons.block;
         iconColor = Colors.redAccent;
       }
-      task.setStatus();
+      task.setStatus(_api);
     });
   }
 

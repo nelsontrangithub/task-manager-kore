@@ -18,4 +18,4 @@ const TextStyle THEME_TEXTSTYLE = TextStyle(
   fontFamily: 'Poppins',
 );
 
-const KorePrimaryColor = const Color(0x223871);
+const KorePrimaryColor = const Color(0xff1282c5);

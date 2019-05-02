@@ -224,7 +224,7 @@ class AccountDetailState extends State<AccountDetail> {
     task.isCompleted = true;
 
     setState(() {
-      task.setStatus();
+      task.setStatus(_api);
     });
 
     print(task.isCompleted);
@@ -234,7 +234,7 @@ class AccountDetailState extends State<AccountDetail> {
     task.isCompleted = false;
 
     setState(() {
-      task.setStatus();
+      task.setStatus(_api);
     });
 
     print(task.isCompleted);

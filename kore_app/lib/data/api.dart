@@ -104,6 +104,13 @@ class Api {
     });
   }
 
+  Future<bool> updateTaskStatus(Future<String> token, Task task) async {
+    String _token = await token;
+    return _netUtil.get(TASK_URL + task.id.toString(), _token).then((dynamic res) {
+      return res;
+    });
+  }
+
   Future<List<Account>> getAccountsByOrgId(
       Future<String> token, Organization org) async {
     String _token = await token;

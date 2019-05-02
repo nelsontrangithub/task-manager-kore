@@ -19,7 +19,7 @@ class ProfileHeader extends StatelessWidget {
         height: 280,
         decoration: BoxDecoration(
           borderRadius:
-              BorderRadius.only(bottomLeft: const Radius.circular(70.0)),
+              BorderRadius.only(bottomLeft: const Radius.circular(60.0)),
           // color: KorePrimaryColor,
           image: new DecorationImage(
             image: new AssetImage("assets/header_background2.jpg"),
