@@ -60,14 +60,6 @@ namespace kore_api.Controllers
             return Ok(file);
         }
 
-        // GET: api/Files/task/7
-        [HttpGet("task/{taskId}")]
-        [Authorize(Policy = "IsAdminOrAgent")]
-        public IEnumerable<File> GetFilesByTaskId(string taskId)
-        {
-            return _filesRepository.GetFilesByTaskId(taskId);
-        }
-
         // PUT: api/Files/5
         [HttpPut("{id}")]
         [Authorize(Policy = "IsAdminOrAgent")]
