@@ -124,7 +124,7 @@ class Api {
     var bodyEncoded = json.encode(body);
     
     try {
-    await _netUtil.post(ASSET_URL, true, headers: headers, body: bodyEncoded).then((dynamic res) {
+    await _netUtil.post(ASSET_URL, false, headers: headers, body: bodyEncoded, returnResponse: true).then((dynamic res) {
       print("File Post Result: " + res.toString());
       if (res.statusCode == 200)
       {

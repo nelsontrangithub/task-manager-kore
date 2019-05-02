@@ -26,7 +26,7 @@ class NetworkUtil {
     });
   }
 
-  Future<dynamic> post(String url, bool isSigin, {Map headers, body, encoding}) {
+  Future<dynamic> post(String url, bool isSigin, {Map headers, body, encoding, returnResponse}) {
     return http
         .post(url, body: body, headers: headers, encoding: encoding)
         .then((http.Response response) {
@@ -36,6 +36,9 @@ class NetworkUtil {
       if (statusCode < 200 || statusCode > 400 || json == null) {
         throw new Exception(
             "Error while fetching data " + statusCode.toString());
+      }
+      if(returnResponse) {
+        return response;
       }
       if (!isSigin)
         return _decoder.convert(res);
