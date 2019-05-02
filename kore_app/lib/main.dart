@@ -10,6 +10,7 @@ import 'package:kore_app/screens/orgnization_list.dart';
 import 'package:kore_app/screens/splash.dart';
 import 'package:kore_app/screens/login.dart';
 import 'package:kore_app/utils/constant.dart';
+import 'package:kore_app/utils/theme.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
@@ -67,6 +68,7 @@ class _AppState extends State<MyApp> {
     return BlocProvider<AuthenticationBloc>(
       bloc: authenticationBloc,
       child: MaterialApp(
+        // theme: koreThemeData,
         home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
           bloc: authenticationBloc,
           builder: (BuildContext context, AuthenticationState state) {
@@ -74,14 +76,15 @@ class _AppState extends State<MyApp> {
               return Splash();
             }
             if (state is AuthenticationAuthenticatedAdmin) {
-              return OrganizationList(userRepository: UserRepository(), role: Constant.AdminRole);
+              return OrganizationList(
+                  userRepository: UserRepository(), role: Constant.AdminRole);
             }
             if (state is AuthenticationAuthenticatedRegular) {
-              return AccountList(userRepository: UserRepository(), role: Constant.RegularRole);
+              return AccountList(
+                  userRepository: UserRepository(), role: Constant.RegularRole);
             }
             if (state is AuthenticationUnauthenticated) {
-              return MyHomePage(
-                  userRepository: UserRepository());
+              return MyHomePage(userRepository: UserRepository());
             }
             if (state is AuthenticationLoading) {
               return Splash();

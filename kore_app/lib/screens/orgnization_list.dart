@@ -7,7 +7,6 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/organization.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/auth/user_repository.dart';
-import 'package:kore_app/utils/constant.dart';
 import 'package:kore_app/widgets/basic_list.dart';
 import 'package:kore_app/widgets/profile_header.dart';
 
@@ -36,28 +35,36 @@ class OrganizationListState extends State<OrganizationList> {
     final AuthenticationBloc authenticationBloc =
         BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Origanizations'),
-          actions: <Widget>[
-            IconButton(
-                    icon: Icon(Icons.exit_to_app),
-                    onPressed: () {
-                      authenticationBloc.dispatch(LoggedOut());
-        //               Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(
-        // builder: (BuildContext context) =>
-        // new MyHomePage(userRepository: widget.userRepository)), (Route<dynamic> route) => false);
-                    },
-                  ),
-          ],
-        ),
-        body: Column(children: <Widget>[
-          ProfileHeader(user: _user),
-          BasicList(
-              user: _user,
-              list: _organizations,
-              userRepository: widget.userRepository,
-              role: widget.role)
-        ]));
+        body: Stack(children: <Widget>[
+      Column(children: <Widget>[
+        ProfileHeader(user: _user),
+        BasicList(
+            user: _user,
+            list: _organizations,
+            userRepository: widget.userRepository,
+            role: widget.role)
+      ]),
+      Positioned(
+          top: 0.0,
+          left: 0.0,
+          right: 0.0,
+          child: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            title: Text('Origanizations'),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.exit_to_app),
+                onPressed: () {
+                  authenticationBloc.dispatch(LoggedOut());
+                  //               Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(
+                  // builder: (BuildContext context) =>
+                  // new MyHomePage(userRepository: widget.userRepository)), (Route<dynamic> route) => false);
+                },
+              ),
+            ],
+          )),
+    ]));
   }
 }
 

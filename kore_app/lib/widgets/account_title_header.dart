@@ -15,9 +15,9 @@ class AccountTitleHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 200.0,
+        height: 280.0,
         // margin: const EdgeInsets.symmetric(vertical: 0.0),
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        // padding: const EdgeInsets.symmetric(vertical: 10.0),
         decoration: BoxDecoration(
           // borderRadius:
           //     BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
@@ -34,7 +34,7 @@ class AccountTitleHeader extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                    padding: const EdgeInsets.only(left: 10.0),
+                    padding: const EdgeInsets.only(left: 10.0, top: 60),
                     child: Text(
                       organization.name,
                       style: _orgTitleFont,
