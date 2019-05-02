@@ -86,7 +86,7 @@ class TaskDetailState extends State<TaskDetail> {
       onPressed: () {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => AssignTask(
-              userRepository: widget.userRepository,
+              userRepository: widget.userRepository, task: widget.task,
             )));
       },
       icon: Icon(Icons.account_circle),

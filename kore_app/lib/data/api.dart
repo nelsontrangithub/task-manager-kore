@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:convert';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/organization.dart';
@@ -16,6 +18,7 @@ class Api {
   static final USER_URL = BASE_URL + "Users/api/getUser/";
   static final ASSET_URL = BASE_URL + "Files/";
   static final ALLUSERS_URL = BASE_URL + "Users/";
+  static final SEARCH_USER_URL = BASE_URL + "Users/api/search/";
   // static String token;
   // static final _API_KEY = "somerandomkey";
 
@@ -81,6 +84,15 @@ class Api {
     });
   }
 
+  Future<List<User>> searchUserByUsername(Future<String> token, String username) async {
+    String _token = await token;
+    String _username = username;
+    return _netUtil.get(SEARCH_USER_URL + _username, _token).then((dynamic res) {
+      print(res.toString());
+      return res.map<User>((json) => new User.fromJson(json)).toList();
+    });
+  }
+
   Future<List<Asset>> getAssets(Future<String> token) async {
     String _token = await token;
     return _netUtil.get(ASSET_URL, _token).then((dynamic res) {
@@ -96,4 +108,25 @@ class Api {
       return res.map<Account>((json) => new Account.fromJson(json)).toList();
     });
   }
+
+  Future<bool>assignUserToTask(Future<String> token, String taskId, String userId) async { 
+      String _token = await token;
+       var headers = {
+      "Content-Type": "application/json",      
+      HttpHeaders.authorizationHeader: "Bearer " + _token.trim()
+    };
+      var bodyEncoder = json.encode(userId);
+    
+      try {
+        await _netUtil.post(TASK_URL + "user/" + taskId, false, headers: headers, body: bodyEncoder).then((dynamic res) {
+          print("task membership res" + res.toString());
+          
+        });
+        return true;
+      } catch (e) {
+        return false;
+      }
+  }
+  
+
 }
