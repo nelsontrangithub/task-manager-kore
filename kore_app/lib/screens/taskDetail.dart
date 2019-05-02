@@ -7,6 +7,7 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
+import 'package:kore_app/screens/asset_list.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:kore_app/widgets/loading_indicator.dart';
@@ -18,7 +19,7 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
 
 class TaskDetailState extends State<TaskDetail> {
   Future<User> _user;
-   // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
+  // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   var icon;
   var iconColor;
   final _biggerFont = const TextStyle(fontSize: 18.0);
@@ -55,7 +56,6 @@ class TaskDetailState extends State<TaskDetail> {
       iconColor = Colors.redAccent;
     }
     _controller.addListener(() => _extension = _controller.text);
-    
   }
 
   @override
@@ -63,7 +63,7 @@ class TaskDetailState extends State<TaskDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.task.description),
-        ),
+      ),
       body: new ListView(
         children: <Widget>[
           Column(
@@ -214,7 +214,13 @@ class TaskDetailState extends State<TaskDetail> {
       child: MaterialButton(
         minWidth: 100,
         onPressed: () {
-          openFileExplorer();
+          //openFileExplorer();
+          //upload button lauches asset list view
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AssetList()),
+              );
         },
         child: Text(
           'Upload File',
@@ -252,16 +258,16 @@ class TaskDetailState extends State<TaskDetail> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             FutureBuilder<List<Asset>>(
-                future: assets,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return _buildAssetList(snapshot.data);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  // By default, show a loading spinner
-                  return LoadingIndicator();
-                },
+              future: assets,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return _buildAssetList(snapshot.data);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                // By default, show a loading spinner
+                return LoadingIndicator();
+              },
             ),
           ],
         ),
@@ -269,11 +275,11 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-Widget _buildAssetList(List<Asset> assets) {
+  Widget _buildAssetList(List<Asset> assets) {
     return Flexible(
         fit: FlexFit.loose,
         child: ListView.builder(
-          shrinkWrap: true,
+            shrinkWrap: true,
             padding: const EdgeInsets.all(25.0),
             itemBuilder: (context, i) {
               if (i.isOdd) return Divider();
@@ -296,12 +302,9 @@ Widget _buildAssetList(List<Asset> assets) {
       //   // Add the lines from here...
       //   account.percentage >= 100 ? Icons.done : null,
       // ),
-      onTap: () {
-      },
+      onTap: () {},
     );
   }
-
-
 
   void toggleCompleted(Task task) {
     task.isCompleted = !task.isCompleted;
@@ -385,12 +388,13 @@ Widget _buildAssetList(List<Asset> assets) {
 
 class TaskDetail extends StatefulWidget {
   final Task task;
-  const TaskDetail({Key key, this.task, @required this.userRepository}) 
-            : assert(userRepository != null), 
-            super(key: key);
+  const TaskDetail({Key key, this.task, @required this.userRepository})
+      : assert(userRepository != null),
+        super(key: key);
 
   final UserRepository userRepository;
 
   @override
   TaskDetailState createState() => new TaskDetailState();
 }
+
