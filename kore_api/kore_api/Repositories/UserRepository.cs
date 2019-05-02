@@ -56,7 +56,29 @@ namespace kore_api.Repositories
             return query;
         }
 
-		public bool UserExists(string email)
+        public IEnumerable<User> UsersAssignedToTask(int taskId)
+        {
+            var query = from x in _context.Taskmembership
+                        join y in _context.User on x.UserId equals y.Id
+                        where x.TaskId.Equals(taskId)
+                        select new User
+                        {
+                            Id = y.Id,
+                            Email = y.Email,
+                            Name = y.Name,
+                            IconFileId = y.IconFileId,
+                            IconFileUrl = y.IconFileUrl,
+                            LastLogin = y.LastLogin,
+                            DateCreated = y.DateCreated,
+                            Status = y.Status,
+                            FirstName = y.FirstName,
+                            LastName = y.LastName,
+                            Sid = y.Sid,
+                        };
+            return query;
+        }
+
+        public bool UserExists(string email)
 		{
 			if (_context.User.Where(u => u.Email == email).FirstOrDefault() != null)
 			{

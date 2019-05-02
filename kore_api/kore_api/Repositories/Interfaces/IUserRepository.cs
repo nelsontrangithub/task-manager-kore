@@ -15,6 +15,6 @@ namespace kore_api.Repositories.Interfaces
         bool CreateUser(UserVM userVM);
 		bool UserExists(string email);
         IEnumerable<User> SearchUsersByEmail(string search);
-
+        IEnumerable<User> UsersAssignedToTask(int taskId);
     }
 }

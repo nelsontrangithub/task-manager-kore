@@ -10,6 +10,7 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
+import 'package:kore_app/screens/user_list.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:kore_app/widgets/loading_indicator.dart';
@@ -80,15 +81,29 @@ class TaskDetailState extends State<TaskDetail> {
         children: <Widget>[
           Column(
             children: <Widget>[
-              // _buildHeader(),
+              Padding(padding: EdgeInsets.only(top: 12)),
+              _assignTask(),
               _buildTaskDescription(),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
-              _buildAssetsListContainer(_assets)
+              _buildAssetsListContainer(_assets),
             ],
           ),
         ],
       ),
+    );
+  }
+
+  Widget _assignTask() {
+    return FloatingActionButton.extended(
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => AssignTask(
+              userRepository: widget.userRepository, task: widget.task,
+            )));
+      },
+      icon: Icon(Icons.account_circle),
+      label: Text("Assign Task"),
     );
   }
 
