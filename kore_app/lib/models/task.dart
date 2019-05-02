@@ -14,7 +14,7 @@ class Task {
   String label;
 
   void setStatus(Api api){
-    if (isCompleted == true) {
+    if (status == 0) {
       this.color = Colors.green;
       this.icon = Icons.done;
       this.label = "Complete";      
@@ -31,7 +31,10 @@ class Task {
     this.isCompleted,
     this.status,
     this.description,
-    this.dueDate
+    this.dueDate,
+    this.color,
+    this.icon,
+    this.label
     });
 
   factory Task.fromJson(Map<String, dynamic> json ) {
@@ -43,14 +46,14 @@ class Task {
         description: json['description'] as String,
         dueDate: json['DueDate'] as DateTime 
     );
-
+    print(json['status']);
     if(task.status == 0){
       task.isCompleted = false;
     } else{
       task.isCompleted = true;
     }
     
-    if (task.isCompleted == true) {
+    if (task.status == 0) {
       task.color = Colors.green;
       task.icon = Icons.done;
       task.label = "Complete";

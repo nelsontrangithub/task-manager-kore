@@ -58,6 +58,7 @@ class Api {
     return _netUtil
         .get(TASK_URL + "user/" + _user.id.toString(), _token)
         .then((dynamic res) {
+          print(res.toString());
       return res.map<Task>((json) => new Task.fromJson(json)).toList();
     });
   }

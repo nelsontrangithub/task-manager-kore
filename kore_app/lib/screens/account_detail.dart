@@ -144,6 +144,8 @@ class AccountDetailState extends State<AccountDetail> {
   }
 
   Widget _buildRow(Task task, int i) {
+    // print(task.status);
+    // print(task.id);
     return new Slidable(
       delegate: new SlidableDrawerDelegate(),
       actionExtentRatio: 0.25,
