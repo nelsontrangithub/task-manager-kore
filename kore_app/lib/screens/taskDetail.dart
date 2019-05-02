@@ -398,10 +398,9 @@ class TaskDetailState extends State<TaskDetail> {
         "https://s3.us-east-2.amazonaws.com/koretaskmanagermediabucket/";
     final taskId = widget.task.id;
     final accountId = widget.task.accountId;
-    final User user = await _user;
 
     Asset asset = new Asset(
-        id: _fileName + user.id.toString(),
+        id: _fileName,
         title: title,
         fileName: _fileName,
         mimeType: _mimeType,
@@ -444,17 +443,19 @@ class TaskDetailState extends State<TaskDetail> {
             file, "koretaskmanagermediabucket", widget.task.id.toString());
         if (s3success) {
           User user = await _user;
-          bool dbSuccess = await _api.postAsset(_token, asset, user);
+          int dbSuccess = await _api.postAsset(_token, asset, user);
 
-          if (dbSuccess) {
+          if (dbSuccess > 0) {
+            dbSuccess == 1 ? print("Added asset successfully") : print("Updated asset successfully");
             getAssets();
+           
           }
         }
       }
     }
   }
 
-  /* End of Assets Functionality */
+  /* End of Assets Functionality, to be moved into its own view at a later point */
 
   void toggleCompleted(Task task) {
     if (task.status == 0) {

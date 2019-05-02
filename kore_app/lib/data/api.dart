@@ -110,8 +110,10 @@ class Api {
     });
   }
 
-  Future<bool> postAsset(Future<String> token, Asset asset, User user) async {
+  Future<int> postAsset(Future<String> token, Asset asset, User user) async {
     String _token = await token;
+
+    bool updateTrue;
 
     var headers = {
       "Content-Type": "application/json",      
@@ -120,16 +122,24 @@ class Api {
 
     var body =  asset.toJson(user);
     var bodyEncoded = json.encode(body);
-
+    
     try {
-    await _netUtil.post(ASSET_URL, false, headers: headers, body: bodyEncoded).then((dynamic res) {
-      print("File Post Result: " + res.toString());        
+    await _netUtil.post(ASSET_URL, true, headers: headers, body: bodyEncoded).then((dynamic res) {
+      print("File Post Result: " + res.toString());
+      if (res.statusCode == 200)
+      {
+        updateTrue = true;
+      }         
     });
     } catch (e){
         print(e);
-        return false;
+        return 0;
     }
-    return true;
+    if (updateTrue) {
+      return 2;
+    }
+
+    return 1;
   }
 
   Future<bool> deleteAssetS3(Future<String> token, Asset asset) async {
