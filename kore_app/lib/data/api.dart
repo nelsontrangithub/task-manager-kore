@@ -113,7 +113,7 @@ class Api {
   Future<int> postAsset(Future<String> token, Asset asset, User user) async {
     String _token = await token;
 
-    bool updateTrue;
+    bool updateTrue = false;
 
     var headers = {
       "Content-Type": "application/json",      

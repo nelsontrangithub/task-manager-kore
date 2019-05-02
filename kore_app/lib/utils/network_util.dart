@@ -37,7 +37,7 @@ class NetworkUtil {
         throw new Exception(
             "Error while fetching data " + statusCode.toString());
       }
-      if(returnResponse) {
+      if(returnResponse != null && returnResponse) {
         return response;
       }
       if (!isSigin)
