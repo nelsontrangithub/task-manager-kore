@@ -40,6 +40,7 @@ class TaskDetailState extends State<TaskDetail> {
   String _nameField;
 
   Future<List<Asset>> _assets;
+  int _assetsLenght;
   Future<String> _username;
   Future<String> _token;
   Api _api;
@@ -284,12 +285,14 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   Widget _buildAssetList(List<Asset> assets) {
+
+    _assetsLenght = assets.length + 1;
     return Flexible(
         fit: FlexFit.loose,
         child: ListView.builder(
             shrinkWrap: true,
             padding: const EdgeInsets.all(25.0),
-            itemCount: assets.length,
+            itemCount: _assetsLenght,
             itemBuilder: (context, i) {
               if (i.isOdd) return Divider();
 
@@ -340,15 +343,19 @@ class TaskDetailState extends State<TaskDetail> {
               bool dbSuccess = await _api.deleteAssetDb(_token, asset);
               print(dbSuccess);
               if (dbSuccess) {
-                setState(() {
-                  _assets = _api.getAssets(_token, widget.task.id.toString());
-                });
+                getAssets();
               }
             }
           },
         ),
       ],
     );
+  }
+
+  getAssets() {
+    
+    _assets = _api.getAssets(_token, widget.task.id.toString());
+    setState(()=> {});
   }
 
   //Alert box with input feild to allow users to assing a title to the selected file
@@ -441,9 +448,7 @@ class TaskDetailState extends State<TaskDetail> {
           bool dbSuccess = await _api.postAsset(_token, asset, user);
 
           if (dbSuccess) {
-            setState(() {
-              _assets = _api.getAssets(_token, widget.task.id.toString());
-            });
+            getAssets();
           }
         }
       }
