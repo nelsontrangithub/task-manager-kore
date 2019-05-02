@@ -289,6 +289,7 @@ class TaskDetailState extends State<TaskDetail> {
         child: ListView.builder(
             shrinkWrap: true,
             padding: const EdgeInsets.all(25.0),
+            itemCount: assets.length,
             itemBuilder: (context, i) {
               if (i.isOdd) return Divider();
 
@@ -321,7 +322,7 @@ class TaskDetailState extends State<TaskDetail> {
         ),
       ),
       secondaryActions: <Widget>[
-            new IconSlideAction(
+        new IconSlideAction(
           caption: "Update",
           color: Colors.blueAccent,
           icon: Icons.file_upload,
@@ -334,11 +335,16 @@ class TaskDetailState extends State<TaskDetail> {
           color: Colors.redAccent,
           icon: Icons.delete_forever,
           onTap: () async {
-           bool s3Success = await _api.deleteAssetS3(_token, asset);
-           if (s3Success){
-             bool dbSuccess = await _api.deleteAssetDb(_token, asset);
-             print (dbSuccess);
-           } 
+            bool s3Success = await _api.deleteAssetS3(_token, asset);
+            if (s3Success) {
+              bool dbSuccess = await _api.deleteAssetDb(_token, asset);
+              print(dbSuccess);
+              if (dbSuccess) {
+                setState(() {
+                  _assets = _api.getAssets(_token, widget.task.id.toString());
+                });
+              }
+            }
           },
         ),
       ],
@@ -434,14 +440,11 @@ class TaskDetailState extends State<TaskDetail> {
           User user = await _user;
           bool dbSuccess = await _api.postAsset(_token, asset, user);
 
-          // if (dbSuccess) {
-          //   // var newAssets = _api.getAssets(_token);
-          //   setState(() {
-          //     // _assets = newAssets;
-          //     // _assets = _api.getAssets(_token);
-          //     // _buildAssetsListContainer(_assets);
-          //   });
-          // }
+          if (dbSuccess) {
+            setState(() {
+              _assets = _api.getAssets(_token, widget.task.id.toString());
+            });
+          }
         }
       }
     }
@@ -450,9 +453,9 @@ class TaskDetailState extends State<TaskDetail> {
   /* End of Assets Functionality */
 
   void toggleCompleted(Task task) {
-    if( task.status == 0){
+    if (task.status == 0) {
       task.status = 1;
-    }else{
+    } else {
       task.status = 0;
     }
     setState(() {

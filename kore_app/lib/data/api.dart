@@ -82,7 +82,7 @@ class Api {
 
   Future<List<Asset>> getAssets(Future<String> token, String taskId) async {
     String _token = await token;
-    return _netUtil.get(ASSET_URL + "task/" + taskId, _token).then((dynamic res) {
+    return await _netUtil.get(ASSET_URL + "task/" + taskId, _token).then((dynamic res) {
       print("File Get Result: " + res.toString());
       return res.map<Asset>((json) => new Asset.fromJson(json)).toList();
     });
@@ -100,7 +100,7 @@ class Api {
     var bodyEncoded = json.encode(body);
 
     try {
-    _netUtil.post(ASSET_URL, false, headers: headers, body: bodyEncoded).then((dynamic res) {
+    await _netUtil.post(ASSET_URL, false, headers: headers, body: bodyEncoded).then((dynamic res) {
       print("File Post Result: " + res.toString());        
     });
     } catch (e){
