@@ -143,9 +143,9 @@ class AccountDetailState extends State<AccountDetail> {
         radius: 95.0,
         lineWidth: 13.0,
         animation: true,
-        percent: _percent * 0.1,
+        percent: _percent,
         center: new Text(
-          _percent.toString() + "%",
+          (_percent * 100.0).round().toString() + "%",
           style: new TextStyle(fontWeight: FontWeight.bold, fontSize: 17.0),
         ),
         footer: new Text(
