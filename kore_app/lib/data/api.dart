@@ -18,8 +18,6 @@ class Api {
   static final LOGIN_URL = BASE_URL + "signin";
   static final USER_URL = BASE_URL + "Users/api/getUser/";
   static final ASSET_URL = BASE_URL + "Files/";
-  // static String token;
-  // static final _API_KEY = "somerandomkey";
 
 //make it a sigleton
   static Api _instance = new Api.internal();
@@ -41,7 +39,6 @@ class Api {
     return _netUtil
         .get(ACCOUNT_URL + "user/" + _user.id.toString(), _token)
         .then((dynamic res) {
-      print(res.toString());
       return res.map<Account>((json) => new Account.fromJson(json)).toList();
     });
   }
@@ -51,7 +48,6 @@ class Api {
     String _token = await token;
     User _user = await user;
     return _netUtil.get(ACCOUNT_URL + "account/" + account.id.toString() + "/user/" + _user.id.toString(), _token).then((dynamic res) {
-      print("HELLO THERE NELSON " + res.toString());
       return res;
     });
   }
@@ -62,7 +58,6 @@ class Api {
     return _netUtil
         .get(TASK_URL + "user/" + _user.id.toString(), _token)
         .then((dynamic res) {
-      print(res.toString());
       return res.map<Task>((json) => new Task.fromJson(json)).toList();
     });
   }
@@ -73,7 +68,6 @@ class Api {
     return _netUtil
         .get(TASK_URL + "account/" + account.id.toString(), _token)
         .then((dynamic res) {
-      print(res.toString());
       return res.map<Task>((json) => new Task.fromJson(json)).toList();
     });
   }
@@ -92,7 +86,6 @@ class Api {
     String _token = await token;
     String _username = await username;
     return _netUtil.get(USER_URL + _username, _token).then((dynamic res) {
-      print(res.toString());
       return User.fromJson(res);
     });
   }
@@ -105,16 +98,17 @@ class Api {
     });
   }
 
-  Future<bool> updateTaskStatus(Future<String> token, Task task) async {
+  Future<bool> updateTaskStatus(Future<String> token, Task task, int status) async {
     String _token = await token;
     var headers = {
       "Content-Type": "application/json",      
       HttpHeaders.authorizationHeader: "Bearer " + _token.trim()
     };
 
-    var bodyEncoded = json.encode(task.id);
+    var bodyEncoded = json.encode(status);
     
-    return _netUtil.post(TASK_URL + task.id.toString(), false, headers: headers, body: bodyEncoded).then((dynamic res) {
+    return _netUtil.put(TASK_URL + task.id.toString(), false, headers: headers, body: bodyEncoded).then((dynamic res) {
+      print(res);
       return res;
     });
   }

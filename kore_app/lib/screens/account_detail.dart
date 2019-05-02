@@ -45,12 +45,6 @@ class AccountDetailState extends State<AccountDetail> {
     }
   }
 
-  // Future<void> foo() async {
-  //   newPercent = await _percent;
-  //   print("BOOM" + newPercent.toString());
-  //   return newPercent;
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,32 +103,6 @@ class AccountDetailState extends State<AccountDetail> {
           },
         ));
   }
-
-  // Widget _buildHeader() {
-  //   return Container(
-  //     // margin: const EdgeInsets.symmetric(vertical: 0.0),
-  //     padding: const EdgeInsets.symmetric(vertical: 10.0),
-  //     decoration: BoxDecoration(
-  //       borderRadius:
-  //           BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
-  //     ),
-  //     child: new Row(
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       children:
-  //       <Widget>[
-  //         Expanded(
-  //             child: new Container(
-  //           height: 150.0,
-  //           child: Column(
-  //             children: <Widget>[
-  //               _buildPercentIndicator(),
-  //             ],
-  //           ),
-  //         )),
-  //       ],
-  //     ),
-  //   );
-  // }
 
   Widget _buildPercentIndicator(double _percent) {
     return new Container(
@@ -221,23 +189,21 @@ class AccountDetailState extends State<AccountDetail> {
   }
 
   void markCompleted(Task task) {
+    _api.updateTaskStatus(_token, task, 1);
     task.isCompleted = true;
-
     setState(() {
       task.setStatus(_api);
     });
-
-    print(task.isCompleted);
+    initState();
   }
 
   void markNotCompleted(Task task) {
+    _api.updateTaskStatus(_token, task, 0);
     task.isCompleted = false;
-
     setState(() {
       task.setStatus(_api);
     });
-
-    print(task.isCompleted);
+    initState();
   }
 }
 
