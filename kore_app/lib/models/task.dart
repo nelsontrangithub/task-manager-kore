@@ -13,12 +13,14 @@ class Task {
   Object icon;
   String label;
 
-  void setStatus(Api api){
+  void setStatus(Api api, Future<String> token, Task task){
     if (status == 0) {
+      api.updateTaskStatus(token, task, 1);
       this.color = Colors.green;
       this.icon = Icons.done;
       this.label = "Complete";      
     } else {
+      api.updateTaskStatus(token, task, 0);
       this.color = Colors.redAccent;
       this.icon = Icons.cancel;
       this.label = "Not Complete";

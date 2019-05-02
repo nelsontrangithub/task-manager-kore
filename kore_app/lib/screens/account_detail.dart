@@ -36,7 +36,7 @@ class AccountDetailState extends State<AccountDetail> {
     _api = Api();
     if (widget.role == Constant.RegularRole) {
       _user = _api.getUserByUsername(_token, _username);
-      _tasksAPI = _api.getTasks(_token, _user);
+      _tasksAPI = _api.getTasks(_token, _user, widget.account);
       _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
     } else {
       _user = _api.getUserByUsername(_token, _username);
@@ -191,19 +191,19 @@ class AccountDetailState extends State<AccountDetail> {
   }
 
   void markCompleted(Task task) {
-    _api.updateTaskStatus(_token, task, 1);
+    // _api.updateTaskStatus(_token, task, 1);
     task.isCompleted = true;
     setState(() {
-      task.setStatus(_api);
+      task.setStatus(_api, _token, task);
     });
     initState();
   }
 
   void markNotCompleted(Task task) {
-    _api.updateTaskStatus(_token, task, 0);
+    // _api.updateTaskStatus(_token, task, 0);
     task.isCompleted = false;
     setState(() {
-      task.setStatus(_api);
+      task.setStatus(_api, _token, task);
     });
     initState();
   }
