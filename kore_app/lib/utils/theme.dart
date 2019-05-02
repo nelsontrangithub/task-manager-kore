@@ -9,7 +9,7 @@
 import 'package:flutter/material.dart';
 
 final ThemeData koreThemeData = ThemeData(
-  brightness: Brightness.dark,
+  brightness: Brightness.light,
   primaryColor: KorePrimaryColor
 );
 
@@ -18,4 +18,4 @@ const TextStyle THEME_TEXTSTYLE = TextStyle(
   fontFamily: 'Poppins',
 );
 
-const KorePrimaryColor = const Color(0x203064);
+const KorePrimaryColor = const Color(0xff1282c5);
