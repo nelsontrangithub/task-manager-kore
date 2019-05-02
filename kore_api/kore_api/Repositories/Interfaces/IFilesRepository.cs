@@ -14,6 +14,6 @@ namespace kore_api.Repositories.Interfaces
         Task<bool> Create(File file);
         Task<bool> Update(string id, File file);
         Task<File> Delete(string id);
-        Task<bool> FileExists(string id);
+        bool FileExists(string id);
     }
 }
