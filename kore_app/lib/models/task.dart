@@ -45,9 +45,6 @@
 //     }
 //   }
 
-  
-
-
 //   void setStatus(){
 //     if (isCompleted == true) {
 //       this.color = Colors.green[800];
@@ -65,6 +62,7 @@ import 'package:kore_app/data/api.dart';
 
 class Task {
   int id;
+  int accountId;
   String title;
   bool isCompleted;
   String description;
@@ -96,8 +94,8 @@ class Task {
   //   }
   // }
 
-  void setStatus(Api api){
-    if (isCompleted == true) {
+  void setStatus() {
+    if (status == 1) {
       this.color = Colors.green;
       this.icon = Icons.done;
       this.label = "Complete";
@@ -109,32 +107,25 @@ class Task {
     }
   }
 
-  Task({
-    this.id,
-    this.title,
-    this.isCompleted,
-    this.description,
-    this.dueDate
-    });
+  Task(
+      {this.id,
+      this.accountId,
+      this.title,
+      this.isCompleted,
+      this.description,
+      this.dueDate,
+      this.status}) {
+    this.setStatus();
+  }
 
-  factory Task.fromJson(Map<String, dynamic> json ) {
-    Task task = Task(
+  factory Task.fromJson(Map<String, dynamic> json) {
+    return new Task(
         id: json['id'] as int,
+        accountId: json['accountId'] as int,
         title: json['subject'] as String,
         isCompleted: true,
+        status: json['status'] as int,
         description: json['description'] as String,
-        dueDate: json['DueDate'] as DateTime 
-    );
-    
-    if (task.isCompleted == true) {
-      task.color = Colors.green;
-      task.icon = Icons.done;
-      task.label = "Complete";
-    } else {
-      task.color = Colors.redAccent;
-      task.icon = Icons.cancel;
-      task.label = "Not Complete";
-    }
-    return task;
+        dueDate: json['DueDate'] as DateTime);
   }
 }

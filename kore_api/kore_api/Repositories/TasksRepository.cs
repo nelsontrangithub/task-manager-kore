@@ -191,11 +191,13 @@ namespace kore_api.Repositories
         public async Task<bool> Update(int id, int status)
         {
             var result = await _context.Task.Where(t => t.Id == id).FirstOrDefaultAsync();
-
+            var resultMembership = await _context.Taskmembership.Where(e => e.TaskId == id).FirstOrDefaultAsync();
             try
             {
                 result.Status = status;
+                resultMembership.Status = status;
                 _context.Update(result);
+                _context.Update(resultMembership);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -204,6 +206,8 @@ namespace kore_api.Repositories
                 return false;
             }
         }
+
+
 
         //Assign a task to a user
         public async Task<bool> AssignToUser(int id, int userID)

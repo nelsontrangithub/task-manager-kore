@@ -41,7 +41,7 @@ initState() {
           Column(
             children: <Widget>[
               // _buildHeader(),
-               _buildAssetsListContainer(_assets),
+               //_buildAssetsListContainer(_assets),
           
             ],
           ),
