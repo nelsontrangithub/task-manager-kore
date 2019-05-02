@@ -58,6 +58,7 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:kore_app/data/api.dart';
 
 class Task {
   int id;
@@ -98,6 +99,7 @@ class Task {
       this.color = Colors.green;
       this.icon = Icons.done;
       this.label = "Complete";
+      
     } else {
       this.color = Colors.redAccent;
       this.icon = Icons.cancel;

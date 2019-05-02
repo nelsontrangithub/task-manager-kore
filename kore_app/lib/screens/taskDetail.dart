@@ -157,11 +157,10 @@ class TaskDetailState extends State<TaskDetail> {
   Widget _buildCalendar(Task task) {
     return Container(
         child: Card(
-      elevation: 0,
+      // elevation: 0,
       child: CalendarCarousel(
-        //  viewportFraction: 0.5,
-        dayPadding: 5,
-        height: 380,
+        dayPadding: 0,
+        height: 400,
         weekendTextStyle: TextStyle(
           color: Colors.red,
         ),
@@ -464,13 +463,13 @@ class TaskDetailState extends State<TaskDetail> {
       task.status = 0;
     }
     setState(() {
-      // if (task.status == 1) {
-      //   icon = Icons.check;
-      //   iconColor = Colors.green;
-      // } else {
-      //   icon = Icons.block;
-      //   iconColor = Colors.redAccent;
-      // }
+      if (task.isCompleted == true) {
+        icon = Icons.check;
+        iconColor = Colors.green;
+      } else {
+        icon = Icons.block;
+        iconColor = Colors.redAccent;
+      }
       task.setStatus();
     });
   }

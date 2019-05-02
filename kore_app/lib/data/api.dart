@@ -14,7 +14,8 @@ import 'package:kore_app/utils/s3bucketUploader.dart';
 
 class Api {
   NetworkUtil _netUtil = new NetworkUtil();
-  static final BASE_URL = "https://w4c7snxw32.execute-api.us-east-2.amazonaws.com/Prod/api/";
+  static final BASE_URL =
+      "https://w4c7snxw32.execute-api.us-east-2.amazonaws.com/Prod/api/";
   static final ACCOUNT_URL = BASE_URL + "Accounts/";
   static final ORGANIZATION_URL = BASE_URL + "Organization/";
   static final TASK_URL = BASE_URL + "Tasks/";
@@ -38,40 +39,61 @@ class Api {
     });
   }
 
-  Future<List<Account>> getAccountsById(Future<String> token, Future<User> user) async {
+  Future<List<Account>> getAccountsById(
+      Future<String> token, Future<User> user) async {
     String _token = await token;
     User _user = await user;
-    return _netUtil.get(ACCOUNT_URL + "user/" + _user.id.toString(), _token).then((dynamic res) {
+    return _netUtil
+        .get(ACCOUNT_URL + "user/" + _user.id.toString(), _token)
+        .then((dynamic res) {
       print(res.toString());
       return res.map<Account>((json) => new Account.fromJson(json)).toList();
+    });
+  }
+
+  Future<double> getPercentageOfTasksCompleted
+    (Future<String> token, Future<User> user, Account account) async {
+    String _token = await token;
+    User _user = await user;
+    return _netUtil.get(ACCOUNT_URL + "account/" + account.id.toString() + "/user/" + _user.id.toString(), _token).then((dynamic res) {
+      print("HELLO THERE NELSON " + res.toString());
+      return res;
     });
   }
 
   Future<List<Task>> getTasks(Future<String> token, Future<User> user) async {
     String _token = await token;
     User _user = await user;
-    return _netUtil.get(TASK_URL + "user/" + _user.id.toString(), _token).then((dynamic res) {
+    return _netUtil
+        .get(TASK_URL + "user/" + _user.id.toString(), _token)
+        .then((dynamic res) {
       print(res.toString());
       return res.map<Task>((json) => new Task.fromJson(json)).toList();
     });
   }
 
-    Future<List<Task>> getAllTasksByAccountId(Future<String> token, Account account) async {
+  Future<List<Task>> getAllTasksByAccountId(
+      Future<String> token, Account account) async {
     String _token = await token;
-    return _netUtil.get(TASK_URL + "account/" + account.id.toString(), _token).then((dynamic res) {
+    return _netUtil
+        .get(TASK_URL + "account/" + account.id.toString(), _token)
+        .then((dynamic res) {
       print(res.toString());
       return res.map<Task>((json) => new Task.fromJson(json)).toList();
     });
   }
 
-  Future<List<Organization>>getOrganizations(Future<String> token) async {
+  Future<List<Organization>> getOrganizations(Future<String> token) async {
     String _token = await token;
     return _netUtil.get(ORGANIZATION_URL, _token).then((dynamic res) {
-      return res.map<Organization>((json) => new Organization.fromJson(json)).toList();
+      return res
+          .map<Organization>((json) => new Organization.fromJson(json))
+          .toList();
     });
   }
 
-  Future<User> getUserByUsername(Future<String> token, Future<String> username) async {
+  Future<User> getUserByUsername(
+      Future<String> token, Future<String> username) async {
     String _token = await token;
     String _username = await username;
     return _netUtil.get(USER_URL + _username, _token).then((dynamic res) {
@@ -155,9 +177,13 @@ class Api {
   //     return User.fromJson(res);
   //   });
   // }
-  Future<List<Account>> getAccountsByOrgId(Future<String> token, Organization org) async {
+
+  Future<List<Account>> getAccountsByOrgId(
+      Future<String> token, Organization org) async {
     String _token = await token;
-    return _netUtil.get(ACCOUNT_URL + 'user/' + org.id.toString(), _token).then((dynamic res) {
+    return _netUtil
+        .get(ACCOUNT_URL + 'user/' + org.id.toString(), _token)
+        .then((dynamic res) {
       print(res.toString());
       return res.map<Account>((json) => new Account.fromJson(json)).toList();
     });

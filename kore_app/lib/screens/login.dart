@@ -162,6 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
+                          SizedBox(height: 50.0),
                           SizedBox(
                             height: 155.0,
                             child: Image.asset(

@@ -39,23 +39,9 @@ class AccountListState extends State<AccountList> {
     final AuthenticationBloc authenticationBloc =
         BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Accounts'),
-          actions: <Widget>[
-            widget.role == Constant.RegularRole
-                ? IconButton(
-                    icon: Icon(Icons.exit_to_app),
-                    onPressed: () {
-                      authenticationBloc.dispatch(LoggedOut());
-        //               Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(
-        // builder: (BuildContext context) =>
-        // new MyHomePage(userRepository: widget.userRepository)), (Route<dynamic> route) => false);
-                    },
-                  )
-                : Container(height:0, width: 0,),
-          ],
-        ),
-        body: Column(children: <Widget>[
+        body: Stack(
+      children: <Widget>[
+        Column(children: <Widget>[
           widget.role == Constant.RegularRole
               ? ProfileHeader(user: _user)
               : AccountTitleHeader(organization: widget.organization),
@@ -64,7 +50,35 @@ class AccountListState extends State<AccountList> {
               list: _contracts,
               userRepository: widget.userRepository,
               role: widget.role)
-        ]));
+        ]),
+        Positioned(
+          top: 0.0,
+          left: 0.0,
+          right: 0.0,
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: Text('Accounts'),
+            actions: <Widget>[
+              widget.role == Constant.RegularRole
+                  ? IconButton(
+                      icon: Icon(Icons.exit_to_app),
+                      onPressed: () {
+                        authenticationBloc.dispatch(LoggedOut());
+                        //               Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(
+                        // builder: (BuildContext context) =>
+                        // new MyHomePage(userRepository: widget.userRepository)), (Route<dynamic> route) => false);
+                      },
+                    )
+                  : Container(
+                      height: 0,
+                      width: 0,
+                    ),
+            ],
+          ),
+        ),
+      ],
+    ));
   }
 }
 

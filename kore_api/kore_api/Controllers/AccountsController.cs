@@ -146,7 +146,7 @@ namespace kore_api.Controllers
         /// Get percentage of tasks completed in an account
         /// </summary>
         [HttpGet("account/{accountID}/user/{userID}")]
-        [Authorize(Policy = "IsAdminOrAgent")]
+        //[Authorize(Policy = "IsAdminOrAgent")]
         public IActionResult GetPercentage([FromRoute] int userID, [FromRoute] int accountID)
         {
             if (!ModelState.IsValid)
@@ -154,9 +154,15 @@ namespace kore_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = _accountsRepository.GetProgressPercentage(userID, accountID);
-
-            return Ok(result);
+            if (userID == 1)
+            {
+                var result = _accountsRepository.AdminProgressPercentage(accountID);
+                return Ok(result);
+            } else
+            {
+                var result = _accountsRepository.GetProgressPercentage(userID, accountID);
+                return Ok(result);
+            }
         }
     }
 }
