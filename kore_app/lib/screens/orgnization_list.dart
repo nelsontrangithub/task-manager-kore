@@ -7,8 +7,7 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/organization.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/auth/user_repository.dart';
-import 'package:kore_app/screens/account_list.dart';
-import 'package:kore_app/utils/constant.dart';
+import 'package:kore_app/widgets/basic_list.dart';
 import 'package:kore_app/widgets/profile_header.dart';
 
 class OrganizationListState extends State<OrganizationList> {
@@ -33,67 +32,39 @@ class OrganizationListState extends State<OrganizationList> {
 
   @override
   Widget build(BuildContext context) {
-    final AuthenticationBloc authenticattionBloc =
+    final AuthenticationBloc authenticationBloc =
         BlocProvider.of<AuthenticationBloc>(context);
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Organizations'),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.exit_to_app),
-              onPressed: () {
-                authenticattionBloc.dispatch(LoggedOut());
-              },
-            )
-          ],
-        ),
-        body: FutureBuilder<List<Organization>>(
-            future: _organizations,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return new Column(
-                  children: <Widget>[
-                    ProfileHeader(user: _user),
-                    _buildList(snapshot.data)
-                  ],
-                );
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-              return Center(child: CircularProgressIndicator());
-            }));
-  }
-
-  Widget _buildList(List<Organization> organizations) {
-    return Flexible(
-        child: ListView.builder(
-      padding: const EdgeInsets.all(25.0),
-      itemBuilder: (context, i) {
-        if (i.isOdd) return Divider();
-        final index = i ~/ 2;
-        if (organizations.length > index) {
-          return _buildRow(organizations[index]);
-        }
-        return null;
-      },
-    ));
-  }
-
-  Widget _buildRow(Organization organization) {
-    return ListTile(
-        title: Text(
-          organization.name,
-        ),
-        onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AccountList(
-                    organization: organization,
-                    userRepository: widget.userRepository,
-                    role: Constant.AdminRole),
-              ));
-        });
+        body: Stack(children: <Widget>[
+      Column(children: <Widget>[
+        ProfileHeader(user: _user),
+        BasicList(
+            user: _user,
+            list: _organizations,
+            userRepository: widget.userRepository,
+            role: widget.role)
+      ]),
+      Positioned(
+          top: 0.0,
+          left: 0.0,
+          right: 0.0,
+          child: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            title: Text('Origanizations'),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.exit_to_app),
+                onPressed: () {
+                  authenticationBloc.dispatch(LoggedOut());
+                  //               Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(
+                  // builder: (BuildContext context) =>
+                  // new MyHomePage(userRepository: widget.userRepository)), (Route<dynamic> route) => false);
+                },
+              ),
+            ],
+          )),
+    ]));
   }
 }
 

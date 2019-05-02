@@ -9,18 +9,22 @@ class AccountTitleHeader extends StatelessWidget {
   final Organization organization;
 
   AccountTitleHeader({Key key, @required this.organization}) : super(key: key);
-  final _orgTitleFont = const TextStyle(color: Colors.white, fontSize: 38);
+  final _orgTitleFont = THEME_TEXTSTYLE.copyWith(fontSize: 48, color: Colors.white, fontWeight: FontWeight.w600);
+  // const TextStyle(color: Colors.white, fontSize: 38);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        height: 150.0,
+        height: 280.0,
         // margin: const EdgeInsets.symmetric(vertical: 0.0),
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        // padding: const EdgeInsets.symmetric(vertical: 10.0),
         decoration: BoxDecoration(
-          borderRadius:
-              BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
-          color: KorePrimaryColor,
+          // borderRadius:
+          //     BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
+          image: new DecorationImage(
+            image: new AssetImage("assets/header_background2.jpg"),
+            fit: BoxFit.cover,
+          ),
         ),
         child: new Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -30,7 +34,7 @@ class AccountTitleHeader extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(
-                    padding: const EdgeInsets.only(left: 10.0),
+                    padding: const EdgeInsets.only(left: 10.0, top: 60),
                     child: Text(
                       organization.name,
                       style: _orgTitleFont,
