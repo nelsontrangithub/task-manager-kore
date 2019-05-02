@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/organization.dart';
@@ -101,6 +102,20 @@ class Api {
     return _netUtil.get(ASSET_URL, _token).then((dynamic res) {
       print("File Get Result: " + res.toString());
       return res.map<Asset>((json) => new Asset.fromJson(json)).toList();
+    });
+  }
+
+  Future<bool> updateTaskStatus(Future<String> token, Task task) async {
+    String _token = await token;
+    var headers = {
+      "Content-Type": "application/json",      
+      HttpHeaders.authorizationHeader: "Bearer " + _token.trim()
+    };
+
+    var bodyEncoded = json.encode(task.id);
+    
+    return _netUtil.post(TASK_URL + task.id.toString(), false, headers: headers, body: bodyEncoded).then((dynamic res) {
+      return res;
     });
   }
 

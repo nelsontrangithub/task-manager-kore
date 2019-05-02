@@ -61,6 +61,7 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:kore_app/data/api.dart';
 
 class Task {
   int id;
@@ -95,11 +96,12 @@ class Task {
   //   }
   // }
 
-  void setStatus(){
+  void setStatus(Api api){
     if (isCompleted == true) {
       this.color = Colors.green;
       this.icon = Icons.done;
       this.label = "Complete";
+      
     } else {
       this.color = Colors.redAccent;
       this.icon = Icons.cancel;
@@ -116,12 +118,23 @@ class Task {
     });
 
   factory Task.fromJson(Map<String, dynamic> json ) {
-    return new Task(
+    Task task = Task(
         id: json['id'] as int,
         title: json['subject'] as String,
         isCompleted: true,
         description: json['description'] as String,
         dueDate: json['DueDate'] as DateTime 
     );
+    
+    if (task.isCompleted == true) {
+      task.color = Colors.green;
+      task.icon = Icons.done;
+      task.label = "Complete";
+    } else {
+      task.color = Colors.redAccent;
+      task.icon = Icons.cancel;
+      task.label = "Not Complete";
+    }
+    return task;
   }
 }
