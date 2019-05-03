@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace kore_api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class FilesController : ControllerBase
@@ -62,7 +62,7 @@ namespace kore_api.Controllers
 
         // POST: api/Files
         [HttpPost]
-        //[Authorize(Policy = "IsAdminOrAgent")]
+        [Authorize(Policy = "IsAdminOrAgent")]
         public async Task<IActionResult> PostFile([FromBody] File file)
         {
             if (!ModelState.IsValid)
