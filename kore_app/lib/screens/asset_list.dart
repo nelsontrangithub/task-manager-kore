@@ -21,15 +21,9 @@ class AssetListState extends State<AssetList> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   //file picker
-  String _fileName;
-  String _path;
-  Map<String, String> _paths;
-  String _extension;
-  bool _multiPick = false;
   bool _hasValidMime = false;
   FileType _pickingType;
 
-  TextEditingController _controller = new TextEditingController();
   TextEditingController _nameFieldController = TextEditingController();
   String _nameField;
 
@@ -48,7 +42,6 @@ class AssetListState extends State<AssetList> {
     _user = _api.getUserByUsername(_token, _username);
     _assets = _api.getAssets(_token, widget.task.id.toString());
 
-    _controller.addListener(() => _extension = _controller.text);
     _nameFieldController.addListener(() {
       print("CONTROLLER: $_nameFieldController");
       _nameField = _nameFieldController.text;
@@ -300,7 +293,7 @@ class AssetListState extends State<AssetList> {
     final accountId = widget.task.accountId;
 
     Asset asset = new Asset(
-        id: _fileName,
+        id: _fileName + taskId.toString(),
         title: _title,
         fileName: _fileName,
         mimeType: _mimeType,
@@ -317,14 +310,7 @@ class AssetListState extends State<AssetList> {
     File file;
     if (_pickingType != FileType.CUSTOM || _hasValidMime) {
       try {
-        if (_multiPick) {
-          _path = null;
-          _paths = await FilePicker.getMultiFilePath(
-              type: _pickingType, fileExtension: _extension);
-        } else {
-          _paths = null;
-          file = await FilePicker.getFile(type: FileType.ANY);
-        }
+        file = await FilePicker.getFile(type: FileType.ANY);
       } on PlatformException catch (e) {
         print("Unsupported operation" + e.toString());
       }
