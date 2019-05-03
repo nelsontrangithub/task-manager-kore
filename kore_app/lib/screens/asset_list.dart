@@ -1,10 +1,10 @@
-
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/asset.dart';
@@ -21,15 +21,9 @@ class AssetListState extends State<AssetList> {
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   //file picker
-  String _fileName;
-  String _path;
-  Map<String, String> _paths;
-  String _extension;
-  bool _multiPick = false;
   bool _hasValidMime = false;
   FileType _pickingType;
 
-  TextEditingController _controller = new TextEditingController();
   TextEditingController _nameFieldController = TextEditingController();
   String _nameField;
 
@@ -39,8 +33,7 @@ class AssetListState extends State<AssetList> {
   Future<String> _token;
   Api _api;
 
-
-initState() {
+  initState() {
     super.initState();
 
     _token = widget.userRepository.hasToken();
@@ -49,14 +42,12 @@ initState() {
     _user = _api.getUserByUsername(_token, _username);
     _assets = _api.getAssets(_token, widget.task.id.toString());
 
-    _controller.addListener(() => _extension = _controller.text);
     _nameFieldController.addListener(() {
       print("CONTROLLER: $_nameFieldController");
       _nameField = _nameFieldController.text;
       print("_nameField" + _nameField);
     });
-}
-
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +60,8 @@ initState() {
           Column(
             children: <Widget>[
               Padding(padding: EdgeInsets.only(top: 12)),
-                 _buildButtonBar(),
-                _buildAssetsListContainer(_assets),
-           
+              _buildButtonBar(),
+              _buildAssetsListContainer(_assets),
             ],
           ),
         ],
@@ -98,12 +88,12 @@ initState() {
       elevation: 4.0,
       borderRadius: BorderRadius.circular(30.0),
       color: Color(0xff1282c5),
-      child: MaterialButton(
-        minWidth: 150,
+      child: FlatButton.icon(
         onPressed: () {
           openFileExplorer();
         },
-        child: Text(
+        icon: Icon(Icons.file_upload, color: Colors.white),
+        label: Text(
           'Upload File',
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -112,9 +102,7 @@ initState() {
     );
   }
 
-
-
-Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
+  Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
       width: double.infinity,
@@ -142,7 +130,6 @@ Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
   }
 
   Widget _buildAssetList(List<Asset> assets) {
-
     _assetsLength = assets.length * 2;
     return Flexible(
         fit: FlexFit.loose,
@@ -161,6 +148,42 @@ Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
             }));
   }
 
+  String mimeTypeTranslator(String assetMimeType) {
+    String translatedMimeType;
+    if (assetMimeType == "application/vnd.openxmlformats-officedocument.word") {
+      translatedMimeType = "Word document";
+    } else if (assetMimeType ==
+        "application/vnd.openxmlformats-officedocument.spre") {
+      translatedMimeType = "Excel document";
+    } else if (assetMimeType ==
+        "application/vnd.openxmlformats-officedocument.pres") {
+      translatedMimeType = "Powerpoint document";
+    } else if (assetMimeType == "application/pdf") {
+      translatedMimeType = "PDF document";
+    } else {
+      translatedMimeType = assetMimeType;
+    }
+    return translatedMimeType;
+  }
+
+  String determineFileSize(int size) {
+    String translatedSize;
+    if (size < 1000000) {
+      translatedSize = (size / 1000).toStringAsFixed(2) + "KB";
+    } else if (size < 1000000000) {
+      translatedSize = (size / 1000000).toStringAsFixed(2) + "MB";
+    } else {
+      translatedSize = (size / 1000000000).toStringAsFixed(2) + "GB";
+    }
+    return translatedSize;
+  }
+
+  String formatDate(String dateString) {
+    DateTime date = DateTime.parse(dateString);
+    DateFormat formatter = new DateFormat("MMM d, yyyy h:mma");
+    return formatter.format(date);
+  }
+
   Widget _buildRow(Asset asset) {
     return new Slidable(
       delegate: new SlidableDrawerDelegate(),
@@ -174,17 +197,19 @@ Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
             asset.title,
             style: _biggerFont,
           ),
-          // trailing: Icon(
-          //   // Add the lines from here...
-          //   account.percentage >= 100 ? Icons.done : null,
-          // ),
+          subtitle: new Text(mimeTypeTranslator(asset.mimeType) +
+              ", " +
+              determineFileSize(asset.size) +
+              "\n" +
+              "Modified: " +
+              formatDate(asset.dateModified)),
           onTap: () {},
         ),
       ),
       secondaryActions: <Widget>[
         new IconSlideAction(
           caption: "Download",
-          color: Colors.green,
+          color: Colors.indigo[900],
           icon: Icons.file_download,
           onTap: () {
             String url = asset.url + asset.location + "/" + asset.fileName;
@@ -211,9 +236,8 @@ Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
   }
 
   getAssets() {
-    
     _assets = _api.getAssets(_token, widget.task.id.toString());
-    setState(()=> {});
+    setState(() => {});
   }
 
   //Alert box with input feild to allow users to assing a title to the selected file
@@ -252,7 +276,6 @@ Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
   }
 
   Future<Asset> createAsset(File file, String title) async {
-
     String checkTitle;
     if (title == "") {
       checkTitle = "[Empty]";
@@ -270,7 +293,7 @@ Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
     final accountId = widget.task.accountId;
 
     Asset asset = new Asset(
-        id: _fileName,
+        id: _fileName + taskId.toString(),
         title: _title,
         fileName: _fileName,
         mimeType: _mimeType,
@@ -287,14 +310,7 @@ Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
     File file;
     if (_pickingType != FileType.CUSTOM || _hasValidMime) {
       try {
-        if (_multiPick) {
-          _path = null;
-          _paths = await FilePicker.getMultiFilePath(
-              type: _pickingType, fileExtension: _extension);
-        } else {
-          _paths = null;
-          file = await FilePicker.getFile(type: FileType.ANY);
-        }
+        file = await FilePicker.getFile(type: FileType.ANY);
       } on PlatformException catch (e) {
         print("Unsupported operation" + e.toString());
       }
@@ -306,7 +322,7 @@ Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
 
       await setFileTitle(context, file);
       Asset asset;
-      if(_nameField != "/") {
+      if (_nameField != "/") {
         asset = await createAsset(file, _nameField);
       }
       //If user did not hit cancel while assigning a file title.
@@ -318,29 +334,24 @@ Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
           int dbSuccess = await _api.postAsset(_token, asset, user);
 
           if (dbSuccess > 0) {
-            dbSuccess == 1 ? print("Added asset successfully") : print("Updated asset successfully");
+            dbSuccess == 1
+                ? print("Added asset successfully")
+                : print("Updated asset successfully");
             getAssets();
-           
           }
         }
       }
     }
   }
-
-
-
-
 }
 
-
-class AssetList extends StatefulWidget{
-final Task task;
+class AssetList extends StatefulWidget {
+  final Task task;
   const AssetList({Key key, this.task, @required this.userRepository})
       : assert(userRepository != null),
         super(key: key);
 
   final UserRepository userRepository;
-
 
   @override
   AssetListState createState() => new AssetListState();

@@ -10,8 +10,6 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:kore_app/utils/s3bucketUploader.dart';
 
-
-
 class Api {
   NetworkUtil _netUtil = new NetworkUtil();
   static final BASE_URL =
@@ -48,7 +46,8 @@ class Api {
     });
   }
 
-  Future<List<Account>> getAccountsById(Future<String> token, Future<User> user) async {
+  Future<List<Account>> getAccountsById(
+      Future<String> token, Future<User> user) async {
     String _token = await token;
     User _user = await user;
     return _netUtil
@@ -71,17 +70,25 @@ class Api {
                 _user.id.toString(),
             _token)
         .then((dynamic res) {
-      print("HELLO THERE NELSON " + res.toString());
+      print(res.toString());
       return res;
     });
   }
 
-  Future<List<Task>> getTasks(Future<String> token, Future<User> user) async {
+  Future<List<Task>> getTasks(
+      Future<String> token, Future<User> user, Account account) async {
     String _token = await token;
     User _user = await user;
     return _netUtil
-        .get(TASK_URL + "user/" + _user.id.toString(), _token)
+        .get(
+            TASK_URL +
+                "account/" +
+                account.id.toString() +
+                "/user/" +
+                _user.id.toString(),
+            _token)
         .then((dynamic res) {
+      print(res.toString());
       return res.map<Task>((json) => new Task.fromJson(json)).toList();
     });
   }
@@ -109,15 +116,20 @@ class Api {
       Future<String> token, Future<String> username) async {
     String _token = await token;
     String _username = await username;
-    return _netUtil.get(USER_URL + "api/getUser/" +_username, _token).then((dynamic res) {
+    return _netUtil
+        .get(USER_URL + "api/getUser/" + _username, _token)
+        .then((dynamic res) {
       return User.fromJson(res);
     });
   }
 
-  Future<List<User>> searchUserByUsername(Future<String> token, String username) async {
+  Future<List<User>> searchUserByUsername(
+      Future<String> token, String username) async {
     String _token = await token;
     String _username = username;
-    return _netUtil.get(SEARCH_USER_URL + _username, _token).then((dynamic res) {
+    return _netUtil
+        .get(SEARCH_USER_URL + _username, _token)
+        .then((dynamic res) {
       print(res.toString());
       return res.map<User>((json) => new User.fromJson(json)).toList();
     });
@@ -125,7 +137,9 @@ class Api {
 
   Future<List<Asset>> getAssets(Future<String> token, String taskId) async {
     String _token = await token;
-    return await _netUtil.get(ASSET_URL + "task/" + taskId, _token).then((dynamic res) {
+    return await _netUtil
+        .get(ASSET_URL + "task/" + taskId, _token)
+        .then((dynamic res) {
       print("File Get Result: " + res.toString());
       return res.map<Asset>((json) => new Asset.fromJson(json)).toList();
     });
@@ -141,20 +155,22 @@ class Api {
       HttpHeaders.authorizationHeader: "Bearer " + _token.trim()
     };
 
-    var body =  asset.toJson(user);
+    var body = asset.toJson(user);
     var bodyEncoded = json.encode(body);
-    
+
     try {
-    await _netUtil.post(ASSET_URL, false, headers: headers, body: bodyEncoded, returnResponse: true).then((dynamic res) {
-      print("File Post Result: " + res.toString());
-      if (res.statusCode == 200)
-      {
-        updateTrue = true;
-      }         
-    });
-    } catch (e){
-        print(e);
-        return 0;
+      await _netUtil
+          .post(ASSET_URL, false,
+              headers: headers, body: bodyEncoded, returnResponse: true)
+          .then((dynamic res) {
+        print("File Post Result: " + res.toString());
+        if (res.statusCode == 200) {
+          updateTrue = true;
+        }
+      });
+    } catch (e) {
+      print(e);
+      return 0;
     }
     if (updateTrue) {
       return 2;
@@ -164,18 +180,19 @@ class Api {
   }
 
   Future<bool> deleteAssetS3(Future<String> token, Asset asset) async {
-    
     String _token = await token;
 
     //Delete File From S3
     bool s3Success = false;
     try {
-      await _netUtil.delete(S3_URL + asset.location + "/" + asset.fileName, _token).then((dynamic res) {
-      print("File S3 Delete Result: " + res.toString());
-      s3Success = true;
-      print ("S3 Success v");
-      print (s3Success);        
-    });
+      await _netUtil
+          .delete(S3_URL + asset.location + "/" + asset.fileName, _token)
+          .then((dynamic res) {
+        print("File S3 Delete Result: " + res.toString());
+        s3Success = true;
+        print("S3 Success v");
+        print(s3Success);
+      });
     } catch (e) {
       print(e);
       s3Success = false;
@@ -183,22 +200,19 @@ class Api {
     return s3Success;
   }
 
-
   Future<bool> deleteAssetDb(Future<String> token, Asset asset) async {
     String _token = await token;
 
-      try {
-        await _netUtil.delete(ASSET_URL + asset.id, _token).then((dynamic res) {
-        print("File MySql Delete Result: " + res.toString());        
+    try {
+      await _netUtil.delete(ASSET_URL + asset.id, _token).then((dynamic res) {
+        print("File MySql Delete Result: " + res.toString());
       });
-      } catch (e) {
-        print(e);
-        return false;
-      }
-      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+    return true;
   }
-
-
 
   // Future<Task> getTaskById(Future<String> token, Future<Task> task) async {
   //   String _token = await token;
@@ -228,24 +242,53 @@ class Api {
       return res.map<User>((json) => new User.fromJson(json)).toList();
     });
   }
-  Future<bool>assignUserToTask(Future<String> token, String taskId, String userId) async { 
-      String _token = await token;
-       var headers = {
-      "Content-Type": "application/json",      
+
+  Future<bool> assignUserToTask(
+      Future<String> token, String taskId, String userId) async {
+    String _token = await token;
+    var headers = {
+      "Content-Type": "application/json",
       HttpHeaders.authorizationHeader: "Bearer " + _token.trim()
     };
-      var bodyEncoder = json.encode(userId);
-    
-      try {
-        await _netUtil.post(TASK_URL + "user/" + taskId, false, headers: headers, body: bodyEncoder).then((dynamic res) {
-          print("task membership res" + res.toString());
-          
-        });
-        return true;
-      } catch (e) {
-        return false;
-      }
-  }
-  
+    var bodyEncoder = json.encode(userId);
 
+    try {
+      await _netUtil
+          .post(TASK_URL + "user/" + taskId, false,
+              headers: headers, body: bodyEncoder)
+          .then((dynamic res) {
+        print("task membership res" + res.toString());
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> updateTaskStatus(
+      Future<String> token, Task task, int status) async {
+    String _token = await token;
+    var headers = {
+      "Content-Type": "application/json",
+      HttpHeaders.authorizationHeader: "Bearer " + _token.trim()
+    };
+
+    var bodyEncoded = json.encode(status);
+
+    return _netUtil
+        .put(TASK_URL + task.id.toString(), false,
+            headers: headers, body: bodyEncoded)
+        .then((dynamic res) {
+      print(res);
+      return res;
+    });
+  }
+
+  Future<Task> getTask(Future<String> token, int id) async {
+    String _token = await token;
+    return _netUtil.get(TASK_URL + id.toString(), _token).then((dynamic res) {
+      print(res.toString());
+      return res;
+    });
+  }
 }

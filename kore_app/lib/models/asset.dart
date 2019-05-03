@@ -11,6 +11,7 @@ class Asset {
   String location;
   String url;
   int status;
+  String dateModified;
 
   Asset({
     this.id,
@@ -23,6 +24,7 @@ class Asset {
     this.location,
     this.url,
     this.status,
+    this.dateModified
   });
 
   factory Asset.fromJson(Map<String, dynamic> json ) {
@@ -36,7 +38,8 @@ class Asset {
         size: json['size'] as int,
         location: json['location'] as String,
         url: json['url'] as String,
-        status: json['status'] as int
+        status: json['status'] as int,
+        dateModified: json['dateModified'] as String
     );
   }
 
