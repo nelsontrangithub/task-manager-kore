@@ -47,28 +47,6 @@ namespace kore_api.Controllers
         }
 
         /// <summary>
-        /// Gets number of Tasks in an Account.
-        /// </summary>
-        // GET: api/Tasks/number/1
-        [HttpGet("number/{accountID}")]
-        [Authorize(Policy = "IsAdminOrAgent")]
-        public int GetNumberOfTasksInAccount([FromRoute] int accountID)
-        {
-            return _tasksRepository.GetNumberOfTasks(accountID);
-        }
-
-        /// <summary>
-        /// Gets all Tasks by OwnerID.
-        /// </summary>
-        // GET: api/Tasks/owner/1
-        [HttpGet("owner/{ownerID}")]
-        [Authorize(Policy = "IsAdmin")]
-        public IEnumerable<Task> GetTaskByOwner([FromRoute] int ownerID)
-        {
-            return _tasksRepository.GetTaskByOwner(ownerID);
-        }
-
-        /// <summary>
         /// Gets Tasks assigned to a User
         /// </summary>
         //GET: api/Tasks/user/5

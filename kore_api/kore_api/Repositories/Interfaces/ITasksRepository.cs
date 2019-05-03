@@ -12,11 +12,9 @@ namespace kore_api.Repositories.Interfaces
     {
         IEnumerable<Task> GetTasks();
         IEnumerable<TaskVM> GetTasksByAccount(int accountID);
-        int GetNumberOfTasks(int accountID);
         IEnumerable<TaskVM> GetTasksByAccountUser(int accountID, int userID);
         IEnumerable<TaskVM> GetUserAssignedTasks(int userID);
         Task<Task> GetTask(int id);
-        IEnumerable<Task> GetTaskByOwner(int userID);
         Task<bool> AssignToUser(int id, int userID);
         Task<bool> UnAssignUser(int id, int userID);
         Task<bool> Update(int id, int status);

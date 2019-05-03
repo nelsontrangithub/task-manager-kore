@@ -26,36 +26,6 @@ namespace kore_api.Repositories
             return _context.Task;
         }
 
-        //returns the number of tasks in an account
-        public int GetNumberOfTasks(int accountID)
-        {
-            var query = from x in _context.Taskmembership
-                        join y in _context.Task on x.TaskId equals y.Id
-                        where x.AccountId.Equals(accountID)
-                        select new TaskVM
-                        {
-                            Id = x.Id,
-                            TaskId = x.TaskId,
-                            AccountId = x.AccountId,
-                            UserId = x.UserId,
-                            OrgId = x.OrgId,
-                            DateCreated = x.DateCreated,
-                            DateModified = x.DateModified,
-                            Status = x.Status,
-                            CreatedBy = x.CreatedBy,
-                            ModifiedBy = x.ModifiedBy,
-                            OwnerId = y.OwnerId,
-                            TaskStatus = y.Status,
-                            Description = y.Description,
-                            DueDate = y.DueDate,
-                            CompletedOn = y.CompletedOn,
-                            Subject = y.Subject,
-                            Department = y.Department
-                        };
-
-            return query.Count();
-        }
-
         //Get tasks by accountID
         public IEnumerable<TaskVM> GetTasksByAccount(int accountID)
         {
@@ -151,12 +121,6 @@ namespace kore_api.Repositories
         {
             var task = _context.Task.FindAsync(id);
             return task;
-        }
-
-        //Get task by OwnerID
-        public IEnumerable<Task> GetTaskByOwner(int userID)
-        {
-            return _context.Task.Where(t => t.OwnerId == userID);
         }
 
         public async Task<bool> Update(int id, int status)
