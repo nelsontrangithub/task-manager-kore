@@ -36,17 +36,6 @@ namespace kore_api.Controllers
         }
 
         /// <summary>
-        /// Gets all Tasks with memberships.
-        /// </summary>
-        // GET: api/Tasks/memberships
-        [HttpGet("memberships/")]
-        [Authorize(Policy = "IsAdminOrAgent")]
-        public IEnumerable<TaskVM> GetTaskMemberships()
-        {
-            return _tasksRepository.GetTaskMemberships();
-        }
-
-        /// <summary>
         /// Gets all Tasks by AccountID.
         /// </summary>
         // GET: api/Tasks/account/1
