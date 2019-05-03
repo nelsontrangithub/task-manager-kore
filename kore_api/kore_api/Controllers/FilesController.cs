@@ -60,26 +60,6 @@ namespace kore_api.Controllers
             return Ok(file);
         }
 
-        // PUT: api/Files/5
-        [HttpPut("{id}")]
-        [Authorize(Policy = "IsAdminOrAgent")]
-        public async Task<IActionResult> PutFile([FromRoute] string id, [FromBody] File file)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var result = await _filesRepository.Update(id, file);
-
-            if (result == true)
-            {
-                return Ok(result);
-            }
-
-            return NoContent();
-        }
-
         // POST: api/Files
         [HttpPost]
         [Authorize(Policy = "IsAdminOrAgent")]

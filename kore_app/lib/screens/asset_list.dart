@@ -1,32 +1,23 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:kore_app/screens/asset_list.dart';
-import 'package:mime/mime.dart';
-import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
-import 'package:kore_app/screens/user_list.dart';
-import 'package:kore_app/utils/theme.dart';
-import 'package:flutter/services.dart';
-import 'package:kore_app/widgets/grid_list.dart';
+import 'package:kore_app/utils/s3bucketUploader.dart';
 import 'package:kore_app/widgets/loading_indicator.dart';
-import '../models/task.dart';
-import '../utils/theme.dart';
-import '../utils/s3bucketUploader.dart';
-import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
-    show CalendarCarousel;
+import 'package:mime/mime.dart';
+import 'package:path/path.dart' as path;
 
-class TaskDetailState extends State<TaskDetail> {
+class AssetListState extends State<AssetList> {
   Future<User> _user;
-  // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
-  var icon;
-  var iconColor;
+
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   //file picker
@@ -47,26 +38,16 @@ class TaskDetailState extends State<TaskDetail> {
   Future<String> _username;
   Future<String> _token;
   Api _api;
-  Future<List<User>> _users;
 
   initState() {
     super.initState();
-    //_assets.add(new Asset(1, "asset1", "assetFIleName", "mime", 2, "here","/here", 1));
 
     _token = widget.userRepository.hasToken();
     _username = widget.userRepository.getUsername();
     _api = Api();
     _user = _api.getUserByUsername(_token, _username);
     _assets = _api.getAssets(_token, widget.task.id.toString());
-    _users = _api.getUsersByTaskId(_token, widget.task);
 
-    if (widget.task.status == 0) {
-      icon = Icons.check;
-      iconColor = Colors.green;
-    } else {
-      icon = Icons.block;
-      iconColor = Colors.redAccent;
-    }
     _controller.addListener(() => _extension = _controller.text);
     _nameFieldController.addListener(() {
       print("CONTROLLER: $_nameFieldController");
@@ -86,15 +67,8 @@ class TaskDetailState extends State<TaskDetail> {
           Column(
             children: <Widget>[
               Padding(padding: EdgeInsets.only(top: 12)),
-              // _assignTask(),
-              _buildTaskDescription(),
-              GridList(
-                  users: _users,
-                  userRepository: widget.userRepository,
-                  task: widget.task,
-                  func: _updateUserListCallback),
-              _buildCalendar(widget.task),
-              _buildTaskEnd(),
+              _buildButtonBar(),
+              _buildAssetsListContainer(_assets),
             ],
           ),
         ],
@@ -102,86 +76,14 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  _updateUserListCallback(){
-    setState((){
-    _users = _api.getUsersByTaskId(_token, widget.task);
-    });
-  }
-
-  Widget _assignTask() {
-    return FloatingActionButton.extended(
-      onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AssignTask(
-                      userRepository: widget.userRepository,
-                      task: widget.task,
-                    )));
-      },
-      icon: Icon(Icons.account_circle),
-      label: Text("Assign Task"),
-    );
-  }
-
-  Widget _buildCalendar(Task task) {
+  Widget _buildButtonBar() {
     return Container(
-        child: Card(
-      // elevation: 0,
-      child: CalendarCarousel(
-        dayPadding: 0,
-        height: 400,
-        weekendTextStyle: TextStyle(
-          color: Colors.red,
-        ),
-        todayTextStyle: TextStyle(fontSize: 20),
-        selectedDayTextStyle: TextStyle(fontSize: 20),
-        todayButtonColor: KorePrimaryColor,
-        selectedDateTime: widget.task.dueDate,
-        selectedDayButtonColor: Colors.red,
-      ),
-    ));
-  }
-
-  Widget _buildTaskDescription() {
-    return new Container(
-      padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-      child: Card(
-        elevation: 0,
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                "Description: ",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              subtitle: Text(
-                widget.task.description,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTaskEnd() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
+      padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Column(
             children: <Widget>[_buildUploadButton()],
-          ),
-          Column(
-            children: <Widget>[_buildDoneButton()],
           ),
         ],
       ),
@@ -195,45 +97,17 @@ class TaskDetailState extends State<TaskDetail> {
       color: Color(0xff1282c5),
       child: FlatButton.icon(
         onPressed: () {
-          //openFileExplorer();
-          //upload button lauches asset list view
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AssetList(
-                    userRepository: widget.userRepository,
-                    task: widget.task,
-                    key: widget.key)),
-          );
+          openFileExplorer();
         },
-        icon: Icon(Icons.folder_open, color: Colors.white),
+        icon: Icon(Icons.file_upload, color: Colors.white),
         label: Text(
-          'Assets',
+          'Upload File',
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
     );
   }
-
-  Widget _buildDoneButton() {
-    return Material(
-      elevation: 4.0,
-      shape: CircleBorder(side: BorderSide.none),
-      color: iconColor,
-      child: MaterialButton(
-          minWidth: 100,
-          onPressed: () {
-            showAlertDialog(context);
-          },
-          child: Icon(
-            icon,
-            color: Colors.white,
-          )),
-    );
-  }
-
-  /* Start of Assets Functionality */
 
   Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
     return new Container(
@@ -281,6 +155,42 @@ class TaskDetailState extends State<TaskDetail> {
             }));
   }
 
+  String mimeTypeTranslator(String assetMimeType) {
+    String translatedMimeType;
+    if (assetMimeType == "application/vnd.openxmlformats-officedocument.word") {
+      translatedMimeType = "Word document";
+    } else if (assetMimeType ==
+        "application/vnd.openxmlformats-officedocument.spre") {
+      translatedMimeType = "Excel document";
+    } else if (assetMimeType ==
+        "application/vnd.openxmlformats-officedocument.pres") {
+      translatedMimeType = "Powerpoint document";
+    } else if (assetMimeType == "application/pdf") {
+      translatedMimeType = "PDF document";
+    } else {
+      translatedMimeType = assetMimeType;
+    }
+    return translatedMimeType;
+  }
+
+  String determineFileSize(int size) {
+    String translatedSize;
+    if (size < 1000000) {
+      translatedSize = (size / 1000).toStringAsFixed(2) + "KB";
+    } else if (size < 1000000000) {
+      translatedSize = (size / 1000000).toStringAsFixed(2) + "MB";
+    } else {
+      translatedSize = (size / 1000000000).toStringAsFixed(2) + "GB";
+    }
+    return translatedSize;
+  }
+
+  String formatDate(String dateString) {
+    DateTime date = DateTime.parse(dateString);
+    DateFormat formatter = new DateFormat("MMM d, yyyy h:mma");
+    return formatter.format(date);
+  }
+
   Widget _buildRow(Asset asset) {
     return new Slidable(
       delegate: new SlidableDrawerDelegate(),
@@ -294,20 +204,23 @@ class TaskDetailState extends State<TaskDetail> {
             asset.title,
             style: _biggerFont,
           ),
-          // trailing: Icon(
-          //   // Add the lines from here...
-          //   account.percentage >= 100 ? Icons.done : null,
-          // ),
+          subtitle: new Text(mimeTypeTranslator(asset.mimeType) +
+              ", " +
+              determineFileSize(asset.size) +
+              "\n" +
+              "Modified: " +
+              formatDate(asset.dateModified)),
           onTap: () {},
         ),
       ),
       secondaryActions: <Widget>[
         new IconSlideAction(
-          caption: "Update",
-          color: Colors.blueAccent,
-          icon: Icons.file_upload,
+          caption: "Download",
+          color: Colors.indigo[900],
+          icon: Icons.file_download,
           onTap: () {
-            //update file
+            String url = asset.url + asset.location + "/" + asset.fileName;
+            S3bucketUploader.downloadFile(url, asset.fileName);
           },
         ),
         new IconSlideAction(
@@ -444,74 +357,16 @@ class TaskDetailState extends State<TaskDetail> {
       }
     }
   }
-
-  /* End of Assets Functionality, to be moved into its own view at a later point */
-
-  void toggleCompleted(Task task) {
-    if (task.status == 0) {
-      task.status = 1;
-      _api.updateTaskStatus(_token, task, 1);
-    } else {
-      task.status = 0;
-      _api.updateTaskStatus(_token, task, 0);
-    }
-    setState(() {
-      if (task.status == 0) {
-        icon = Icons.check;
-        iconColor = Colors.green;
-        _buildDoneButton();
-      } else {
-        icon = Icons.block;
-        iconColor = Colors.redAccent;
-        _buildDoneButton();
-      }
-      // task.setStatus(_api);
-    });
-  }
-
-  //Alert Dialog
-  showAlertDialog(BuildContext context) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-    Widget continueButton = FlatButton(
-      child: Text("Done!"),
-      onPressed: () {
-        toggleCompleted(widget.task);
-        Navigator.of(context).pop();
-      },
-    );
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Notice"),
-      content: Text("Confirm Status Change"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
 }
 
-class TaskDetail extends StatefulWidget {
+class AssetList extends StatefulWidget {
   final Task task;
-  const TaskDetail({Key key, this.task, @required this.userRepository})
+  const AssetList({Key key, this.task, @required this.userRepository})
       : assert(userRepository != null),
         super(key: key);
 
   final UserRepository userRepository;
 
   @override
-  TaskDetailState createState() => new TaskDetailState();
+  AssetListState createState() => new AssetListState();
 }

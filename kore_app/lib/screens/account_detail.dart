@@ -36,20 +36,39 @@ class AccountDetailState extends State<AccountDetail> {
     _api = Api();
     if (widget.role == Constant.RegularRole) {
       _user = _api.getUserByUsername(_token, _username);
-      _tasksAPI = _api.getTasks(_token, _user);
-      _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+      _tasksAPI = _api.getTasks(_token, _user, widget.account);
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
     } else {
       _user = _api.getUserByUsername(_token, _username);
       _tasksAPI = _api.getAllTasksByAccountId(_token, widget.account);
-      _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
     }
   }
 
-  // Future<void> foo() async {
-  //   newPercent = await _percent;
-  //   print("BOOM" + newPercent.toString());
-  //   return newPercent;
+  // @override
+  // void didChangeDependencies() {
+  //   if (widget.role == Constant.RegularRole) {
+  //     _user = _api.getUserByUsername(_token, _username);
+  //     _tasksAPI = _api.getTasks(_token, _user, widget.account);
+  //     _percent =
+  //         _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+  //   } else {
+  //     _user = _api.getUserByUsername(_token, _username);
+  //     _tasksAPI = _api.getAllTasksByAccountId(_token, widget.account);
+  //     _percent =
+  //         _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+  //   }
+  //   super.didChangeDependencies();
   // }
+
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    setState(() {
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,32 +129,6 @@ class AccountDetailState extends State<AccountDetail> {
         ));
   }
 
-  // Widget _buildHeader() {
-  //   return Container(
-  //     // margin: const EdgeInsets.symmetric(vertical: 0.0),
-  //     padding: const EdgeInsets.symmetric(vertical: 10.0),
-  //     decoration: BoxDecoration(
-  //       borderRadius:
-  //           BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
-  //     ),
-  //     child: new Row(
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       children:
-  //       <Widget>[
-  //         Expanded(
-  //             child: new Container(
-  //           height: 150.0,
-  //           child: Column(
-  //             children: <Widget>[
-  //               _buildPercentIndicator(),
-  //             ],
-  //           ),
-  //         )),
-  //       ],
-  //     ),
-  //   );
-  // }
-
   Widget _buildPercentIndicator(double _percent) {
     return new Container(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -176,6 +169,8 @@ class AccountDetailState extends State<AccountDetail> {
   }
 
   Widget _buildRow(Task task, int i) {
+    // print(task.status);
+    // print(task.id);
     return new Slidable(
       delegate: new SlidableDrawerDelegate(),
       actionExtentRatio: 0.25,
@@ -191,7 +186,6 @@ class AccountDetailState extends State<AccountDetail> {
           ),
           trailing: Icon(completeIcon),
           title: new Text(task.description),
-          subtitle: new Text((task.dueDate).toString()),
           onTap: () {
             Navigator.push(
                 context,
@@ -213,7 +207,14 @@ class AccountDetailState extends State<AccountDetail> {
           color: task.color,
           icon: task.icon,
           onTap: () {
-            task.status == 1 ? markNotCompleted(task) : markCompleted(task);
+            // task.isCompleted ? markNotCompleted(task) : markCompleted(task);
+            _percent = _api.getPercentageOfTasksCompleted(
+                _token, _user, widget.account);
+            if (task.status == 0) {
+              markCompleted(task);
+            } else {
+              markNotCompleted(task);
+            }
           },
         ),
       ],
@@ -221,23 +222,25 @@ class AccountDetailState extends State<AccountDetail> {
   }
 
   void markCompleted(Task task) {
-    task.status = 1;
-
     setState(() {
-      task.setStatus();
+      task.setStatus(_api, _token, task);
     });
-
-    print(task.status);
+    setState(() {
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+    });
+    _buildHeader();
   }
 
   void markNotCompleted(Task task) {
-    task.status = 0;
-
     setState(() {
-      task.setStatus();
+      task.setStatus(_api, _token, task);
     });
-
-    print(task.status);
+    setState(() {
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+    });
+    _buildHeader();
   }
 }
 

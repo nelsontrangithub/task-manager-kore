@@ -77,8 +77,8 @@ class GridListState extends State<GridList> {
                   onPressed: () {
                     Navigator.push(
             context, MaterialPageRoute(builder: (context) => AssignTask(
-              userRepository: widget.userRepository, task: widget.task,
-            ))).then((val)=>val? widget.func() :null);
+              userRepository: widget.userRepository, task: widget.task, func: widget.func
+            )));
                   },
                   child: Icon(Icons.add, size: 50, color: Colors.white),
                 ),

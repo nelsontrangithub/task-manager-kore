@@ -32,17 +32,38 @@ class AssignTaskState extends State<AssignTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("")),
+        appBar: AppBar(
+          title: Text(""),
+          leading: Builder(
+    builder: (BuildContext context) {
+      return IconButton(
+        icon: const Icon(Icons.cancel),
+        onPressed: () { 
+          Navigator.of(context).pop();
+         },
+      );
+    },
+  ),
+        actions : <Widget>[
+              FlatButton(
+                child: new Text('Assign', style: TextStyle(color: Colors.white)),
+                onPressed: () {
+                  widget.func();
+                  Navigator.of(context).pop();
+                  },
+              )],
+            ),
         body: FutureBuilder<List<User>>(
             future: _allUsers,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return new Container(
                   padding: EdgeInsets.only(top: 20, right: 20, left: 20),
+                  
                   child: Column(
                     children: <Widget>[
                       _buildSearch(),
-                      _buildList(snapshot.data)
+                      _buildList(snapshot.data, widget.func)
                     ],
                   ),
                 );
@@ -70,7 +91,7 @@ class AssignTaskState extends State<AssignTask> {
     );
   }
 
-  Widget _buildList(List<User> users) {
+  Widget _buildList(List<User> users, Function func) {
     return Flexible(
       child: ListView.builder(
       itemCount: users.length*2,
@@ -79,7 +100,7 @@ class AssignTaskState extends State<AssignTask> {
         if (i.isOdd) return Divider();
         final index = i ~/ 2;
         if (users.length > index) {
-          return UserRow(user: users[index], task: widget.task, token: _token, api: _api);
+          return UserRow(user: users[index], task: widget.task, token: _token, api: _api, func: func);
         }
         return null;
       },
@@ -107,8 +128,9 @@ class AssignTask extends StatefulWidget {
   final UserRepository userRepository;
   final Task task;
   final String role;
+  final Function func;
 
-  const AssignTask({Key key, this.userRepository, this.task, this.role}) : super(key: key);
+  const AssignTask({Key key, this.userRepository, this.task, this.role, this.func}) : super(key: key);
   @override
   AssignTaskState createState() => new AssignTaskState();
 }

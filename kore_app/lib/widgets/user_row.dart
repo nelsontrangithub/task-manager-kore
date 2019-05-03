@@ -10,11 +10,13 @@ class UserRow extends StatelessWidget {
   final Future<String> token;
   final Task task;
   final Api api;
-  UserRow({Key key, @required this.user, @required this.token, @required this.task, @required this.api})
+  final Function func;
+  UserRow({Key key, @required this.user, @required this.token, @required this.task, @required this.api, @required this.func})
       : assert(user != null),
         assert(token != null),
         assert(task != null),
         assert(api != null),
+        assert(func != null),
         super(key: key);
 
   @override
@@ -34,7 +36,7 @@ class UserRow extends StatelessWidget {
           )),
           title: Text(user.name),
           subtitle: Text(user.email),
-          onTap: (){
+          onTap: () {
               api.assignUserToTask(token, task.id.toString(), user.id);
           },
     );
