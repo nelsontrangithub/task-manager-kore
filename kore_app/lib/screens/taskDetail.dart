@@ -488,12 +488,11 @@ class TaskDetailState extends State<TaskDetail> {
 
   void toggleCompleted(Task task) {
     if (task.status == 0) {
-      // task.status = 1;
+      task.status = 1;
       _api.updateTaskStatus(_token, task, 1);
     } else {
+      task.status = 0;
       _api.updateTaskStatus(_token, task, 1);
-
-      // task.status = 0;
     }
     setState(() {
       if (task.status == 0) {
