@@ -59,24 +59,16 @@ class AccountDetailState extends State<AccountDetail> {
   //     _tasksAPI = _api.getAllTasksByAccountId(_token, widget.account);
   //     _percent =
   //         _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
-  //   }    
+  //   }
   //   super.didChangeDependencies();
   // }
 
   void didChangeAppLifecycleState(AppLifecycleState state) {
-        if (widget.role == Constant.RegularRole) {
-      _user = _api.getUserByUsername(_token, _username);
-      _tasksAPI = _api.getTasks(_token, _user, widget.account);
+    setState(() {
       _percent =
           _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
-    } else {
-      _user = _api.getUserByUsername(_token, _username);
-      _tasksAPI = _api.getAllTasksByAccountId(_token, widget.account);
-      _percent =
-          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
-    }    
-   }
-
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -216,7 +208,8 @@ class AccountDetailState extends State<AccountDetail> {
           icon: task.icon,
           onTap: () {
             // task.isCompleted ? markNotCompleted(task) : markCompleted(task);
-            _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+            _percent = _api.getPercentageOfTasksCompleted(
+                _token, _user, widget.account);
             if (task.status == 0) {
               markCompleted(task);
             } else {
@@ -231,17 +224,23 @@ class AccountDetailState extends State<AccountDetail> {
   void markCompleted(Task task) {
     setState(() {
       task.setStatus(_api, _token, task);
-      _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
-      // _buildHeader();
     });
+    setState(() {
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+    });
+    _buildHeader();
   }
 
   void markNotCompleted(Task task) {
     setState(() {
       task.setStatus(_api, _token, task);
-      _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
-      // _buildHeader();
     });
+    setState(() {
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+    });
+    _buildHeader();
   }
 }
 
