@@ -3,6 +3,7 @@ import 'package:kore_app/data/api.dart';
 
 class Task {
   int id;
+  int accountId;
   String title;
   bool isCompleted;
   String description;
@@ -29,6 +30,7 @@ class Task {
 
   Task({
     this.id,
+    this.accountId,
     this.title,
     this.isCompleted,
     this.status,
@@ -42,6 +44,7 @@ class Task {
   factory Task.fromJson(Map<String, dynamic> json ) {
     Task task = Task(
         id: json['id'] as int,
+        accountId: json['accountId'] as int,
         title: json['subject'] as String,
         isCompleted: true,
         status: json['status'] as int,

@@ -174,11 +174,11 @@ class AccountDetailState extends State<AccountDetail> {
         ),
       ),
       secondaryActions: <Widget>[
-        new IconSlideAction(
-          caption: 'Upload',
-          color: Colors.blueAccent,
-          icon: Icons.file_upload,
-        ),
+        // new IconSlideAction(
+        //   caption: 'Upload',
+        //   color: Colors.blueAccent,
+        //   icon: Icons.file_upload,
+        // ),
         new IconSlideAction(
           caption: task.label,
           color: task.color,

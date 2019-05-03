@@ -32,6 +32,14 @@ namespace kore_api.Controllers
             return _filesRepository.GetFiles();
         }
 
+        // GET: api/Files/task/7
+        [HttpGet("task/{taskId}")]
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IEnumerable<File> GetFilesByTaskId(string taskId)
+        {
+            return _filesRepository.GetFilesByTaskId(taskId);
+        }
+
         // GET: api/Files/5
         [HttpGet("{id}")]
         [Authorize(Policy = "IsAdminOrAgent")]
@@ -50,14 +58,6 @@ namespace kore_api.Controllers
             }
 
             return Ok(file);
-        }
-
-        // GET: api/Files/task/7
-        [HttpGet("task/{taskId}")]
-        [Authorize(Policy = "IsAdminOrAgent")]
-        public IEnumerable<File> GetFilesByTaskId(string taskId)
-        {
-            return _filesRepository.GetFilesByTaskId(taskId);
         }
 
         // PUT: api/Files/5
@@ -90,12 +90,24 @@ namespace kore_api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var result = await _filesRepository.Create(file);
 
-            if (result == true)
+            if (_filesRepository.FileExists(file.FileId))
             {
-                return CreatedAtAction("GetFile", new { id = file.FileId }, file);
+                var result = await _filesRepository.Update(file.FileId, file);
+                if (result == true)
+                {
+                    return Ok(file);
+                }
             }
+            else
+            {
+                var result = await _filesRepository.Create(file);
+                if (result == true)
+                {
+                    return CreatedAtAction("GetFile", new { id = file.FileId }, file);
+                }
+            }
+            
 
             return new StatusCodeResult(StatusCodes.Status409Conflict);
         }
