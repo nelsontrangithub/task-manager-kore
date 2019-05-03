@@ -9,6 +9,7 @@ import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:flutter/services.dart';
+import 'package:kore_app/widgets/grid_list.dart';
 import 'package:kore_app/widgets/loading_indicator.dart';
 import '../models/task.dart';
 import '../utils/theme.dart';
@@ -36,6 +37,7 @@ class TaskDetailState extends State<TaskDetail> {
   Future<String> _username;
   Future<String> _token;
   Api _api;
+  Future<List<User>> _users;
 
   initState() {
     super.initState();
@@ -46,6 +48,7 @@ class TaskDetailState extends State<TaskDetail> {
     _api = Api();
     _user = _api.getUserByUsername(_token, _username);
     _assets = _api.getAssets(_token);
+    _users = _api.getUsersByTaskId(_token, widget.task);
 
     if (widget.task.isCompleted == true) {
       icon = Icons.check;
@@ -70,6 +73,7 @@ class TaskDetailState extends State<TaskDetail> {
             children: <Widget>[
               // _buildHeader(),
               _buildTaskDescription(),
+              GridList(users: _users),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
               _buildAssetsListContainer(_assets)

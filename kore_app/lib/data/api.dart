@@ -16,7 +16,7 @@ class Api {
   static final ORGANIZATION_URL = BASE_URL + "Organization/";
   static final TASK_URL = BASE_URL + "Tasks/";
   static final LOGIN_URL = BASE_URL + "signin";
-  static final USER_URL = BASE_URL + "Users/api/getUser/";
+  static final USER_URL = BASE_URL + "Users/";
   static final ASSET_URL = BASE_URL + "Files/";
   // static String token;
   // static final _API_KEY = "somerandomkey";
@@ -41,16 +41,23 @@ class Api {
     return _netUtil
         .get(ACCOUNT_URL + "user/" + _user.id.toString(), _token)
         .then((dynamic res) {
-      print(res.toString());
       return res.map<Account>((json) => new Account.fromJson(json)).toList();
     });
   }
 
-  Future<double> getPercentageOfTasksCompleted
-    (Future<String> token, Future<User> user, Account account) async {
+  Future<double> getPercentageOfTasksCompleted(
+      Future<String> token, Future<User> user, Account account) async {
     String _token = await token;
     User _user = await user;
-    return _netUtil.get(ACCOUNT_URL + "account/" + account.id.toString() + "/user/" + _user.id.toString(), _token).then((dynamic res) {
+    return _netUtil
+        .get(
+            ACCOUNT_URL +
+                "account/" +
+                account.id.toString() +
+                "/user/" +
+                _user.id.toString(),
+            _token)
+        .then((dynamic res) {
       print("HELLO THERE NELSON " + res.toString());
       return res;
     });
@@ -62,7 +69,6 @@ class Api {
     return _netUtil
         .get(TASK_URL + "user/" + _user.id.toString(), _token)
         .then((dynamic res) {
-      print(res.toString());
       return res.map<Task>((json) => new Task.fromJson(json)).toList();
     });
   }
@@ -73,7 +79,6 @@ class Api {
     return _netUtil
         .get(TASK_URL + "account/" + account.id.toString(), _token)
         .then((dynamic res) {
-      print(res.toString());
       return res.map<Task>((json) => new Task.fromJson(json)).toList();
     });
   }
@@ -91,8 +96,7 @@ class Api {
       Future<String> token, Future<String> username) async {
     String _token = await token;
     String _username = await username;
-    return _netUtil.get(USER_URL + _username, _token).then((dynamic res) {
-      print(res.toString());
+    return _netUtil.get(USER_URL + "api/getUser/" +_username, _token).then((dynamic res) {
       return User.fromJson(res);
     });
   }
@@ -108,13 +112,16 @@ class Api {
   Future<bool> updateTaskStatus(Future<String> token, Task task) async {
     String _token = await token;
     var headers = {
-      "Content-Type": "application/json",      
+      "Content-Type": "application/json",
       HttpHeaders.authorizationHeader: "Bearer " + _token.trim()
     };
 
     var bodyEncoded = json.encode(task.id);
-    
-    return _netUtil.post(TASK_URL + task.id.toString(), false, headers: headers, body: bodyEncoded).then((dynamic res) {
+
+    return _netUtil
+        .post(TASK_URL + task.id.toString(), false,
+            headers: headers, body: bodyEncoded)
+        .then((dynamic res) {
       return res;
     });
   }
@@ -125,8 +132,17 @@ class Api {
     return _netUtil
         .get(ACCOUNT_URL + 'user/' + org.id.toString(), _token)
         .then((dynamic res) {
-      print(res.toString());
       return res.map<Account>((json) => new Account.fromJson(json)).toList();
+    });
+  }
+
+  Future<List<User>> getUsersByTaskId(Future<String> token, Task task) async {
+    String _token = await token;
+    return _netUtil
+        .get(USER_URL + 'api/task/' + task.id.toString(), _token)
+        .then((dynamic res) {
+      print(res.toString());
+      return res.map<User>((json) => new User.fromJson(json)).toList();
     });
   }
 }

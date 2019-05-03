@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:kore_app/models/user.dart';
+import 'package:kore_app/utils/constant.dart';
 import 'package:kore_app/utils/theme.dart';
 
 class ProfileHeader extends StatelessWidget {
   final Future<User> user;
 
   ProfileHeader({Key key, this.user}) : super(key: key);
-  final _nameFont = THEME_TEXTSTYLE.copyWith(fontSize: 28, color: Colors.white, fontWeight: FontWeight.w600);
-  static const PHOTO_PLACEHOLDER_PATH =
-      "https://image.flaticon.com/icons/png/128/201/201570.png";
+  final _nameFont = THEME_TEXTSTYLE.copyWith(
+      fontSize: 28, color: Colors.white, fontWeight: FontWeight.w600);
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +36,22 @@ class ProfileHeader extends StatelessWidget {
                     //Using expanded to ensure the image is always sized with contraint
                     Expanded(
                       child: new Container(
-                        margin: const EdgeInsets.only(top: 80.0),
-                        height: 150.0,
-                        // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-                        child: CachedNetworkImage(
-                          imageUrl: snapshot.data.iconFileUrl == null
-                              ? PHOTO_PLACEHOLDER_PATH
-                              : snapshot.data.iconFileUrl,
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                        ),
-                      ),
+                          margin: const EdgeInsets.only(top: 80.0),
+                          height: 150.0,
+                          // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
+                          child: CircleAvatar(
+                              backgroundColor: Colors.transparent,
+                              child: ClipOval(
+                                child: CachedNetworkImage(
+                                  imageUrl: snapshot.data.iconFileUrl == null
+                                      ? Constant.PHOTO_PLACEHOLDER_PATH
+                                      : snapshot.data.iconFileUrl,
+                                  placeholder: (context, url) =>
+                                      CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                ),
+                              ))),
                     ),
                     Expanded(
                       child: Column(
@@ -56,13 +59,16 @@ class ProfileHeader extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Container(
-                          margin: const EdgeInsets.only(top: 50),
-                          child: Text(snapshot.data.name, style: _nameFont),
+                            margin: const EdgeInsets.only(top: 50),
+                            child: Text(snapshot.data.name, style: _nameFont),
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 5.0),
                             child: Text(snapshot.data.status.toString(),
-                                style: THEME_TEXTSTYLE.copyWith(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w200)),
+                                style: THEME_TEXTSTYLE.copyWith(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w200)),
                           ),
                         ],
                       ),
