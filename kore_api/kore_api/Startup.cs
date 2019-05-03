@@ -83,8 +83,7 @@ namespace kore_api
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
             {
-                //this.ConnectionString = "server=localhost;port=3306;user=root;password=password;database=koredb";
-                this.ConnectionString = "server=koretaskmanagerrdsinstance.cya4cpibjenz.us-east-2.rds.amazonaws.com;port=3306;user=koreadmin;password=koressd2019;database=koredb";
+                this.ConnectionString = "server=localhost;port=3306;user=root;password=password;database=koredb";
             }
             else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
             {
