@@ -59,5 +59,21 @@ namespace kore_api.Controllers
             var result = _userRepository.SearchUsersByEmail(username);
             return result;
         }
+
+        /// <summary>
+        /// Get Users assigned to a task
+        /// </summary>
+        [HttpGet]
+        [Authorize(Policy = "IsAdminOrAgent")]
+        [Route("api/task/{taskId}")]
+        public IActionResult GetUsersAssignedToTask([FromRoute] int taskId)
+        {
+            var result = _userRepository.UsersAssignedToTask(taskId);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
     }
 }

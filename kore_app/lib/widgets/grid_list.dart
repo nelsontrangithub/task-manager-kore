@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:kore_app/auth/user_repository.dart';
+import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
+import 'package:kore_app/screens/user_list.dart';
 import 'package:kore_app/utils/constant.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:kore_app/widgets/loading_indicator.dart';
@@ -49,9 +52,7 @@ class GridListState extends State<GridList> {
       margin: new EdgeInsets.only(left: 30.0, top: 10),
       child: Column(children: <Widget>[
         user != null
-            ? Hero(
-                tag: "user_image",
-                child: CircleAvatar(
+            ? CircleAvatar(
                     radius: 35,
                     backgroundColor: KorePrimaryColor,
                     child: ClipOval(
@@ -62,17 +63,22 @@ class GridListState extends State<GridList> {
                       placeholder: (context, url) =>
                           CircularProgressIndicator(),
                       errorWidget: (context, url, error) => Icon(Icons.error),
-                    ))))
+                    )))
             : Material(
                 elevation: 1.0,
                 shape: CircleBorder(side: BorderSide.none),
                 color: Color(0xff1282c5),
                 child: MaterialButton(
                   highlightElevation: 0,
-                  padding:const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   minWidth: 100,
-                  onPressed: () {},
-                  child: Icon(Icons.add, size: 50, color:Colors.white),
+                  onPressed: () {
+                    Navigator.push(
+            context, MaterialPageRoute(builder: (context) => AssignTask(
+              userRepository: widget.userRepository, task: widget.task,
+            )));
+                  },
+                  child: Icon(Icons.add, size: 50, color: Colors.white),
                 ),
               ),
         user != null ? Text(user.name) : Container(height: 0, width: 0),
@@ -83,8 +89,14 @@ class GridListState extends State<GridList> {
 
 class GridList extends StatefulWidget {
   final Future<List<User>> users;
+  final UserRepository userRepository;
+  final Task task;
 
-  GridList({Key key, @required this.users}) : super(key: key);
+  GridList({Key key, @required this.users, @required this.userRepository, @required this.task}) : 
+  assert(users != null),
+  assert(userRepository != null),
+  assert(task != null),
+  super(key: key);
 
   @override
   GridListState createState() => new GridListState();

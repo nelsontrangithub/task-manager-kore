@@ -1,12 +1,16 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:mime/mime.dart';
+import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
+import 'package:kore_app/screens/user_list.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:flutter/services.dart';
 import 'package:kore_app/widgets/grid_list.dart';
@@ -19,7 +23,7 @@ import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
 
 class TaskDetailState extends State<TaskDetail> {
   Future<User> _user;
-   // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
+  // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   var icon;
   var iconColor;
   final _biggerFont = const TextStyle(fontSize: 18.0);
@@ -32,8 +36,13 @@ class TaskDetailState extends State<TaskDetail> {
   bool _multiPick = false;
   bool _hasValidMime = false;
   FileType _pickingType;
+
   TextEditingController _controller = new TextEditingController();
+  TextEditingController _nameFieldController = TextEditingController();
+  String _nameField;
+
   Future<List<Asset>> _assets;
+  int _assetsLength;
   Future<String> _username;
   Future<String> _token;
   Api _api;
@@ -47,8 +56,9 @@ class TaskDetailState extends State<TaskDetail> {
     _username = widget.userRepository.getUsername();
     _api = Api();
     _user = _api.getUserByUsername(_token, _username);
-    _assets = _api.getAssets(_token);
-    _users = _api.getUsersByTaskId(_token, widget.task);
+
+    _assets = _api.getAssets(_token, widget.task.id.toString());
+        _users = _api.getUsersByTaskId(_token, widget.task);
 
     if (widget.task.isCompleted == true) {
       icon = Icons.check;
@@ -58,7 +68,11 @@ class TaskDetailState extends State<TaskDetail> {
       iconColor = Colors.redAccent;
     }
     _controller.addListener(() => _extension = _controller.text);
-    
+    _nameFieldController.addListener(() {
+      print("CONTROLLER: $_nameFieldController");
+      _nameField = _nameFieldController.text;
+      print("_nameField" + _nameField);
+    });
   }
 
   @override
@@ -66,17 +80,18 @@ class TaskDetailState extends State<TaskDetail> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.task.description),
-        ),
+      ),
       body: new ListView(
         children: <Widget>[
           Column(
             children: <Widget>[
-              // _buildHeader(),
+              Padding(padding: EdgeInsets.only(top: 12)),
+              // _assignTask(),
               _buildTaskDescription(),
-              GridList(users: _users),
+              GridList(users: _users, userRepository: widget.userRepository, task: widget.task,),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
-              _buildAssetsListContainer(_assets)
+              _buildAssetsListContainer(_assets),
             ],
           ),
         ],
@@ -84,68 +99,19 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  Widget _buildHeader() {
-    return Container(
-      // margin: const EdgeInsets.symmetric(vertical: 0.0),
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
-        color: KorePrimaryColor,
-      ),
-      child: new Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          //Using expanded to ensure the image is always sized with contraint
-          Expanded(
-            child: new Container(
-              height: 150.0,
-              // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-              // child: new CachedNetworkImage(
-              //   imageUrl: _user.iconFileUrl,
-              // ),
-            ),
-          ),
-          Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                new Text(
-                  widget.task.description,
-                  style: TextStyle(
-                    fontSize: 21.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                new Container(
-                  margin: const EdgeInsets.only(top: 5.0),
-                  child: new Text(
-                    'Status: ' + widget.task.status.toString(),
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                new Container(
-                  margin: const EdgeInsets.only(top: 5.0),
-                  child: new Text(
-                    'Id: ' + widget.task.id.toString(),
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+  Widget _assignTask() {
+    return FloatingActionButton.extended(
+      onPressed: () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => AssignTask(
+              userRepository: widget.userRepository, task: widget.task,
+            )));
+      },
+      icon: Icon(Icons.account_circle),
+      label: Text("Assign Task"),
     );
   }
-
+  
   Widget _buildCalendar(Task task) {
     return Container(
         child: Card(
@@ -246,6 +212,8 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
+  /* Start of Assets Functionality */
+
   Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
@@ -256,16 +224,16 @@ class TaskDetailState extends State<TaskDetail> {
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             FutureBuilder<List<Asset>>(
-                future: assets,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return _buildAssetList(snapshot.data);
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  // By default, show a loading spinner
-                  return LoadingIndicator();
-                },
+              future: assets,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return _buildAssetList(snapshot.data);
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                // By default, show a loading spinner
+                return LoadingIndicator();
+              },
             ),
           ],
         ),
@@ -273,12 +241,15 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-Widget _buildAssetList(List<Asset> assets) {
+  Widget _buildAssetList(List<Asset> assets) {
+
+    _assetsLength = assets.length * 2;
     return Flexible(
         fit: FlexFit.loose,
         child: ListView.builder(
-          shrinkWrap: true,
+            shrinkWrap: true,
             padding: const EdgeInsets.all(25.0),
+            itemCount: _assetsLength,
             itemBuilder: (context, i) {
               if (i.isOdd) return Divider();
 
@@ -291,24 +262,178 @@ Widget _buildAssetList(List<Asset> assets) {
   }
 
   Widget _buildRow(Asset asset) {
-    return ListTile(
-      title: Text(
-        asset.title,
-        style: _biggerFont,
+    return new Slidable(
+      delegate: new SlidableDrawerDelegate(),
+      actionExtentRatio: 0.25,
+      child: new Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+        ),
+        child: ListTile(
+          title: Text(
+            asset.title,
+            style: _biggerFont,
+          ),
+          // trailing: Icon(
+          //   // Add the lines from here...
+          //   account.percentage >= 100 ? Icons.done : null,
+          // ),
+          onTap: () {},
+        ),
       ),
-      // trailing: Icon(
-      //   // Add the lines from here...
-      //   account.percentage >= 100 ? Icons.done : null,
-      // ),
-      onTap: () {
-      },
+      secondaryActions: <Widget>[
+        new IconSlideAction(
+          caption: "Update",
+          color: Colors.blueAccent,
+          icon: Icons.file_upload,
+          onTap: () {
+            //update file
+          },
+        ),
+        new IconSlideAction(
+          caption: "Delete",
+          color: Colors.redAccent,
+          icon: Icons.delete_forever,
+          onTap: () async {
+            bool s3Success = await _api.deleteAssetS3(_token, asset);
+            if (s3Success) {
+              bool dbSuccess = await _api.deleteAssetDb(_token, asset);
+              print(dbSuccess);
+              if (dbSuccess) {
+                getAssets();
+              }
+            }
+          },
+        ),
+      ],
     );
   }
 
+  getAssets() {
+    
+    _assets = _api.getAssets(_token, widget.task.id.toString());
+    setState(()=> {});
+  }
 
+  //Alert box with input feild to allow users to assing a title to the selected file
+  setFileTitle(BuildContext context, File file) async {
+    _nameField = "";
+
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Selected: " + path.basename(file.path)),
+            content: TextField(
+              inputFormatters: [
+                BlacklistingTextInputFormatter(RegExp("[/\\\\]")),
+              ],
+              controller: _nameFieldController,
+              decoration: InputDecoration(hintText: "file title"),
+            ),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text('CANCEL'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  _nameField = "/";
+                },
+              ),
+              new FlatButton(
+                child: new Text('SUBMIT'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
+  Future<Asset> createAsset(File file, String title) async {
+
+    String checkTitle;
+    if (title == "") {
+      checkTitle = "[Empty]";
+    } else {
+      checkTitle = title;
+    }
+    final _title = checkTitle;
+    final _fileName = path.basename(file.path);
+    final _mimeType = lookupMimeType(file.path);
+    final _length = await file.length();
+    final _location = widget.task.id.toString();
+    final _path =
+        "https://s3.us-east-2.amazonaws.com/koretaskmanagermediabucket/";
+    final taskId = widget.task.id;
+    final accountId = widget.task.accountId;
+
+    Asset asset = new Asset(
+        id: _fileName,
+        title: _title,
+        fileName: _fileName,
+        mimeType: _mimeType,
+        size: _length,
+        location: _location,
+        url: _path,
+        taskId: taskId.toString(),
+        accountId: accountId.toString(),
+        status: 0);
+    return asset;
+  }
+
+  void openFileExplorer() async {
+    File file;
+    if (_pickingType != FileType.CUSTOM || _hasValidMime) {
+      try {
+        if (_multiPick) {
+          _path = null;
+          _paths = await FilePicker.getMultiFilePath(
+              type: _pickingType, fileExtension: _extension);
+        } else {
+          _paths = null;
+          file = await FilePicker.getFile(type: FileType.ANY);
+        }
+      } on PlatformException catch (e) {
+        print("Unsupported operation" + e.toString());
+      }
+      if (!mounted) return;
+    }
+
+    if (file != null) {
+      //Create Asset Object and assign a title.
+
+      await setFileTitle(context, file);
+      Asset asset;
+      if(_nameField != "/") {
+        asset = await createAsset(file, _nameField);
+      }
+      //If user did not hit cancel while assigning a file title.
+      if (asset != null) {
+        bool s3success = await S3bucketUploader.uploadFile(
+            file, "koretaskmanagermediabucket", widget.task.id.toString());
+        if (s3success) {
+          User user = await _user;
+          int dbSuccess = await _api.postAsset(_token, asset, user);
+
+          if (dbSuccess > 0) {
+            dbSuccess == 1 ? print("Added asset successfully") : print("Updated asset successfully");
+            getAssets();
+           
+          }
+        }
+      }
+    }
+  }
+
+  /* End of Assets Functionality, to be moved into its own view at a later point */
 
   void toggleCompleted(Task task) {
-    task.isCompleted = !task.isCompleted;
+    if (task.status == 0) {
+      task.status = 1;
+    } else {
+      task.status = 0;
+    }
     setState(() {
       if (task.isCompleted == true) {
         icon = Icons.check;
@@ -317,7 +442,7 @@ Widget _buildAssetList(List<Asset> assets) {
         icon = Icons.block;
         iconColor = Colors.redAccent;
       }
-      task.setStatus(_api);
+      task.setStatus();
     });
   }
 
@@ -354,44 +479,13 @@ Widget _buildAssetList(List<Asset> assets) {
       },
     );
   }
-
-  void openFileExplorer() async {
-    File file;
-    if (_pickingType != FileType.CUSTOM || _hasValidMime) {
-      try {
-        if (_multiPick) {
-          _path = null;
-          _paths = await FilePicker.getMultiFilePath(
-              type: _pickingType, fileExtension: _extension);
-        } else {
-          _paths = null;
-          file = await FilePicker.getFile(type: FileType.ANY);
-          // _path = await FilePicker.getFilePath(
-          //     type: _pickingType, fileExtension: _extension);
-        }
-      } on PlatformException catch (e) {
-        print("Unsupported operation" + e.toString());
-      }
-      if (!mounted) return;
-
-      // setState(() {
-      //   _fileName = _path != null
-      //       ? _path.split('/').last
-      //       : _paths != null ? _paths.keys.toString() : '...';
-      // });
-    }
-    //in case user click on cancel
-    if (file != null) {
-      S3bucketUploader.uploadFile(file, "koretaskmanagermediabucket", "temp");
-    }
-  }
 }
 
 class TaskDetail extends StatefulWidget {
   final Task task;
-  const TaskDetail({Key key, this.task, @required this.userRepository}) 
-            : assert(userRepository != null), 
-            super(key: key);
+  const TaskDetail({Key key, this.task, @required this.userRepository})
+      : assert(userRepository != null),
+        super(key: key);
 
   final UserRepository userRepository;
 

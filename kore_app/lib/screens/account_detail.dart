@@ -203,17 +203,17 @@ class AccountDetailState extends State<AccountDetail> {
         ),
       ),
       secondaryActions: <Widget>[
-        new IconSlideAction(
-          caption: 'Upload',
-          color: Colors.blueAccent,
-          icon: Icons.file_upload,
-        ),
+        // new IconSlideAction(
+        //   caption: 'Upload',
+        //   color: Colors.blueAccent,
+        //   icon: Icons.file_upload,
+        // ),
         new IconSlideAction(
           caption: task.label,
           color: task.color,
           icon: task.icon,
           onTap: () {
-            task.isCompleted ? markNotCompleted(task) : markCompleted(task);
+            task.status == 1 ? markNotCompleted(task) : markCompleted(task);
           },
         ),
       ],
@@ -221,23 +221,23 @@ class AccountDetailState extends State<AccountDetail> {
   }
 
   void markCompleted(Task task) {
-    task.isCompleted = true;
+    task.status = 1;
 
     setState(() {
-      task.setStatus(_api);
+      task.setStatus();
     });
 
-    print(task.isCompleted);
+    print(task.status);
   }
 
   void markNotCompleted(Task task) {
-    task.isCompleted = false;
+    task.status = 0;
 
     setState(() {
-      task.setStatus(_api);
+      task.setStatus();
     });
 
-    print(task.isCompleted);
+    print(task.status);
   }
 }
 

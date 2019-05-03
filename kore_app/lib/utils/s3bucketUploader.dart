@@ -7,8 +7,9 @@ import 'package:amazon_cognito_identity_dart/sig_v4.dart';
 import 'package:path/path.dart';
 import './s3bucketPolicy.dart';
 
+
 class S3bucketUploader {
-  static void uploadFile(File file, String bucketName, String taskId) async {
+  static Future<bool> uploadFile(File file, String bucketName, String taskId) async {
     const _accessKeyId = 'AKIAI7VGATG6RF6KV6CA';
     const _secretKeyId = 'Ky8ImCeRiz5iBoFi0Zrgo5oB2JWPWuuRTc+q7spH';
     const _region = 'us-east-2';
@@ -47,8 +48,13 @@ class S3bucketUploader {
       await for (var value in res.stream.transform(utf8.decoder)) {
         print(value);
       }
+      if (res.statusCode ==HttpStatus.noContent){
+        return true;
+      }
+      return false;
     } catch (e) {
       print(e.toString());
+      return false;
     }
   }
 }
