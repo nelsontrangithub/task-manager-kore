@@ -441,7 +441,7 @@ class TaskDetailState extends State<TaskDetail> {
       _api.updateTaskStatus(_token, task, 1);
     } else {
       task.status = 0;
-      _api.updateTaskStatus(_token, task, 1);
+      _api.updateTaskStatus(_token, task, 0);
     }
     setState(() {
       if (task.status == 0) {

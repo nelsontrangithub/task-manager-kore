@@ -47,6 +47,37 @@ class AccountDetailState extends State<AccountDetail> {
     }
   }
 
+  // @override
+  // void didChangeDependencies() {
+  //   if (widget.role == Constant.RegularRole) {
+  //     _user = _api.getUserByUsername(_token, _username);
+  //     _tasksAPI = _api.getTasks(_token, _user, widget.account);
+  //     _percent =
+  //         _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+  //   } else {
+  //     _user = _api.getUserByUsername(_token, _username);
+  //     _tasksAPI = _api.getAllTasksByAccountId(_token, widget.account);
+  //     _percent =
+  //         _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+  //   }    
+  //   super.didChangeDependencies();
+  // }
+
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+        if (widget.role == Constant.RegularRole) {
+      _user = _api.getUserByUsername(_token, _username);
+      _tasksAPI = _api.getTasks(_token, _user, widget.account);
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+    } else {
+      _user = _api.getUserByUsername(_token, _username);
+      _tasksAPI = _api.getAllTasksByAccountId(_token, widget.account);
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+    }    
+   }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
