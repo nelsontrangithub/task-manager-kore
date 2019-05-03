@@ -1,32 +1,23 @@
+
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:kore_app/screens/asset_list.dart';
-import 'package:mime/mime.dart';
-import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
-import 'package:kore_app/screens/user_list.dart';
-import 'package:kore_app/utils/theme.dart';
-import 'package:flutter/services.dart';
-import 'package:kore_app/widgets/grid_list.dart';
+import 'package:kore_app/utils/s3bucketUploader.dart';
 import 'package:kore_app/widgets/loading_indicator.dart';
-import '../models/task.dart';
-import '../utils/theme.dart';
-import '../utils/s3bucketUploader.dart';
-import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
-    show CalendarCarousel;
+import 'package:mime/mime.dart';
+import 'package:path/path.dart' as path;
 
-class TaskDetailState extends State<TaskDetail> {
+class AssetListState extends State<AssetList> {
   Future<User> _user;
-  // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
-  var icon;
-  var iconColor;
+
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   //file picker
@@ -47,34 +38,25 @@ class TaskDetailState extends State<TaskDetail> {
   Future<String> _username;
   Future<String> _token;
   Api _api;
-  Future<List<User>> _users;
 
-  initState() {
+
+initState() {
     super.initState();
-    //_assets.add(new Asset(1, "asset1", "assetFIleName", "mime", 2, "here","/here", 1));
 
     _token = widget.userRepository.hasToken();
     _username = widget.userRepository.getUsername();
     _api = Api();
     _user = _api.getUserByUsername(_token, _username);
-
     _assets = _api.getAssets(_token, widget.task.id.toString());
-        _users = _api.getUsersByTaskId(_token, widget.task);
 
-    if (widget.task.status == 0) {
-      icon = Icons.check;
-      iconColor = Colors.green;
-    } else {
-      icon = Icons.block;
-      iconColor = Colors.redAccent;
-    }
     _controller.addListener(() => _extension = _controller.text);
     _nameFieldController.addListener(() {
       print("CONTROLLER: $_nameFieldController");
       _nameField = _nameFieldController.text;
       print("_nameField" + _nameField);
     });
-  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -87,11 +69,9 @@ class TaskDetailState extends State<TaskDetail> {
           Column(
             children: <Widget>[
               Padding(padding: EdgeInsets.only(top: 12)),
-              // _assignTask(),
-              _buildTaskDescription(),
-              GridList(users: _users, userRepository: widget.userRepository, task: widget.task,),
-              _buildCalendar(widget.task),
-              _buildTaskEnd(),
+                 _buildButtonBar(),
+                _buildAssetsListContainer(_assets),
+           
             ],
           ),
         ],
@@ -99,80 +79,14 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  Widget _assignTask() {
-    return FloatingActionButton.extended(
-      onPressed: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => AssignTask(
-                      userRepository: widget.userRepository,
-                      task: widget.task,
-                    )));
-      },
-      icon: Icon(Icons.account_circle),
-      label: Text("Assign Task"),
-    );
-  }
-  
-  Widget _buildCalendar(Task task) {
+  Widget _buildButtonBar() {
     return Container(
-        child: Card(
-      // elevation: 0,
-      child: CalendarCarousel(
-        dayPadding: 0,
-        height: 400,
-        weekendTextStyle: TextStyle(
-          color: Colors.red,
-        ),
-        todayTextStyle: TextStyle(fontSize: 20),
-        selectedDayTextStyle: TextStyle(fontSize: 20),
-        todayButtonColor: KorePrimaryColor,
-        selectedDateTime: widget.task.dueDate,
-        selectedDayButtonColor: Colors.red,
-      ),
-    ));
-  }
-
-  Widget _buildTaskDescription() {
-    return new Container(
-      padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-      child: Card(
-        elevation: 0,
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                "Description: ",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              subtitle: Text(
-                widget.task.description,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTaskEnd() {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(10, 5, 5, 5),
+      padding: const EdgeInsets.fromLTRB(15, 15, 15, 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Column(
             children: <Widget>[_buildUploadButton()],
-          ),
-          Column(
-            children: <Widget>[_buildDoneButton()],
           ),
         ],
       ),
@@ -185,18 +99,12 @@ class TaskDetailState extends State<TaskDetail> {
       borderRadius: BorderRadius.circular(30.0),
       color: Color(0xff1282c5),
       child: MaterialButton(
-        minWidth: 100,
+        minWidth: 150,
         onPressed: () {
-          //openFileExplorer();
-          //upload button lauches asset list view
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AssetList(userRepository: widget.userRepository, task: widget.task, key: widget.key)),
-              );
+          openFileExplorer();
         },
         child: Text(
-          'Asset List',
+          'Upload File',
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -204,26 +112,9 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  Widget _buildDoneButton() {
-    return Material(
-      elevation: 4.0,
-      shape: CircleBorder(side: BorderSide.none),
-      color: iconColor,
-      child: MaterialButton(
-          minWidth: 100,
-          onPressed: () {
-            showAlertDialog(context);
-          },
-          child: Icon(
-            icon,
-            color: Colors.white,
-          )),
-    );
-  }
 
-  /* Start of Assets Functionality */
 
-  Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
+Widget _buildAssetsListContainer(Future<List<Asset>> assets) {
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
       width: double.infinity,
@@ -251,6 +142,7 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   Widget _buildAssetList(List<Asset> assets) {
+
     _assetsLength = assets.length * 2;
     return Flexible(
         fit: FlexFit.loose,
@@ -291,11 +183,12 @@ class TaskDetailState extends State<TaskDetail> {
       ),
       secondaryActions: <Widget>[
         new IconSlideAction(
-          caption: "Update",
-          color: Colors.blueAccent,
-          icon: Icons.file_upload,
+          caption: "Download",
+          color: Colors.green,
+          icon: Icons.file_download,
           onTap: () {
-            //update file
+            String url = asset.url + asset.location + "/" + asset.fileName;
+            S3bucketUploader.downloadFile(url, asset.fileName);
           },
         ),
         new IconSlideAction(
@@ -318,8 +211,9 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   getAssets() {
+    
     _assets = _api.getAssets(_token, widget.task.id.toString());
-    setState(() => {});
+    setState(()=> {});
   }
 
   //Alert box with input feild to allow users to assing a title to the selected file
@@ -358,6 +252,7 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   Future<Asset> createAsset(File file, String title) async {
+
     String checkTitle;
     if (title == "") {
       checkTitle = "[Empty]";
@@ -411,7 +306,7 @@ class TaskDetailState extends State<TaskDetail> {
 
       await setFileTitle(context, file);
       Asset asset;
-      if (_nameField != "/") {
+      if(_nameField != "/") {
         asset = await createAsset(file, _nameField);
       }
       //If user did not hit cancel while assigning a file title.
@@ -423,84 +318,30 @@ class TaskDetailState extends State<TaskDetail> {
           int dbSuccess = await _api.postAsset(_token, asset, user);
 
           if (dbSuccess > 0) {
-            dbSuccess == 1
-                ? print("Added asset successfully")
-                : print("Updated asset successfully");
+            dbSuccess == 1 ? print("Added asset successfully") : print("Updated asset successfully");
             getAssets();
+           
           }
         }
       }
     }
   }
 
-  /* End of Assets Functionality, to be moved into its own view at a later point */
 
-  void toggleCompleted(Task task) {
-    if (task.status == 0) {
-      task.status = 1;
-      _api.updateTaskStatus(_token, task, 1);
-    } else {
-      task.status = 0;
-      _api.updateTaskStatus(_token, task, 1);
-    }
-    setState(() {
-      if (task.status == 0) {
-        icon = Icons.check;
-        iconColor = Colors.green;
-        _buildDoneButton();
-      } else {
-        icon = Icons.block;
-        iconColor = Colors.redAccent;
-        _buildDoneButton();
-      }
-      // task.setStatus(_api);
-    });
-  }
 
-  //Alert Dialog
-  showAlertDialog(BuildContext context) {
-    // set up the buttons
-    Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-    Widget continueButton = FlatButton(
-      child: Text("Done!"),
-      onPressed: () {
-        toggleCompleted(widget.task);
-        Navigator.of(context).pop();
-      },
-    );
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Notice"),
-      content: Text("Confirm Status Change"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
+
 }
 
-class TaskDetail extends StatefulWidget {
-  final Task task;
-  const TaskDetail({Key key, this.task, @required this.userRepository})
+
+class AssetList extends StatefulWidget{
+final Task task;
+  const AssetList({Key key, this.task, @required this.userRepository})
       : assert(userRepository != null),
         super(key: key);
 
   final UserRepository userRepository;
 
-  @override
-  TaskDetailState createState() => new TaskDetailState();
-}
 
+  @override
+  AssetListState createState() => new AssetListState();
+}
