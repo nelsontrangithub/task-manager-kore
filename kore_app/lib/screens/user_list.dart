@@ -97,7 +97,7 @@ class AssignTaskState extends State<AssignTask> {
         user.name
       ),
       onTap: () async {
-      _api.assignUserToTask(_token, widget.task.id.toString(), user.id.toString());
+      _api.assignUserToTask(_token, widget.task.id.toString(), user.id);
       },
     );
   }

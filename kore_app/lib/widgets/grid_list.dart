@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:kore_app/auth/user_repository.dart';
+import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/screens/user_list.dart';
@@ -50,9 +51,9 @@ class GridListState extends State<GridList> {
   Widget _buildGridCell(User user) {
     return new Container(
       margin: new EdgeInsets.only(left: 30.0, top: 10),
-      child: Column(children: <Widget>[
+      child: Column(children: 
         user != null
-            ? CircleAvatar(
+            ? <Widget>[ CircleAvatar(
                     radius: 35,
                     backgroundColor: KorePrimaryColor,
                     child: ClipOval(
@@ -63,8 +64,9 @@ class GridListState extends State<GridList> {
                       placeholder: (context, url) =>
                           CircularProgressIndicator(),
                       errorWidget: (context, url, error) => Icon(Icons.error),
-                    )))
-            : Material(
+                    ))), Text(user.name)]
+            : <Widget> [
+              Material(
                 elevation: 1.0,
                 shape: CircleBorder(side: BorderSide.none),
                 color: Color(0xff1282c5),
@@ -76,12 +78,12 @@ class GridListState extends State<GridList> {
                     Navigator.push(
             context, MaterialPageRoute(builder: (context) => AssignTask(
               userRepository: widget.userRepository, task: widget.task,
-            )));
+            ))).then((val)=>val? widget.func() :null);
                   },
                   child: Icon(Icons.add, size: 50, color: Colors.white),
                 ),
               ),
-        user != null ? Text(user.name) : Container(height: 0, width: 0),
+        Container(height: 0, width: 0),
       ]),
     );
   }
@@ -91,11 +93,13 @@ class GridList extends StatefulWidget {
   final Future<List<User>> users;
   final UserRepository userRepository;
   final Task task;
+  final Function func;
 
-  GridList({Key key, @required this.users, @required this.userRepository, @required this.task}) : 
+  GridList({Key key, @required this.users, @required this.userRepository, @required this.task, @required this.func}) : 
   assert(users != null),
   assert(userRepository != null),
   assert(task != null),
+  assert(func != null),
   super(key: key);
 
   @override

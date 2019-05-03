@@ -35,7 +35,7 @@ class UserRow extends StatelessWidget {
           title: Text(user.name),
           subtitle: Text(user.email),
           onTap: (){
-              api.assignUserToTask(token, task.id.toString(), user.id.toString());
+              api.assignUserToTask(token, task.id.toString(), user.id);
           },
     );
   }

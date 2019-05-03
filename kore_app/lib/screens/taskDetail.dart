@@ -58,7 +58,7 @@ class TaskDetailState extends State<TaskDetail> {
     _user = _api.getUserByUsername(_token, _username);
 
     _assets = _api.getAssets(_token, widget.task.id.toString());
-        _users = _api.getUsersByTaskId(_token, widget.task);
+    _users = _api.getUsersByTaskId(_token, widget.task);
 
     if (widget.task.isCompleted == true) {
       icon = Icons.check;
@@ -88,7 +88,11 @@ class TaskDetailState extends State<TaskDetail> {
               Padding(padding: EdgeInsets.only(top: 12)),
               // _assignTask(),
               _buildTaskDescription(),
-              GridList(users: _users, userRepository: widget.userRepository, task: widget.task,),
+              GridList(
+                  users: _users,
+                  userRepository: widget.userRepository,
+                  task: widget.task,
+                  func: _updateUserListCallback),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
               _buildAssetsListContainer(_assets),
@@ -99,19 +103,28 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
+  _updateUserListCallback(){
+    setState((){
+    _users = _api.getUsersByTaskId(_token, widget.task);
+    });
+  }
+
   Widget _assignTask() {
     return FloatingActionButton.extended(
       onPressed: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AssignTask(
-              userRepository: widget.userRepository, task: widget.task,
-            )));
+            context,
+            MaterialPageRoute(
+                builder: (context) => AssignTask(
+                      userRepository: widget.userRepository,
+                      task: widget.task,
+                    )));
       },
       icon: Icon(Icons.account_circle),
       label: Text("Assign Task"),
     );
   }
-  
+
   Widget _buildCalendar(Task task) {
     return Container(
         child: Card(
@@ -242,7 +255,6 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   Widget _buildAssetList(List<Asset> assets) {
-
     _assetsLength = assets.length * 2;
     return Flexible(
         fit: FlexFit.loose,
@@ -310,9 +322,8 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   getAssets() {
-    
     _assets = _api.getAssets(_token, widget.task.id.toString());
-    setState(()=> {});
+    setState(() => {});
   }
 
   //Alert box with input feild to allow users to assing a title to the selected file
@@ -351,7 +362,6 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   Future<Asset> createAsset(File file, String title) async {
-
     String checkTitle;
     if (title == "") {
       checkTitle = "[Empty]";
@@ -405,7 +415,7 @@ class TaskDetailState extends State<TaskDetail> {
 
       await setFileTitle(context, file);
       Asset asset;
-      if(_nameField != "/") {
+      if (_nameField != "/") {
         asset = await createAsset(file, _nameField);
       }
       //If user did not hit cancel while assigning a file title.
@@ -417,9 +427,10 @@ class TaskDetailState extends State<TaskDetail> {
           int dbSuccess = await _api.postAsset(_token, asset, user);
 
           if (dbSuccess > 0) {
-            dbSuccess == 1 ? print("Added asset successfully") : print("Updated asset successfully");
+            dbSuccess == 1
+                ? print("Added asset successfully")
+                : print("Updated asset successfully");
             getAssets();
-           
           }
         }
       }

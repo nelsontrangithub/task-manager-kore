@@ -228,7 +228,7 @@ class Api {
       return res.map<User>((json) => new User.fromJson(json)).toList();
     });
   }
-  Future<bool>assignUserToTask(Future<String> token, String taskId, String userId) async { 
+  Future<bool>assignUserToTask(Future<String> token, String taskId, int userId) async { 
       String _token = await token;
        var headers = {
       "Content-Type": "application/json",      
