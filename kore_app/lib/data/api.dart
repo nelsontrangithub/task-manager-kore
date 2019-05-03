@@ -75,23 +75,34 @@ class Api {
     });
   }
 
-  Future<List<Task>> getTasks(
-      Future<String> token, Future<User> user, Account account) async {
+  // Future<List<Task>> getTasks(
+  //     Future<String> token, Future<User> user, Account account) async {
+  //   String _token = await token;
+  //   User _user = await user;
+  //   return _netUtil
+  //       .get(
+  //           TASK_URL +
+  //               "account/" +
+  //               account.id.toString() +
+  //               "user/" +
+  //               _user.id.toString(),
+  //           _token)
+  //       .then((dynamic res) {
+  //     print(res.toString());
+  //     return res.map<Task>((json) => new Task.fromJson(json)).toList();
+  //   });
+  // }
+
+    Future<List<Task>> getTasks(Future<String> token, Future<User> user, Account account) async {
     String _token = await token;
     User _user = await user;
     return _netUtil
-        .get(
-            TASK_URL +
-                "account/" +
-                account.id.toString() +
-                "user/" +
-                _user.id.toString(),
-            _token)
+        .get(TASK_URL + "user/" + _user.id.toString(), _token)
         .then((dynamic res) {
-      print(res.toString());
       return res.map<Task>((json) => new Task.fromJson(json)).toList();
     });
   }
+
 
   Future<List<Task>> getAllTasksByAccountId(
       Future<String> token, Account account) async {
