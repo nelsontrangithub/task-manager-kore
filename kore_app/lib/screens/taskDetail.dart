@@ -122,6 +122,7 @@ class TaskDetailState extends State<TaskDetail> {
   Widget _buildCalendar(Task task) {
     return Container(
         child: Card(
+          color: Colors.white,
       // elevation: 0,
       child: CalendarCarousel(
         dayPadding: 0,
@@ -142,6 +143,7 @@ class TaskDetailState extends State<TaskDetail> {
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
       child: Card(
+        color: Colors.transparent,
         elevation: 0,
         child: Column(
           children: <Widget>[
@@ -185,7 +187,7 @@ class TaskDetailState extends State<TaskDetail> {
 
   Widget _buildUploadButton() {
     return Material(
-      elevation: 4.0,
+      elevation: 6.0,
       borderRadius: BorderRadius.circular(30.0),
       color: Color(0xff1282c5),
       child: FlatButton.icon(
@@ -213,7 +215,7 @@ class TaskDetailState extends State<TaskDetail> {
 
   Widget _buildDoneButton() {
     return Material(
-      elevation: 4.0,
+      elevation: 6.0,
       shape: CircleBorder(side: BorderSide.none),
       color: iconColor,
       child: MaterialButton(
@@ -282,7 +284,7 @@ class TaskDetailState extends State<TaskDetail> {
       actionExtentRatio: 0.25,
       child: new Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.transparent,
         ),
         child: ListTile(
           title: Text(
