@@ -176,7 +176,7 @@ class AccountDetailState extends State<AccountDetail> {
       actionExtentRatio: 0.25,
       child: new Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.transparent,
         ),
         child: new ListTile(
           leading: new CircleAvatar(
