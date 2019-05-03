@@ -98,9 +98,12 @@ class TaskDetailState extends State<TaskDetail> {
     return FloatingActionButton.extended(
       onPressed: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => AssignTask(
-              userRepository: widget.userRepository, task: widget.task,
-            )));
+            context,
+            MaterialPageRoute(
+                builder: (context) => AssignTask(
+                      userRepository: widget.userRepository,
+                      task: widget.task,
+                    )));
       },
       icon: Icon(Icons.account_circle),
       label: Text("Assign Task"),
@@ -299,7 +302,6 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   Widget _buildAssetList(List<Asset> assets) {
-
     _assetsLength = assets.length * 2;
     return Flexible(
         fit: FlexFit.loose,
@@ -366,9 +368,9 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  getAssets() {   
+  getAssets() {
     _assets = _api.getAssets(_token, widget.task.id.toString());
-    setState(()=> {});
+    setState(() => {});
   }
 
   //Alert box with input feild to allow users to assing a title to the selected file
@@ -407,7 +409,6 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   Future<Asset> createAsset(File file, String title) async {
-
     String checkTitle;
     if (title == "") {
       checkTitle = "[Empty]";
@@ -461,7 +462,7 @@ class TaskDetailState extends State<TaskDetail> {
 
       await setFileTitle(context, file);
       Asset asset;
-      if(_nameField != "/") {
+      if (_nameField != "/") {
         asset = await createAsset(file, _nameField);
       }
       //If user did not hit cancel while assigning a file title.
@@ -473,9 +474,10 @@ class TaskDetailState extends State<TaskDetail> {
           int dbSuccess = await _api.postAsset(_token, asset, user);
 
           if (dbSuccess > 0) {
-            dbSuccess == 1 ? print("Added asset successfully") : print("Updated asset successfully");
+            dbSuccess == 1
+                ? print("Added asset successfully")
+                : print("Updated asset successfully");
             getAssets();
-           
           }
         }
       }
@@ -486,9 +488,12 @@ class TaskDetailState extends State<TaskDetail> {
 
   void toggleCompleted(Task task) {
     if (task.status == 0) {
-      task.status = 1;
+      // task.status = 1;
+      _api.updateTaskStatus(_token, task, 1);
     } else {
-      task.status = 0;
+      _api.updateTaskStatus(_token, task, 1);
+
+      // task.status = 0;
     }
     setState(() {
       if (task.status == 0) {

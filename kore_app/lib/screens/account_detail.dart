@@ -185,6 +185,7 @@ class AccountDetailState extends State<AccountDetail> {
           icon: task.icon,
           onTap: () {
             // task.isCompleted ? markNotCompleted(task) : markCompleted(task);
+            _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
             if (task.status == 0) {
               markCompleted(task);
             } else {
