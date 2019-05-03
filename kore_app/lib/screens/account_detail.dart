@@ -163,7 +163,6 @@ class AccountDetailState extends State<AccountDetail> {
           ),
           trailing: Icon(completeIcon),
           title: new Text(task.description),
-          subtitle: new Text((task.dueDate).toString()),
           onTap: () {
             Navigator.push(
                 context,
@@ -198,22 +197,18 @@ class AccountDetailState extends State<AccountDetail> {
   }
 
   void markCompleted(Task task) {
-    // _api.updateTaskStatus(_token, task, 1);
     setState(() {
       task.setStatus(_api, _token, task);
-      _percent =
-          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
-      _buildHeader();
+      _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+      // _buildHeader();
     });
   }
 
   void markNotCompleted(Task task) {
-    // _api.updateTaskStatus(_token, task, 0);
     setState(() {
       task.setStatus(_api, _token, task);
-      _percent =
-          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
-      _buildHeader();
+      _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+      // _buildHeader();
     });
   }
 }

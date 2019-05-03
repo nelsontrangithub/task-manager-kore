@@ -47,7 +47,7 @@ class TaskDetailState extends State<TaskDetail> {
     _user = _api.getUserByUsername(_token, _username);
     _assets = _api.getAssets(_token);
 
-    if (widget.task.isCompleted == true) {
+    if (widget.task.status == 0) {
       icon = Icons.check;
       iconColor = Colors.green;
     } else {
@@ -301,17 +301,18 @@ Widget _buildAssetList(List<Asset> assets) {
     );
   }
 
-
-
   void toggleCompleted(Task task) {
-    task.isCompleted = !task.isCompleted;
+    // task.isCompleted = !task.isCompleted;
+    task.setStatus(_api, _token, task);
     setState(() {
-      if (task.isCompleted == true) {
+      if (task.status == 0) {
         icon = Icons.check;
         iconColor = Colors.green;
+        _buildDoneButton();
       } else {
         icon = Icons.block;
         iconColor = Colors.redAccent;
+        _buildDoneButton();
       }
       // task.setStatus(_api);
     });
