@@ -1,62 +1,3 @@
-// import 'package:flutter/material.dart';
-
-// class Task {
-//   int id;
-//   String subject;
-//   int taskType;
-//   int department;
-//   String description;
-//   DateTime dueDate;
-//   DateTime  completedOn;
-//   DateTime dateCreated;
-//   DateTime dateModified;
-//   int status;
-//   int createdBy;
-//   int modifiedBy;
-//   bool isCompleted;
-//   Object color;
-//   Object icon;
-//   String label;
-
-//   Task({
-//     this.id,
-//     this.subject,
-//     this.taskType,
-//     this.department,
-//     this.description,
-//     this.dueDate,
-//     this.completedOn,
-//     this.dateCreated,
-//     this.dateModified,
-//     this.status,
-//     this.createdBy,
-//     this.modifiedBy,
-//     })
-
-//   {
-//     if (isCompleted == true) {
-//       this.color = Colors.green[800];
-//       this.icon = Icons.done;
-//       this.label = "Complete";
-//     } else {
-//       this.color = Colors.red[800];
-//       this.icon = Icons.cancel;
-//       this.label = "Not Complete";
-//     }
-//   }
-
-//   void setStatus(){
-//     if (isCompleted == true) {
-//       this.color = Colors.green[800];
-//       this.icon = Icons.done;
-//       this.label = "Complete";
-//     } else {
-//       this.color = Colors.red[800];
-//       this.icon = Icons.cancel;
-//       this.label = "Not Complete";
-//     }
-//   }
-// }
 import 'package:flutter/material.dart';
 import 'package:kore_app/data/api.dart';
 
@@ -73,59 +14,54 @@ class Task {
   Object icon;
   String label;
 
-  //Task(this.id, this.title, this.isCompleted, this.description, this.dueDate, this.color, this.icon, this.label);
-
-  // Task(int id, String title, bool isCompleted, String description,
-  //     DateTime dueDate) {
-  //   this.id = id;
-  //   this.title = title;
-  //   this.isCompleted = isCompleted;
-  //   this.description = description;
-  //   this.dueDate = dueDate;
-
-  //   if (isCompleted == true) {
-  //     this.color = Colors.green[800];
-  //     this.icon = Icons.done;
-  //     this.label = "Complete";
-  //   } else {
-  //     this.color = Colors.red[800];
-  //     this.icon = Icons.cancel;
-  //     this.label = "Not Complete";
-  //   }
-  // }
-
-  void setStatus() {
+  void setStatus(Api api, Future<String> token, Task task) {
     if (status == 1) {
+      api.updateTaskStatus(token, task, 0);
       this.color = Colors.green;
       this.icon = Icons.done;
-      this.label = "Complete";
-      
-    } else {
+      this.label = "Complete";      
+    } else if(status == 0) {
+      api.updateTaskStatus(token, task, 1);
       this.color = Colors.redAccent;
       this.icon = Icons.cancel;
       this.label = "Not Complete";
     }
   }
 
-  Task(
-      {this.id,
-      this.accountId,
-      this.title,
-      this.isCompleted,
-      this.description,
-      this.dueDate,
-      this.status}) {
-    this.setStatus();
-  }
+  Task({
+    this.id,
+    this.accountId,
+    this.title,
+    this.isCompleted,
+    this.status,
+    this.description,
+    this.dueDate,
+    this.color,
+    this.icon,
+    this.label
+    });
 
-  factory Task.fromJson(Map<String, dynamic> json) {
-    return new Task(
+  factory Task.fromJson(Map<String, dynamic> json ) {
+    Task task = Task(
         id: json['id'] as int,
         accountId: json['accountId'] as int,
         title: json['subject'] as String,
         isCompleted: true,
         status: json['status'] as int,
         description: json['description'] as String,
-        dueDate: json['DueDate'] as DateTime);
+        dueDate: json['DueDate'] as DateTime 
+    );
+    print(json['status']);
+    
+    if (task.status == 0) {
+      task.color = Colors.green;
+      task.icon = Icons.done;
+      task.label = "Complete";
+    } else {
+      task.color = Colors.redAccent;
+      task.icon = Icons.cancel;
+      task.label = "Not Complete";
+    }
+    return task;
   }
 }
