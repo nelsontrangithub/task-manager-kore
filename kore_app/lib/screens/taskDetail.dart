@@ -14,6 +14,7 @@ import 'package:kore_app/models/user.dart';
 import 'package:kore_app/screens/user_list.dart';
 import 'package:kore_app/utils/theme.dart';
 import 'package:flutter/services.dart';
+import 'package:kore_app/widgets/grid_list.dart';
 import 'package:kore_app/widgets/loading_indicator.dart';
 import '../models/task.dart';
 import '../utils/theme.dart';
@@ -46,6 +47,7 @@ class TaskDetailState extends State<TaskDetail> {
   Future<String> _username;
   Future<String> _token;
   Api _api;
+  Future<List<User>> _users;
 
   initState() {
     super.initState();
@@ -55,7 +57,9 @@ class TaskDetailState extends State<TaskDetail> {
     _username = widget.userRepository.getUsername();
     _api = Api();
     _user = _api.getUserByUsername(_token, _username);
+
     _assets = _api.getAssets(_token, widget.task.id.toString());
+        _users = _api.getUsersByTaskId(_token, widget.task);
 
     if (widget.task.isCompleted == true) {
       icon = Icons.check;
@@ -83,8 +87,9 @@ class TaskDetailState extends State<TaskDetail> {
           Column(
             children: <Widget>[
               Padding(padding: EdgeInsets.only(top: 12)),
-              _assignTask(),
+              // _assignTask(),
               _buildTaskDescription(),
+              GridList(users: _users, userRepository: widget.userRepository, task: widget.task,),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
             ],
@@ -106,69 +111,7 @@ class TaskDetailState extends State<TaskDetail> {
       label: Text("Assign Task"),
     );
   }
-
-  Widget _buildHeader() {
-    return Container(
-      // margin: const EdgeInsets.symmetric(vertical: 0.0),
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
-        color: KorePrimaryColor,
-      ),
-      child: new Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          //Using expanded to ensure the image is always sized with contraint
-          Expanded(
-            child: new Container(
-              height: 150.0,
-              // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
-              // child: new CachedNetworkImage(
-              //   imageUrl: _user.iconFileUrl,
-              // ),
-            ),
-          ),
-          Expanded(
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                new Text(
-                  widget.task.description,
-                  style: TextStyle(
-                    fontSize: 21.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                new Container(
-                  margin: const EdgeInsets.only(top: 5.0),
-                  child: new Text(
-                    'Status: ' + widget.task.status.toString(),
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                new Container(
-                  margin: const EdgeInsets.only(top: 5.0),
-                  child: new Text(
-                    'Id: ' + widget.task.id.toString(),
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
+  
   Widget _buildCalendar(Task task) {
     return Container(
         child: Card(

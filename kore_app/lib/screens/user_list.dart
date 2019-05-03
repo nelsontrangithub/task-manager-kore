@@ -5,6 +5,7 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/auth/user_repository.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
+import 'package:kore_app/widgets/user_row.dart';
 
 class AssignTaskState extends State<AssignTask> {
   final TextEditingController _filter = new TextEditingController();
@@ -78,7 +79,7 @@ class AssignTaskState extends State<AssignTask> {
         if (i.isOdd) return Divider();
         final index = i ~/ 2;
         if (users.length > index) {
-          return _buildRow(users[index]);
+          return UserRow(user: users[index], task: widget.task, token: _token, api: _api);
         }
         return null;
       },
