@@ -1,20 +1,23 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as path;
 import 'package:async/async.dart';
 import 'package:http/http.dart' as http;
 import 'package:amazon_cognito_identity_dart/sig_v4.dart';
 import 'package:path/path.dart';
 import './s3bucketPolicy.dart';
-
+import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
 
 class S3bucketUploader {
-  static Future<bool> uploadFile(File file, String bucketName, String taskId) async {
+  static Future<bool> uploadFile(
+      File file, String bucketName, String taskId) async {
     const _accessKeyId = 'AKIAI7VGATG6RF6KV6CA';
     const _secretKeyId = 'Ky8ImCeRiz5iBoFi0Zrgo5oB2JWPWuuRTc+q7spH';
     const _region = 'us-east-2';
-    const _s3Endpoint =
-        'https://koretaskmanagermediabucket.s3.amazonaws.com';
+    const _s3Endpoint = 'https://koretaskmanagermediabucket.s3.amazonaws.com';
 
     // final file = File(path.join(pathToFile, fileName));
     final stream = http.ByteStream(DelegatingStream.typed(file.openRead()));
@@ -27,8 +30,8 @@ class S3bucketUploader {
     final multipartFile = http.MultipartFile('file', stream, length,
         filename: path.basename(file.path));
 
-    final policy = S3bucketPolicy.fromS3PresignedPost(taskId + "/" + fileName,
-        bucketName, _accessKeyId, 15, length,
+    final policy = S3bucketPolicy.fromS3PresignedPost(
+        taskId + "/" + fileName, bucketName, _accessKeyId, 15, length,
         region: _region);
     final key =
         SigV4.calculateSigningKey(_secretKeyId, policy.datetime, _region, 's3');
@@ -48,7 +51,7 @@ class S3bucketUploader {
       await for (var value in res.stream.transform(utf8.decoder)) {
         print(value);
       }
-      if (res.statusCode ==HttpStatus.noContent){
+      if (res.statusCode == HttpStatus.noContent) {
         return true;
       }
       return false;
@@ -57,4 +60,19 @@ class S3bucketUploader {
       return false;
     }
   }
+
+    static var httpClient = new HttpClient();
+    static Future<File> downloadFile(String url, String filename) async {
+        var request = await httpClient.getUrl(Uri.parse(url));
+        var response = await request.close();
+        var bytes = await consolidateHttpClientResponseBytes(response);
+        String dir = (await getApplicationDocumentsDirectory()).path;
+        File file = new File('$dir/$filename');
+        await file.writeAsBytes(bytes);
+        OpenFile.open(file.path);
+        print(dir);
+        print("RUN COMPLETE");
+        return file;
+    }
+  
 }
