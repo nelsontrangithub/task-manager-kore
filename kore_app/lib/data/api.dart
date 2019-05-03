@@ -63,6 +63,16 @@ class Api {
     });
   }
 
+  Future<Task> getTask(Future<String> token, int id) async {
+    String _token = await token;
+    return _netUtil
+        .get(TASK_URL + id.toString(), _token)
+        .then((dynamic res) {
+          print(res.toString());
+      return res;
+    });
+  }
+
   Future<List<Task>> getAllTasksByAccountId(
       Future<String> token, Account account) async {
     String _token = await token;

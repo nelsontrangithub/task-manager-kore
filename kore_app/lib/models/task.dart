@@ -13,14 +13,14 @@ class Task {
   Object icon;
   String label;
 
-  void setStatus(Api api, Future<String> token, Task task){
-    if (status == 0) {
-      api.updateTaskStatus(token, task, 1);
+  void setStatus(Api api, Future<String> token, Task task) {
+    if (status == 1) {
+      api.updateTaskStatus(token, task, 0);
       this.color = Colors.green;
       this.icon = Icons.done;
       this.label = "Complete";      
-    } else {
-      api.updateTaskStatus(token, task, 0);
+    } else if(status == 0) {
+      api.updateTaskStatus(token, task, 1);
       this.color = Colors.redAccent;
       this.icon = Icons.cancel;
       this.label = "Not Complete";
@@ -43,17 +43,12 @@ class Task {
     Task task = Task(
         id: json['id'] as int,
         title: json['subject'] as String,
-        // isCompleted: true,
+        isCompleted: true,
         status: json['status'] as int,
         description: json['description'] as String,
         dueDate: json['DueDate'] as DateTime 
     );
     print(json['status']);
-    if(task.status == 0){
-      task.isCompleted = false;
-    } else{
-      task.isCompleted = true;
-    }
     
     if (task.status == 0) {
       task.color = Colors.green;

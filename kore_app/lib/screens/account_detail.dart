@@ -183,7 +183,12 @@ class AccountDetailState extends State<AccountDetail> {
           color: task.color,
           icon: task.icon,
           onTap: () {
-            task.isCompleted ? markNotCompleted(task) : markCompleted(task);
+            // task.isCompleted ? markNotCompleted(task) : markCompleted(task);
+            if (task.status == 0){
+              markCompleted(task);
+            } else {
+              markNotCompleted(task);
+            }
           },
         ),
       ],
@@ -192,20 +197,18 @@ class AccountDetailState extends State<AccountDetail> {
 
   void markCompleted(Task task) {
     // _api.updateTaskStatus(_token, task, 1);
-    task.isCompleted = true;
     setState(() {
       task.setStatus(_api, _token, task);
+      // task = await _api.getTask(_token, task.id);
     });
-    initState();
   }
 
   void markNotCompleted(Task task) {
     // _api.updateTaskStatus(_token, task, 0);
-    task.isCompleted = false;
     setState(() {
       task.setStatus(_api, _token, task);
+      // task = await _api.getTask(_token, task.id);
     });
-    initState();
   }
 }
 
