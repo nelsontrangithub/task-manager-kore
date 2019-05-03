@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkUtil {
@@ -18,10 +19,15 @@ class NetworkUtil {
       final String res = response.body;
       final int statusCode = response.statusCode;
 
+      if (statusCode == 401){
+        return response;
+      }
+
       if (statusCode < 200 || statusCode > 400 || json == null) {
         throw new Exception(
             "Error while fetching data " + statusCode.toString());
       }
+      
       return _decoder.convert(res);
     });
   }

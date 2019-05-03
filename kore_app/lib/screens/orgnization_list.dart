@@ -7,10 +7,13 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/organization.dart';
 import 'package:kore_app/models/user.dart';
 import 'package:kore_app/auth/user_repository.dart';
+import 'package:kore_app/screens/login.dart';
 import 'package:kore_app/widgets/basic_list.dart';
 import 'package:kore_app/widgets/profile_header.dart';
+import 'package:after_layout/after_layout.dart';
 
-class OrganizationListState extends State<OrganizationList> {
+class OrganizationListState extends State<OrganizationList>
+    with AfterLayoutMixin<OrganizationList> {
   static const PHOTO_PLACEHOLDER_PATH =
       "https://image.flaticon.com/icons/png/128/201/201570.png";
 
@@ -28,6 +31,13 @@ class OrganizationListState extends State<OrganizationList> {
     _api = Api();
     _user = _api.getUserByUsername(_token, _username);
     _organizations = _api.getOrganizations(_token);
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    // Calling the same function "after layout" to resolve the issue.
+
+    returnToLoginScreen();
   }
 
   @override
@@ -51,7 +61,7 @@ class OrganizationListState extends State<OrganizationList> {
           child: AppBar(
             elevation: 0,
             backgroundColor: Colors.transparent,
-            title: Text('Origanizations'),
+            title: Text('Organizations'),
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.exit_to_app),
@@ -65,6 +75,18 @@ class OrganizationListState extends State<OrganizationList> {
             ],
           )),
     ]));
+  }
+
+  returnToLoginScreen() async {
+    if (await _organizations == null) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                MyHomePage(userRepository: widget.userRepository)),
+        (Route<dynamic> route) => false,
+      );
+    }
   }
 }
 
