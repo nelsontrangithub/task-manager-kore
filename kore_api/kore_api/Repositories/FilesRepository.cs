@@ -70,10 +70,10 @@ namespace kore_api.Repositories
                 return false;
             }
 
-            //_context.Entry(file).State = EntityState.Modified;
 
             var _file = _context.File.Where(f => f.FileId == id).FirstOrDefault();
             _file.Title = file.Title;
+            _file.DateModified = DateTime.Now;
 
             _context.File.Update(_file);
 
