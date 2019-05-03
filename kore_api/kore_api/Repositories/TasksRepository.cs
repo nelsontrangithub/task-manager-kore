@@ -215,6 +215,27 @@ namespace kore_api.Repositories
             }
         }
 
+        public async Task<bool> UnAssignUser(int id, int userID)
+        {
+            var taskmembership = await _context.Taskmembership.Where(t => t.TaskId == id && t.UserId == userID).FirstOrDefaultAsync();
+
+            if (taskmembership == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                _context.Taskmembership.Remove(taskmembership);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         //Delete a task (admin only)
         public async Task<bool> Delete(int id)
         {

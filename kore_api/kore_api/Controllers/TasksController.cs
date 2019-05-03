@@ -184,6 +184,29 @@ namespace kore_api.Controllers
         }
 
         /// <summary>
+        /// Un-assign a Task
+        /// </summary>
+        // PUT: api/Tasks/5
+        [HttpDelete("user/{id}")]
+        [Authorize(Policy = "IsAdmin")]
+        public async Task<IActionResult> UnAssignTask([FromRoute] int id, [FromBody] int userID)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _tasksRepository.UnAssignUser(id, userID);
+
+            if (result == true)
+            {
+                return Ok(result);
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
         /// Delete a Task (Admin only)
         /// </summary>
         // DELETE: api/Tasks/5
