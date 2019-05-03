@@ -37,11 +37,13 @@ class AccountDetailState extends State<AccountDetail> {
     if (widget.role == Constant.RegularRole) {
       _user = _api.getUserByUsername(_token, _username);
       _tasksAPI = _api.getTasks(_token, _user, widget.account);
-      _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
     } else {
       _user = _api.getUserByUsername(_token, _username);
       _tasksAPI = _api.getAllTasksByAccountId(_token, widget.account);
-      _percent = _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
     }
   }
 
@@ -184,7 +186,7 @@ class AccountDetailState extends State<AccountDetail> {
           icon: task.icon,
           onTap: () {
             // task.isCompleted ? markNotCompleted(task) : markCompleted(task);
-            if (task.status == 0){
+            if (task.status == 0) {
               markCompleted(task);
             } else {
               markNotCompleted(task);
@@ -199,7 +201,9 @@ class AccountDetailState extends State<AccountDetail> {
     // _api.updateTaskStatus(_token, task, 1);
     setState(() {
       task.setStatus(_api, _token, task);
-      // task = await _api.getTask(_token, task.id);
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+      _buildHeader();
     });
   }
 
@@ -207,7 +211,9 @@ class AccountDetailState extends State<AccountDetail> {
     // _api.updateTaskStatus(_token, task, 0);
     setState(() {
       task.setStatus(_api, _token, task);
-      // task = await _api.getTask(_token, task.id);
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+      _buildHeader();
     });
   }
 }
