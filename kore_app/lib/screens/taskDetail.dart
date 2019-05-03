@@ -59,7 +59,7 @@ class TaskDetailState extends State<TaskDetail> {
     _user = _api.getUserByUsername(_token, _username);
 
     _assets = _api.getAssets(_token, widget.task.id.toString());
-        _users = _api.getUsersByTaskId(_token, widget.task);
+    _users = _api.getUsersByTaskId(_token, widget.task);
 
     if (widget.task.status == 0) {
       icon = Icons.check;
@@ -89,7 +89,11 @@ class TaskDetailState extends State<TaskDetail> {
               Padding(padding: EdgeInsets.only(top: 12)),
               // _assignTask(),
               _buildTaskDescription(),
-              GridList(users: _users, userRepository: widget.userRepository, task: widget.task,),
+              GridList(
+                users: _users,
+                userRepository: widget.userRepository,
+                task: widget.task,
+              ),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
             ],
@@ -114,7 +118,7 @@ class TaskDetailState extends State<TaskDetail> {
       label: Text("Assign Task"),
     );
   }
-  
+
   Widget _buildCalendar(Task task) {
     return Container(
         child: Card(
@@ -184,19 +188,22 @@ class TaskDetailState extends State<TaskDetail> {
       elevation: 4.0,
       borderRadius: BorderRadius.circular(30.0),
       color: Color(0xff1282c5),
-      child: MaterialButton(
-        minWidth: 100,
+      child: FlatButton.icon(
         onPressed: () {
           //openFileExplorer();
           //upload button lauches asset list view
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => AssetList(userRepository: widget.userRepository, task: widget.task, key: widget.key)),
-              );
+            context,
+            MaterialPageRoute(
+                builder: (context) => AssetList(
+                    userRepository: widget.userRepository,
+                    task: widget.task,
+                    key: widget.key)),
+          );
         },
-        child: Text(
-          'Asset List',
+        icon: Icon(Icons.folder_open, color: Colors.white),
+        label: Text(
+          'Assets',
           textAlign: TextAlign.center,
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
@@ -503,4 +510,3 @@ class TaskDetail extends StatefulWidget {
   @override
   TaskDetailState createState() => new TaskDetailState();
 }
-
