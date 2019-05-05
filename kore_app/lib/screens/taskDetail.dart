@@ -484,6 +484,7 @@ class TaskDetailState extends State<TaskDetail> {
       onPressed: () {
         toggleCompleted(widget.task);
         Navigator.of(context).pop();
+        widget.updatePercentCallBack();
       },
     );
     // set up the AlertDialog
@@ -508,9 +509,11 @@ class TaskDetailState extends State<TaskDetail> {
 class TaskDetail extends StatefulWidget {
   final Task task;
   final String role;
-  const TaskDetail({Key key, this.task, @required this.userRepository, @required this.role})
+  final Function updatePercentCallBack;
+  const TaskDetail({Key key, this.task, @required this.userRepository, @required this.role, @required this.updatePercentCallBack})
       : assert(userRepository != null),
         assert(task != null),
+        assert(updatePercentCallBack != null),
         super(key: key);
 
   final UserRepository userRepository;
