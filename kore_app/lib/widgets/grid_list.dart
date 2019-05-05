@@ -25,11 +25,11 @@ class GridListState extends State<GridList> {
           if (snapshot.hasData) {
             return SizedBox(
                 height: 100.0,
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
+                child: Container(
+                    padding: const EdgeInsets.only(left: 5),
+                    child: 
                       ListView.builder(
-                          itemCount: snapshot.data.length + 1,
+                          itemCount: widget.role == Constant.AdminRole ? snapshot.data.length + 1 : snapshot.data.length,
                           // This next line does the trick.
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
@@ -40,7 +40,7 @@ class GridListState extends State<GridList> {
                               return _buildGridCell(null);
                             }
                           })
-                    ]));
+                    ));
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
@@ -51,9 +51,10 @@ class GridListState extends State<GridList> {
   Widget _buildGridCell(User user) {
     return new Container(
       margin: new EdgeInsets.only(left: 30.0, top: 10),
-      child: Column(children: 
-        user != null
-            ? <Widget>[ CircleAvatar(
+      child: 
+        user != null ? Column(
+        children: 
+            <Widget>[ CircleAvatar(
                     radius: 35,
                     backgroundColor: KorePrimaryColor,
                     child: ClipOval(
@@ -64,8 +65,9 @@ class GridListState extends State<GridList> {
                       placeholder: (context, url) =>
                           CircularProgressIndicator(),
                       errorWidget: (context, url, error) => Icon(Icons.error),
-                    ))), Text(user.name)]
-            : <Widget> [
+                    ))), Text(user.name)])
+            : Row(
+              children: <Widget> [
               Material(
                 elevation: 1.0,
                 shape: CircleBorder(side: BorderSide.none),
@@ -77,13 +79,29 @@ class GridListState extends State<GridList> {
                   onPressed: () {
                     Navigator.push(
             context, MaterialPageRoute(builder: (context) => AssignTask(
-              userRepository: widget.userRepository, task: widget.task, func: widget.func
+              userRepository: widget.userRepository, task: widget.task, func: widget.func, isDelete: false
             )));
                   },
                   child: Icon(Icons.add, size: 50, color: Colors.white),
                 ),
               ),
-        Container(height: 0, width: 0),
+        Material(
+                elevation: 1.0,
+                shape: CircleBorder(side: BorderSide.none),
+                color: Color(0xff1282c5),
+                child: MaterialButton(
+                  highlightElevation: 0,
+                  padding: const EdgeInsets.all(10),
+                  minWidth: 100,
+                  onPressed: () {
+                    Navigator.push(
+            context, MaterialPageRoute(builder: (context) => AssignTask(
+              userRepository: widget.userRepository, task: widget.task, func: widget.func, isDelete: true
+            )));
+                  },
+                  child: Icon(Icons.remove, size: 50, color: Colors.white),
+                ),
+              ),
       ]),
     );
   }
@@ -94,12 +112,14 @@ class GridList extends StatefulWidget {
   final UserRepository userRepository;
   final Task task;
   final Function func;
+  final String role;
 
-  GridList({Key key, @required this.users, @required this.userRepository, @required this.task, @required this.func}) : 
+  GridList({Key key, @required this.users, @required this.userRepository, @required this.task, @required this.func, @required this.role}) : 
   assert(users != null),
   assert(userRepository != null),
   assert(task != null),
   assert(func != null),
+  assert(role != null),
   super(key: key);
 
   @override

@@ -92,7 +92,8 @@ class TaskDetailState extends State<TaskDetail> {
                   users: _users,
                   userRepository: widget.userRepository,
                   task: widget.task,
-                  func: _updateUserListCallback),
+                  func: _updateUserListCallback,
+                  role: widget.role,),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
             ],
@@ -506,8 +507,10 @@ class TaskDetailState extends State<TaskDetail> {
 
 class TaskDetail extends StatefulWidget {
   final Task task;
-  const TaskDetail({Key key, this.task, @required this.userRepository})
+  final String role;
+  const TaskDetail({Key key, this.task, @required this.userRepository, @required this.role})
       : assert(userRepository != null),
+        assert(task != null),
         super(key: key);
 
   final UserRepository userRepository;

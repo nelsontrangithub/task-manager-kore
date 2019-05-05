@@ -191,7 +191,7 @@ class AccountDetailState extends State<AccountDetail> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => TaskDetail(
-                      task: task, userRepository: widget.userRepository),
+                      task: task, userRepository: widget.userRepository, role: widget.role),
                 ));
           },
         ),
