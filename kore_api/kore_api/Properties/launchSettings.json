@@ -12,8 +12,8 @@
       "commandName": "IISExpress",
       "launchBrowser": true,
       "environmentVariables": {
-        "AWS_SECRET_ACCESS_KEY": "Ky8ImCeRiz5iBoFi0Zrgo5oB2JWPWuuRTc+q7spH",
-        "AWS_ACCESS_KEY_ID": "AKIAI7VGATG6RF6KV6CA",
+        "AWS_SECRET_ACCESS_KEY": "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",
+        "AWS_ACCESS_KEY_ID": "AKIAJ7RLYHEHPSP6DWSA",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
