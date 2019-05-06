@@ -7,12 +7,14 @@ import 'package:kore_app/data/api.dart';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/organization.dart';
 import 'package:kore_app/models/user.dart';
+import 'package:kore_app/screens/login.dart';
 import 'package:kore_app/utils/constant.dart';
 import 'package:kore_app/widgets/account_title_header.dart';
 import 'package:kore_app/widgets/basic_list.dart';
 import 'package:kore_app/widgets/profile_header.dart';
+import 'package:after_layout/after_layout.dart';
 
-class AccountListState extends State<AccountList> {
+class AccountListState extends State<AccountList> with AfterLayoutMixin<AccountList> {
   Future<User>
       _user; // = User("Tina", "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   Future<List<Account>> _contracts;
@@ -32,6 +34,13 @@ class AccountListState extends State<AccountList> {
     } else {
       _contracts = _api.getAccountsById(_token, _user);
     }
+  }
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    // Calling the same function "after layout" to resolve the issue.
+
+    returnToLoginScreen();
   }
 
   @override
@@ -79,6 +88,13 @@ class AccountListState extends State<AccountList> {
         ),
       ],
     ));
+  }
+  returnToLoginScreen() async {
+    final AuthenticationBloc authenticationBloc =
+        BlocProvider.of<AuthenticationBloc>(context);
+    if (await _contracts == null) {
+        authenticationBloc.dispatch(LoggedOut());
+   }
   }
 }
 
