@@ -51,6 +51,7 @@ class AuthenticationBloc
       yield AuthenticationLoading();
       await userRepository.deleteToken();
       yield AuthenticationUnauthenticated();
+      print("Authentican Bloc calls LoggedOut");
     }
   }
 }

@@ -67,9 +67,6 @@ class OrganizationListState extends State<OrganizationList>
                 icon: Icon(Icons.exit_to_app),
                 onPressed: () {
                   authenticationBloc.dispatch(LoggedOut());
-                  //               Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(
-                  // builder: (BuildContext context) =>
-                  // new MyHomePage(userRepository: widget.userRepository)), (Route<dynamic> route) => false);
                 },
               ),
             ],
@@ -78,6 +75,8 @@ class OrganizationListState extends State<OrganizationList>
   }
 
   returnToLoginScreen() async {
+    final AuthenticationBloc authenticationBloc =
+        BlocProvider.of<AuthenticationBloc>(context);
     if (await _organizations == null) {
       print("Sending Admin back to the login screen");
       Navigator.pushAndRemoveUntil(
@@ -87,6 +86,7 @@ class OrganizationListState extends State<OrganizationList>
                 MyHomePage(userRepository: widget.userRepository)),
         (Route<dynamic> route) => false,
       );
+      authenticationBloc.dispatch(LoggedOut());
     }
   }
 }
