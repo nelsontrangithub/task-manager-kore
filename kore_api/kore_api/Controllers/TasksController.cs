@@ -29,8 +29,8 @@ namespace kore_api.Controllers
         /// </summary>
         // GET: api/Tasks
         [HttpGet]
-		[Authorize(Policy = "IsAdminOrAgent")]
-		public IEnumerable<Task> GetTasks()
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IEnumerable<Task> GetTasks()
         {
             return _tasksRepository.GetTasks();
         }
