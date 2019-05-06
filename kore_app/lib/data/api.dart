@@ -55,6 +55,11 @@ class Api {
     return _netUtil
         .get(ACCOUNT_URL + "user/" + _user.id.toString(), _token)
         .then((dynamic res) {
+      if(res is http.Response){
+        if (res.statusCode == 401){
+          return null;
+        }
+      }
       return res.map<Account>((json) => new Account.fromJson(json)).toList();
     });
   }

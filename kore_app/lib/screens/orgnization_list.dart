@@ -79,6 +79,7 @@ class OrganizationListState extends State<OrganizationList>
 
   returnToLoginScreen() async {
     if (await _organizations == null) {
+      print("Sending Admin back to the login screen");
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
