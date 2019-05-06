@@ -79,13 +79,13 @@ class OrganizationListState extends State<OrganizationList>
         BlocProvider.of<AuthenticationBloc>(context);
     if (await _organizations == null) {
       print("Sending Admin back to the login screen");
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                MyHomePage(userRepository: widget.userRepository)),
-        (Route<dynamic> route) => false,
-      );
+      // Navigator.pushAndRemoveUntil(
+      //   context,
+      //   MaterialPageRoute(
+      //       builder: (context) =>
+      //           MyHomePage(userRepository: widget.userRepository)),
+      //   (Route<dynamic> route) => false,
+      // );
       authenticationBloc.dispatch(LoggedOut());
     }
   }

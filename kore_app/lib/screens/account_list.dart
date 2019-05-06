@@ -90,16 +90,19 @@ class AccountListState extends State<AccountList> with AfterLayoutMixin<AccountL
     ));
   }
   returnToLoginScreen() async {
+    final AuthenticationBloc authenticationBloc =
+        BlocProvider.of<AuthenticationBloc>(context);
     if (await _contracts == null) {
       print("Sending Agent back to the login screen");
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                MyHomePage(userRepository: widget.userRepository)),
-        (Route<dynamic> route) => false,
-      );
-    }
+      // Navigator.pushAndRemoveUntil(
+      //   context,
+      //   MaterialPageRoute(
+      //       builder: (context) =>
+      //           MyHomePage(userRepository: widget.userRepository)),
+      //   (Route<dynamic> route) => false,
+      // );
+        authenticationBloc.dispatch(LoggedOut());
+   }
   }
 }
 
