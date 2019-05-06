@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:kore_app/auth/authentication_event.dart';
 import 'package:kore_app/models/account.dart';
 import 'package:kore_app/models/asset.dart';
 import 'package:kore_app/models/organization.dart';
 import 'package:kore_app/models/task.dart';
 import 'package:kore_app/models/user.dart';
+import 'package:kore_app/screens/orgnization_list.dart';
 import 'package:kore_app/utils/network_util.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -53,6 +55,11 @@ class Api {
     return _netUtil
         .get(ACCOUNT_URL + "user/" + _user.id.toString(), _token)
         .then((dynamic res) {
+      if(res is http.Response){
+        if (res.statusCode == 401){
+          return null;
+        }
+      }
       return res.map<Account>((json) => new Account.fromJson(json)).toList();
     });
   }
@@ -106,6 +113,11 @@ class Api {
   Future<List<Organization>> getOrganizations(Future<String> token) async {
     String _token = await token;
     return _netUtil.get(ORGANIZATION_URL, _token).then((dynamic res) {
+      if(res is http.Response){
+        if (res.statusCode == 401){
+         return null;
+        }
+      }
       return res
           .map<Organization>((json) => new Organization.fromJson(json))
           .toList();
@@ -268,16 +280,16 @@ class Api {
   Future<bool> unassignUserToTask(
       Future<String> token, int taskId, int userId) async {
     String _token = await token;
-    var bodyEncoder = json.encode(taskId);
 
     try {
       await _netUtil
-          .deleteWithBody(TASK_URL + "user/" + userId.toString(), _token, body: bodyEncoder)
+          .delete(TASK_URL + "task/" + taskId.toString() + "/user/" + userId.toString(), _token)
           .then((dynamic res) {
         print("task membership res" + res.toString());
       });
       return true;
     } catch (e) {
+      print(false);
       return false;
     }
   }
