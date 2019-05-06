@@ -268,16 +268,16 @@ class Api {
   Future<bool> unassignUserToTask(
       Future<String> token, int taskId, int userId) async {
     String _token = await token;
-    var bodyEncoder = json.encode(taskId);
 
     try {
       await _netUtil
-          .deleteWithBody(TASK_URL + "user/" + userId.toString(), _token, body: bodyEncoder)
+          .delete(TASK_URL + "task/" + taskId.toString() + "/user/" + userId.toString(), _token)
           .then((dynamic res) {
         print("task membership res" + res.toString());
       });
       return true;
     } catch (e) {
+      print(false);
       return false;
     }
   }
