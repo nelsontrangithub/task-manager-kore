@@ -26,7 +26,8 @@ class NetworkUtil {
     });
   }
 
-  Future<dynamic> post(String url, bool isSigin, {Map headers, body, encoding, returnResponse}) {
+  Future<dynamic> post(String url, bool isSigin,
+      {Map headers, body, encoding, returnResponse}) {
     return http
         .post(url, body: body, headers: headers, encoding: encoding)
         .then((http.Response response) {
@@ -37,7 +38,7 @@ class NetworkUtil {
         throw new Exception(
             "Error while fetching data " + statusCode.toString());
       }
-      if(returnResponse != null && returnResponse) {
+      if (returnResponse != null && returnResponse) {
         return response;
       }
       if (!isSigin)
@@ -47,8 +48,7 @@ class NetworkUtil {
     });
   }
 
-  Future<dynamic> put(String url, bool isSigin,
-      {Map headers, body, encoding}) {
+  Future<dynamic> put(String url, bool isSigin, {Map headers, body, encoding}) {
     return http
         .put(url, body: body, headers: headers, encoding: encoding)
         .then((http.Response response) {
@@ -67,21 +67,38 @@ class NetworkUtil {
   }
 
   Future<dynamic> delete(String url, String token) {
-    
     return http.delete(url, headers: {
       "Content-Type": "application/json",
       HttpHeaders.authorizationHeader: "Bearer " + token.trim()
     }).then((http.Response response) {
-
       final int statusCode = response.statusCode;
       final String res = response.body;
 
       if (statusCode < 200 || statusCode > 400 || json == null) {
-        throw new Exception("Error while deleting data " + statusCode.toString());         
+        throw new Exception(
+            "Error while deleting data " + statusCode.toString());
       }
       return res;
     });
+  }
 
+  Future<dynamic> deleteWithBody(String url, String token, {body}) {
+    http.Request rq = http.Request('DELETE', Uri.parse(url))
+      ..headers.addAll({
+        "Content-Type": "application/json",
+        HttpHeaders.authorizationHeader: "Bearer " + token.trim()
+      });
+    rq.bodyFields = body;
 
-  } 
+    http.Client().send(rq).then((http.StreamedResponse response) {
+      final int statusCode = response.statusCode;
+      final http.ByteStream res = response.stream;
+
+      if (statusCode < 200 || statusCode > 400 || json == null) {
+        throw new Exception(
+            "Error while deleting data " + statusCode.toString());
+      }
+      return res;
+    });
+  }
 }
