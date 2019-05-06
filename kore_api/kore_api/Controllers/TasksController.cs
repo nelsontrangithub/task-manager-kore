@@ -29,8 +29,8 @@ namespace kore_api.Controllers
         /// </summary>
         // GET: api/Tasks
         [HttpGet]
-		[Authorize(Policy = "IsAdminOrAgent")]
-		public IEnumerable<Task> GetTasks()
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IEnumerable<Task> GetTasks()
         {
             return _tasksRepository.GetTasks();
         }
@@ -165,16 +165,16 @@ namespace kore_api.Controllers
         /// Un-assign a Task
         /// </summary>
         // PUT: api/Tasks/5
-        [HttpDelete("user/{userID}")]
+        [HttpDelete("task/{taskID}/user/{userID}")]
         [Authorize(Policy = "IsAdmin")]
-        public async Task<IActionResult> UnAssignTask([FromRoute] int userID, [FromBody] int taskId)
+        public async Task<IActionResult> UnAssignTask([FromRoute] int taskID, [FromRoute] int userID)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var result = await _tasksRepository.UnAssignUser(taskId, userID);
+            var result = await _tasksRepository.UnAssignUser(taskID, userID);
 
             if (result == true)
             {

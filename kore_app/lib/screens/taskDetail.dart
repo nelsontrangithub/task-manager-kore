@@ -57,7 +57,6 @@ class TaskDetailState extends State<TaskDetail> {
     _username = widget.userRepository.getUsername();
     _api = Api();
     _user = _api.getUserByUsername(_token, _username);
-
     _assets = _api.getAssets(_token, widget.task.id.toString());
     _users = _api.getUsersByTaskId(_token, widget.task);
 
@@ -90,10 +89,11 @@ class TaskDetailState extends State<TaskDetail> {
               // _assignTask(),
               _buildTaskDescription(),
               GridList(
-                users: _users,
-                userRepository: widget.userRepository,
-                task: widget.task,
-              ),
+                  users: _users,
+                  userRepository: widget.userRepository,
+                  task: widget.task,
+                  func: _updateUserListCallback,
+                  role: widget.role,),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
             ],
@@ -101,6 +101,12 @@ class TaskDetailState extends State<TaskDetail> {
         ],
       ),
     );
+  }
+
+  _updateUserListCallback(){
+    setState((){
+    _users = _api.getUsersByTaskId(_token, widget.task);
+    });
   }
 
   Widget _assignTask() {
@@ -480,6 +486,7 @@ class TaskDetailState extends State<TaskDetail> {
       onPressed: () {
         toggleCompleted(widget.task);
         Navigator.of(context).pop();
+        widget.updatePercentCallBack();
       },
     );
     // set up the AlertDialog
@@ -503,8 +510,12 @@ class TaskDetailState extends State<TaskDetail> {
 
 class TaskDetail extends StatefulWidget {
   final Task task;
-  const TaskDetail({Key key, this.task, @required this.userRepository})
+  final String role;
+  final Function updatePercentCallBack;
+  const TaskDetail({Key key, this.task, @required this.userRepository, @required this.role, @required this.updatePercentCallBack})
       : assert(userRepository != null),
+        assert(task != null),
+        assert(updatePercentCallBack != null),
         super(key: key);
 
   final UserRepository userRepository;

@@ -244,7 +244,7 @@ class Api {
   }
 
   Future<bool> assignUserToTask(
-      Future<String> token, String taskId, String userId) async {
+      Future<String> token, String taskId, int userId) async {
     String _token = await token;
     var headers = {
       "Content-Type": "application/json",
@@ -256,6 +256,23 @@ class Api {
       await _netUtil
           .post(TASK_URL + "user/" + taskId, false,
               headers: headers, body: bodyEncoder)
+          .then((dynamic res) {
+        print("task membership res" + res.toString());
+      });
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> unassignUserToTask(
+      Future<String> token, int taskId, int userId) async {
+    String _token = await token;
+    var bodyEncoder = json.encode(taskId);
+
+    try {
+      await _netUtil
+          .deleteWithBody(TASK_URL + "user/" + userId.toString(), _token, body: bodyEncoder)
           .then((dynamic res) {
         print("task membership res" + res.toString());
       });

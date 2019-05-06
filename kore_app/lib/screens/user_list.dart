@@ -17,7 +17,7 @@ class AssignTaskState extends State<AssignTask> {
 //  Future<String> value;
   Api _api;
   String val;
- // Future<List<User>> searchUser;
+  // Future<List<User>> searchUser;
 
   @override
   void initState() {
@@ -26,13 +26,38 @@ class AssignTaskState extends State<AssignTask> {
     _username = widget.userRepository.getUsername();
     _api = Api();
     _user = _api.getUserByUsername(_token, _username);
-    _allUsers = _api.getAllUsers(_token);
+    if (!widget.isDelete) {
+      _allUsers = _api.getAllUsers(_token);
+    } else {
+      _allUsers = _api.getUsersByTaskId(_token, widget.task);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("")),
+        appBar: AppBar(
+          title: Text(""),
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.cancel),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              );
+            },
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: new Text('Done', style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                widget.func();
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ),
         body: FutureBuilder<List<User>>(
             future: _allUsers,
             builder: (context, snapshot) {
@@ -42,7 +67,7 @@ class AssignTaskState extends State<AssignTask> {
                   child: Column(
                     children: <Widget>[
                       _buildSearch(),
-                      _buildList(snapshot.data)
+                      _buildList(snapshot.data, widget.func)
                     ],
                   ),
                 );
@@ -70,16 +95,22 @@ class AssignTaskState extends State<AssignTask> {
     );
   }
 
-  Widget _buildList(List<User> users) {
+  Widget _buildList(List<User> users, Function func) {
     return Flexible(
-      child: ListView.builder(
-      itemCount: users.length*2,
+        child: ListView.builder(
+      itemCount: users.length * 2,
       padding: const EdgeInsets.all(15.0),
       itemBuilder: (context, i) {
         if (i.isOdd) return Divider();
         final index = i ~/ 2;
         if (users.length > index) {
-          return UserRow(user: users[index], task: widget.task, token: _token, api: _api);
+          return UserRow(
+              user: users[index],
+              task: widget.task,
+              token: _token,
+              api: _api,
+              func: func,
+              isDelete: widget.isDelete);
         }
         return null;
       },
@@ -91,13 +122,10 @@ class AssignTaskState extends State<AssignTask> {
       leading: Icon(Icons.contacts),
       title: Text(
         user.email,
-      
       ),
-      subtitle: Text(
-        user.name
-      ),
+      subtitle: Text(user.name),
       onTap: () async {
-      _api.assignUserToTask(_token, widget.task.id.toString(), user.id.toString());
+        _api.assignUserToTask(_token, widget.task.id.toString(), user.id);
       },
     );
   }
@@ -107,8 +135,17 @@ class AssignTask extends StatefulWidget {
   final UserRepository userRepository;
   final Task task;
   final String role;
+  final Function func;
+  final bool isDelete;
 
-  const AssignTask({Key key, this.userRepository, this.task, this.role}) : super(key: key);
+  const AssignTask(
+      {Key key,
+      this.userRepository,
+      this.task,
+      this.role,
+      this.func,
+      this.isDelete})
+      : super(key: key);
   @override
   AssignTaskState createState() => new AssignTaskState();
 }

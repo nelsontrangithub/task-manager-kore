@@ -129,6 +129,13 @@ class AccountDetailState extends State<AccountDetail> {
         ));
   }
 
+  _updatePercentageIndicator(){
+    setState(() {
+      _percent =
+          _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
+    });
+  }
+
   Widget _buildPercentIndicator(double _percent) {
     return new Container(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -191,7 +198,7 @@ class AccountDetailState extends State<AccountDetail> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => TaskDetail(
-                      task: task, userRepository: widget.userRepository),
+                      task: task, userRepository: widget.userRepository, role: widget.role, updatePercentCallBack: _updatePercentageIndicator),
                 ));
           },
         ),
