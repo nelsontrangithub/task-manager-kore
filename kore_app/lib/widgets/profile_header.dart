@@ -64,7 +64,7 @@ class ProfileHeader extends StatelessWidget {
                           ),
                           Container(
                             margin: const EdgeInsets.only(top: 5.0),
-                            child: Text(snapshot.data.status.toString(),
+                            child: Text(snapshot.data.email.toString(),
                                 style: THEME_TEXTSTYLE.copyWith(
                                     fontSize: 16,
                                     color: Colors.white,

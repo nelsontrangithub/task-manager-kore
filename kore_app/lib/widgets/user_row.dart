@@ -10,18 +10,29 @@ class UserRow extends StatelessWidget {
   final Future<String> token;
   final Task task;
   final Api api;
-  UserRow({Key key, @required this.user, @required this.token, @required this.task, @required this.api})
+  final Function func;
+  final bool isDelete;
+  UserRow(
+      {Key key,
+      @required this.user,
+      @required this.token,
+      @required this.task,
+      @required this.api,
+      @required this.func,
+      @required this.isDelete})
       : assert(user != null),
         assert(token != null),
         assert(task != null),
         assert(api != null),
+        assert(func != null),
+        assert(isDelete != null),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        radius: 30,
+          radius: 30,
           backgroundColor: Colors.transparent,
           child: ClipOval(
             child: CachedNetworkImage(
@@ -32,11 +43,19 @@ class UserRow extends StatelessWidget {
               errorWidget: (context, url, error) => Icon(Icons.error),
             ),
           )),
-          title: Text(user.name),
-          subtitle: Text(user.email),
-          onTap: (){
-              api.assignUserToTask(token, task.id.toString(), user.id.toString());
-          },
+      title: Text(user.name),
+      subtitle: Text(user.email),
+      onTap: () {
+        if (!isDelete) {
+          api.assignUserToTask(token, task.id.toString(), user.id);
+          func();
+          Navigator.of(context).pop();
+        } else {
+          api.unassignUserToTask(token, task.id, user.id);
+          func();
+          Navigator.of(context).pop();
+        }
+      },
     );
   }
 }

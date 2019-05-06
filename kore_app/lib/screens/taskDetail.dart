@@ -57,7 +57,6 @@ class TaskDetailState extends State<TaskDetail> {
     _username = widget.userRepository.getUsername();
     _api = Api();
     _user = _api.getUserByUsername(_token, _username);
-
     _assets = _api.getAssets(_token, widget.task.id.toString());
     _users = _api.getUsersByTaskId(_token, widget.task);
 
@@ -90,10 +89,11 @@ class TaskDetailState extends State<TaskDetail> {
               // _assignTask(),
               _buildTaskDescription(),
               GridList(
-                users: _users,
-                userRepository: widget.userRepository,
-                task: widget.task,
-              ),
+                  users: _users,
+                  userRepository: widget.userRepository,
+                  task: widget.task,
+                  func: _updateUserListCallback,
+                  role: widget.role,),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
             ],
@@ -101,6 +101,12 @@ class TaskDetailState extends State<TaskDetail> {
         ],
       ),
     );
+  }
+
+  _updateUserListCallback(){
+    setState((){
+    _users = _api.getUsersByTaskId(_token, widget.task);
+    });
   }
 
   Widget _assignTask() {
@@ -122,6 +128,7 @@ class TaskDetailState extends State<TaskDetail> {
   Widget _buildCalendar(Task task) {
     return Container(
         child: Card(
+          color: Colors.white,
       // elevation: 0,
       child: CalendarCarousel(
         dayPadding: 0,
@@ -142,6 +149,7 @@ class TaskDetailState extends State<TaskDetail> {
     return new Container(
       padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
       child: Card(
+        color: Colors.transparent,
         elevation: 0,
         child: Column(
           children: <Widget>[
@@ -185,7 +193,7 @@ class TaskDetailState extends State<TaskDetail> {
 
   Widget _buildUploadButton() {
     return Material(
-      elevation: 4.0,
+      elevation: 6.0,
       borderRadius: BorderRadius.circular(30.0),
       color: Color(0xff1282c5),
       child: FlatButton.icon(
@@ -213,7 +221,7 @@ class TaskDetailState extends State<TaskDetail> {
 
   Widget _buildDoneButton() {
     return Material(
-      elevation: 4.0,
+      elevation: 6.0,
       shape: CircleBorder(side: BorderSide.none),
       color: iconColor,
       child: MaterialButton(
@@ -282,7 +290,7 @@ class TaskDetailState extends State<TaskDetail> {
       actionExtentRatio: 0.25,
       child: new Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Colors.transparent,
         ),
         child: ListTile(
           title: Text(
@@ -478,6 +486,7 @@ class TaskDetailState extends State<TaskDetail> {
       onPressed: () {
         toggleCompleted(widget.task);
         Navigator.of(context).pop();
+        widget.updatePercentCallBack();
       },
     );
     // set up the AlertDialog
@@ -501,8 +510,12 @@ class TaskDetailState extends State<TaskDetail> {
 
 class TaskDetail extends StatefulWidget {
   final Task task;
-  const TaskDetail({Key key, this.task, @required this.userRepository})
+  final String role;
+  final Function updatePercentCallBack;
+  const TaskDetail({Key key, this.task, @required this.userRepository, @required this.role, @required this.updatePercentCallBack})
       : assert(userRepository != null),
+        assert(task != null),
+        assert(updatePercentCallBack != null),
         super(key: key);
 
   final UserRepository userRepository;

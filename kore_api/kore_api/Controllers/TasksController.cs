@@ -29,21 +29,10 @@ namespace kore_api.Controllers
         /// </summary>
         // GET: api/Tasks
         [HttpGet]
-		[Authorize(Policy = "IsAdminOrAgent")]
-		public IEnumerable<Task> GetTasks()
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IEnumerable<Task> GetTasks()
         {
             return _tasksRepository.GetTasks();
-        }
-
-        /// <summary>
-        /// Gets all Tasks with memberships.
-        /// </summary>
-        // GET: api/Tasks/memberships
-        [HttpGet("memberships/")]
-        [Authorize(Policy = "IsAdminOrAgent")]
-        public IEnumerable<TaskVM> GetTaskMemberships()
-        {
-            return _tasksRepository.GetTaskMemberships();
         }
 
         /// <summary>
@@ -55,28 +44,6 @@ namespace kore_api.Controllers
         public IEnumerable<TaskVM> GetTaskByAccount([FromRoute] int accountID)
         {
             return _tasksRepository.GetTasksByAccount(accountID);
-        }
-
-        /// <summary>
-        /// Gets number of Tasks in an Account.
-        /// </summary>
-        // GET: api/Tasks/number/1
-        [HttpGet("number/{accountID}")]
-        [Authorize(Policy = "IsAdminOrAgent")]
-        public int GetNumberOfTasksInAccount([FromRoute] int accountID)
-        {
-            return _tasksRepository.GetNumberOfTasks(accountID);
-        }
-
-        /// <summary>
-        /// Gets all Tasks by OwnerID.
-        /// </summary>
-        // GET: api/Tasks/owner/1
-        [HttpGet("owner/{ownerID}")]
-        [Authorize(Policy = "IsAdmin")]
-        public IEnumerable<Task> GetTaskByOwner([FromRoute] int ownerID)
-        {
-            return _tasksRepository.GetTaskByOwner(ownerID);
         }
 
         /// <summary>
@@ -185,6 +152,29 @@ namespace kore_api.Controllers
             }
 
             var result = await _tasksRepository.AssignToUser(id, userID);
+
+            if (result == true)
+            {
+                return Ok(result);
+            }
+
+            return NoContent();
+        }
+
+        /// <summary>
+        /// Un-assign a Task
+        /// </summary>
+        // PUT: api/Tasks/5
+        [HttpDelete("task/{taskID}/user/{userID}")]
+        [Authorize(Policy = "IsAdmin")]
+        public async Task<IActionResult> UnAssignTask([FromRoute] int taskID, [FromRoute] int userID)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _tasksRepository.UnAssignUser(taskID, userID);
 
             if (result == true)
             {
