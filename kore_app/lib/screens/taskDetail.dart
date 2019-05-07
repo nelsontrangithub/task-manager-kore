@@ -84,16 +84,18 @@ class TaskDetailState extends State<TaskDetail> {
       body: new ListView(
         children: <Widget>[
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(padding: EdgeInsets.only(top: 12)),
               // _assignTask(),
               _buildTaskDescription(),
               GridList(
-                  users: _users,
-                  userRepository: widget.userRepository,
-                  task: widget.task,
-                  func: _updateUserListCallback,
-                  role: widget.role,),
+                users: _users,
+                userRepository: widget.userRepository,
+                task: widget.task,
+                func: _updateUserListCallback,
+                role: widget.role,
+              ),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
             ],
@@ -103,9 +105,10 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  _updateUserListCallback(){
-    setState((){
-    _users = _api.getUsersByTaskId(_token, widget.task);
+  _updateUserListCallback() {
+    setState(() {
+      Future.delayed(const Duration(seconds: 1), () => "1");
+      _users = _api.getUsersByTaskId(_token, widget.task);
     });
   }
 
@@ -128,7 +131,7 @@ class TaskDetailState extends State<TaskDetail> {
   Widget _buildCalendar(Task task) {
     return Container(
         child: Card(
-          color: Colors.white,
+      color: Colors.white,
       // elevation: 0,
       child: CalendarCarousel(
         dayPadding: 0,
@@ -512,7 +515,12 @@ class TaskDetail extends StatefulWidget {
   final Task task;
   final String role;
   final Function updatePercentCallBack;
-  const TaskDetail({Key key, this.task, @required this.userRepository, @required this.role, @required this.updatePercentCallBack})
+  const TaskDetail(
+      {Key key,
+      this.task,
+      @required this.userRepository,
+      @required this.role,
+      @required this.updatePercentCallBack})
       : assert(userRepository != null),
         assert(task != null),
         assert(updatePercentCallBack != null),
