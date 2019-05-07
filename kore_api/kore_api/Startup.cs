@@ -117,7 +117,6 @@ namespace kore_api
             }
             app.UseAuthentication();
             app.UseHttpsRedirection();
-            //app.UseMvc();
 
             app.UseCors(
                 options => options.WithOrigins("http://example.com").AllowAnyMethod()
@@ -140,7 +139,7 @@ namespace kore_api
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint(SwaggerPath, "My API V1");
+                c.SwaggerEndpoint(SwaggerPath, "");
             });
         }
     }
