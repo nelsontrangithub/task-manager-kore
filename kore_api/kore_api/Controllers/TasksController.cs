@@ -97,8 +97,8 @@ namespace kore_api.Controllers
         /// </summary>
         // GET: api/Tasks/5
         [HttpGet("{id}")]
-		[Authorize(Policy = "IsAdminOrAgent")]
-		public async Task<IActionResult> GetTask([FromRoute] int id)
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public async Task<IActionResult> GetTask([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
@@ -120,8 +120,8 @@ namespace kore_api.Controllers
         /// </summary>
         // PUT: api/Tasks/5
         [HttpPut("{id}")]
-		[Authorize(Policy = "IsAdminOrAgent")]
-		public async Task<IActionResult> PutTask([FromRoute] int id, [FromBody] int status)
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public async Task<IActionResult> PutTask([FromRoute] int id, [FromBody] int status)
         {
             if (!ModelState.IsValid)
             {
@@ -190,8 +190,8 @@ namespace kore_api.Controllers
         // DELETE: api/Tasks/5
         //Admin only
         [HttpDelete("{id}")]
-		[Authorize(Policy = "IsAdmin")]
-		public async Task<IActionResult> DeleteTask([FromRoute] int id)
+        [Authorize(Policy = "IsAdmin")]
+        public async Task<IActionResult> DeleteTask([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {

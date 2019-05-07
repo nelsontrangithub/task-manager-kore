@@ -21,28 +21,8 @@ namespace kore_api.Controllers
 
         public S3BucketController()
         {
-            client = new AmazonS3Client(bucketRegion);      
+            client = new AmazonS3Client(bucketRegion);
         }
-
-        // GET: api/S3Bucket
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        // GET: api/S3Bucket/5
-        //[HttpGet("{id}", Name = "Get")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        // PUT: api/S3Bucket/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody] string value)
-        //{
-        //}
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{location}/{filename}")]
