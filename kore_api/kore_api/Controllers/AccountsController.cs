@@ -27,8 +27,8 @@ namespace kore_api.Controllers
         /// </summary>
         // GET: api/account
         [HttpGet]
-		[Authorize(Policy = "IsAdminOrAgent")]
-		public IEnumerable<AccountVM> GetAll()
+        [Authorize(Policy = "IsAdminOrAgent")]
+        public IEnumerable<AccountVM> GetAll()
         {
             return _accountsRepository.GetAccounts();
         }
@@ -83,8 +83,8 @@ namespace kore_api.Controllers
         [HttpGet("{id}")]
         [Authorize(Policy = "IsAdminOrAgent")]
         public async Task<IActionResult> Get([FromRoute] int id)
-		{
-			if (!ModelState.IsValid)
+        {
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
@@ -158,7 +158,8 @@ namespace kore_api.Controllers
             {
                 var result = _accountsRepository.AdminProgressPercentage(accountID);
                 return Ok(result);
-            } else
+            }
+            else
             {
                 var result = _accountsRepository.GetProgressPercentage(userID, accountID);
                 return Ok(result);

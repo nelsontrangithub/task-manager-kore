@@ -25,7 +25,7 @@ namespace kore_api
         public const string AppS3BucketKey = "AppS3Bucket";
 
         public string ConnectionString;
-		public string SwaggerPath;
+        public string SwaggerPath;
 
         public Startup(IConfiguration configuration)
         {
@@ -37,19 +37,19 @@ namespace kore_api
         // This method gets called by the runtime. Use this method to add services to the container
         public void ConfigureServices(IServiceCollection services)
         {
-			
-			services.AddAuthorization(options =>
-			{
-				//Policies for Cognito roles
-				options.AddPolicy("IsAdmin", policy =>
-					policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Admin" })));
-				options.AddPolicy("IsAgent", policy =>
-					policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Agent" })));
-			    options.AddPolicy("IsAdminOrAgent", policy =>
-				    policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Admin", "Agent" })));
-			});
 
-			services.AddSingleton<IAuthorizationHandler, CognitoGroupAuthorizationHandler>();
+            services.AddAuthorization(options =>
+            {
+                //Policies for Cognito roles
+                options.AddPolicy("IsAdmin", policy =>
+                    policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Admin" })));
+                options.AddPolicy("IsAgent", policy =>
+                    policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Agent" })));
+                options.AddPolicy("IsAdminOrAgent", policy =>
+                    policy.Requirements.Add(new CognitoGroupAuthorizationRequirement(new string[] { "Admin", "Agent" })));
+            });
+
+            services.AddSingleton<IAuthorizationHandler, CognitoGroupAuthorizationHandler>();
             services.AddAuthentication("Bearer")
                 .AddJwtBearer(options =>
                 {
@@ -83,11 +83,11 @@ namespace kore_api
 
             if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
             {
-                this.ConnectionString = "server=localhost;port=3306;user=root;password=password;database=koredb";
+                ConnectionString = "server=localhost;port=3306;user=root;password=password;database=koredb";
             }
             else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
             {
-                this.ConnectionString = "server=koretaskmanagerrdsinstance.cya4cpibjenz.us-east-2.rds.amazonaws.com;port=3306;user=koreadmin;password=koressd2019;database=koredb";
+                ConnectionString = "server=koretaskmanagerrdsinstance.cya4cpibjenz.us-east-2.rds.amazonaws.com;port=3306;user=koreadmin;password=koressd2019;database=koredb";
             }
 
             services.AddDbContext<koredbContext>(options =>
@@ -96,7 +96,7 @@ namespace kore_api
             //Repos
             services.AddScoped<IAccountsRepository, AccountsRespository>();
             services.AddScoped<ITasksRepository, TasksRepository>();
-			services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IFilesRepository, FilesRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
 
@@ -117,7 +117,6 @@ namespace kore_api
             }
             app.UseAuthentication();
             app.UseHttpsRedirection();
-            //app.UseMvc();
 
             app.UseCors(
                 options => options.WithOrigins("http://example.com").AllowAnyMethod()
@@ -128,19 +127,19 @@ namespace kore_api
                 routes.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
             });
 
-			if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-			{
-				this.SwaggerPath = "/swagger/v1/swagger.json";
-			}
-			else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
-			{
-				this.SwaggerPath = "/Prod/swagger/v1/swagger.json";
-			}
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            {
+                SwaggerPath = "/swagger/v1/swagger.json";
+            }
+            else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+            {
+                SwaggerPath = "/Prod/swagger/v1/swagger.json";
+            }
 
-			app.UseSwagger();
+            app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint(SwaggerPath, "My API V1");
+                c.SwaggerEndpoint(SwaggerPath, "");
             });
         }
     }
