@@ -21,7 +21,7 @@ namespace kore_api.Controllers
 
         public S3BucketController()
         {
-            client = new AmazonS3Client(bucketRegion);      
+            client = new AmazonS3Client(bucketRegion);
         }
 
         // GET: api/S3Bucket

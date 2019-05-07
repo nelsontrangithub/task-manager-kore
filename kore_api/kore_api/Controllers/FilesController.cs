@@ -23,7 +23,6 @@ namespace kore_api.Controllers
             _filesRepository = filesRepository;
         }
 
-
         // GET: api/Files
         [HttpGet]
         [Authorize(Policy = "IsAdminOrAgent")]
@@ -87,7 +86,7 @@ namespace kore_api.Controllers
                     return CreatedAtAction("GetFile", new { id = file.FileId }, file);
                 }
             }
-            
+
 
             return new StatusCodeResult(StatusCodes.Status409Conflict);
         }
