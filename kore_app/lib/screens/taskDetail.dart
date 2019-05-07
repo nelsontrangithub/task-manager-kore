@@ -84,6 +84,7 @@ class TaskDetailState extends State<TaskDetail> {
       body: new ListView(
         children: <Widget>[
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(padding: EdgeInsets.only(top: 12)),
               // _assignTask(),
