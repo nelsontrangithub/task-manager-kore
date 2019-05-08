@@ -27,6 +27,7 @@ class TaskDetailState extends State<TaskDetail> {
   // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   var icon;
   var iconColor;
+  String text;
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   //file picker
@@ -63,9 +64,11 @@ class TaskDetailState extends State<TaskDetail> {
     if (widget.task.status == 0) {
       icon = Icons.check;
       iconColor = Colors.green;
+      text = "Not Completed";
     } else {
       icon = Icons.block;
       iconColor = Colors.redAccent;
+      text = "Completed";
     }
     _controller.addListener(() => _extension = _controller.text);
     _nameFieldController.addListener(() {
@@ -73,6 +76,7 @@ class TaskDetailState extends State<TaskDetail> {
       _nameField = _nameFieldController.text;
       print("_nameField" + _nameField);
     });
+
   }
 
   @override
@@ -89,11 +93,12 @@ class TaskDetailState extends State<TaskDetail> {
               // _assignTask(),
               _buildTaskDescription(),
               GridList(
-                  users: _users,
-                  userRepository: widget.userRepository,
-                  task: widget.task,
-                  func: _updateUserListCallback,
-                  role: widget.role,),
+                users: _users,
+                userRepository: widget.userRepository,
+                task: widget.task,
+                func: _updateUserListCallback,
+                role: widget.role,
+              ),
               _buildCalendar(widget.task),
               _buildTaskEnd(),
             ],
@@ -103,9 +108,9 @@ class TaskDetailState extends State<TaskDetail> {
     );
   }
 
-  _updateUserListCallback(){
-    setState((){
-    _users = _api.getUsersByTaskId(_token, widget.task);
+  _updateUserListCallback() {
+    setState(() {
+      _users = _api.getUsersByTaskId(_token, widget.task);
     });
   }
 
@@ -128,7 +133,7 @@ class TaskDetailState extends State<TaskDetail> {
   Widget _buildCalendar(Task task) {
     return Container(
         child: Card(
-          color: Colors.white,
+      color: Colors.white,
       // elevation: 0,
       child: CalendarCarousel(
         dayPadding: 0,
@@ -139,7 +144,7 @@ class TaskDetailState extends State<TaskDetail> {
         todayTextStyle: TextStyle(fontSize: 20),
         selectedDayTextStyle: TextStyle(fontSize: 20),
         todayButtonColor: KorePrimaryColor,
-        selectedDateTime: widget.task.dueDate,
+      //  selectedDateTime: this.dueDate,
         selectedDayButtonColor: Colors.red,
       ),
     ));
@@ -154,20 +159,30 @@ class TaskDetailState extends State<TaskDetail> {
         child: Column(
           children: <Widget>[
             ListTile(
-              title: Text(
-                "Description: ",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                title: Text(
+                  "Description: ",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              subtitle: Text(
-                widget.task.description,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      widget.task.description,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10),),
+                    Text("Status: " + text, style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: iconColor
+                    ),
+                    )
+                  ],
+                )),
           ],
         ),
       ),
@@ -462,10 +477,12 @@ class TaskDetailState extends State<TaskDetail> {
       if (task.status == 0) {
         icon = Icons.check;
         iconColor = Colors.green;
+        text = "Completed";
         _buildDoneButton();
       } else {
         icon = Icons.block;
         iconColor = Colors.redAccent;
+        text = "Not Completed!";
         _buildDoneButton();
       }
       // task.setStatus(_api);
@@ -487,6 +504,7 @@ class TaskDetailState extends State<TaskDetail> {
         toggleCompleted(widget.task);
         Navigator.of(context).pop();
         widget.updatePercentCallBack();
+        // widget.task.setStatus(_api, _token, widget.task);
       },
     );
     // set up the AlertDialog
@@ -512,7 +530,12 @@ class TaskDetail extends StatefulWidget {
   final Task task;
   final String role;
   final Function updatePercentCallBack;
-  const TaskDetail({Key key, this.task, @required this.userRepository, @required this.role, @required this.updatePercentCallBack})
+  const TaskDetail(
+      {Key key,
+      this.task,
+      @required this.userRepository,
+      @required this.role,
+      @required this.updatePercentCallBack})
       : assert(userRepository != null),
         assert(task != null),
         assert(updatePercentCallBack != null),
