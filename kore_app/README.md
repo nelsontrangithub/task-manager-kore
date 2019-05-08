@@ -2,6 +2,12 @@
 
 A Flutter mobile application that integrates with a RESTful API and AWS Cognito.
 
+![](../project-files/flutter-1.gif)
+![](../project-files/flutter-2.gif)
+![](../project-files/flutter-3.gif)
+![](../project-files/flutter-4.gif)
+![](../project-files/flutter-5.gif)
+
 ## Getting Started
 
 For help getting started with Flutter, view our 
