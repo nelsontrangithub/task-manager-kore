@@ -1,35 +1,31 @@
 # Task Manager
 
-[Google Drive](https://drive.google.com/open?id=152iXPBzXkmBrEiGeA1CxkhKxQQXTxXR6)
+A mobile application built with Flutter that integrates with a Task Managing API that is built with ASP.NET Core 2.1
 
-## Test API
-- Production API documentation with testing available at https://w4c7snxw32.execute-api.us-east-2.amazonaws.com/Prod/swagger/
-
-- Local API documentation with testing available at http://localhost:56203/swagger/ after launching the sln.
-
-- Sign In
-
-![](project-files/swagger1.png)
-
-- Copy Bearer token
-
-![](project-files/swagger2.png)
-
-- Click on Authorize button at the top and enter in Bearer followed by a space and then the token.
-
-![](project-files/swagger3.png)
+* [Google Drive](https://drive.google.com/open?id=152iXPBzXkmBrEiGeA1CxkhKxQQXTxXR6)
+* [KORE Project Requirements](https://drive.google.com/drive/folders/152iXPBzXkmBrEiGeA1CxkhKxQQXTxXR6)
+* [Design Document](https://docs.google.com/document/d/1OOhsAdpf2sLjm5drSU1pfyU3SWm1O0hKQgxbko0kGcc/edit#)
 
 ## Getting Started
-
-### Prerequisites
+* Git clone or download the repo
 
 ### Installing
+* [API instructions](https://github.com/nelsontrangithub/task-manager-kore/tree/master/kore_api)
+* [Flutter instructions](https://github.com/nelsontrangithub/task-manager-kore/tree/master/kore_app)
 
 ## Deployment
+* AWS Serverless
 
 ## Built With
+* .NET Core Web API (Back-end)
+* Flutter (Mobile application)
 
 ## Authors
+* Xi (Tina) Chu
+* Nelson Tran
+* Stephen Syrnyk
+* Jonathan Oporto
+* Jordan Perrella
 
 ## Acknowledgments
-
+* KORE provided the ERD for the database

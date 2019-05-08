@@ -14,8 +14,8 @@ import 'package:path_provider/path_provider.dart';
 class S3bucketUploader {
   static Future<bool> uploadFile(
       File file, String bucketName, String taskId) async {
-    const _accessKeyId = 'AKIAI7VGATG6RF6KV6CA';
-    const _secretKeyId = 'Ky8ImCeRiz5iBoFi0Zrgo5oB2JWPWuuRTc+q7spH';
+    const _accessKeyId = 'AKIAJP2NO5VTO7NP4HEQ';
+    const _secretKeyId = 'DCuNDZarZeLeOiDaex4lj4xYE+uyDUfhhln9W7wR';
     const _region = 'us-east-2';
     const _s3Endpoint = 'https://koretaskmanagermediabucket.s3.amazonaws.com';
 

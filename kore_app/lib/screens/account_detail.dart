@@ -47,22 +47,6 @@ class AccountDetailState extends State<AccountDetail> {
     }
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   if (widget.role == Constant.RegularRole) {
-  //     _user = _api.getUserByUsername(_token, _username);
-  //     _tasksAPI = _api.getTasks(_token, _user, widget.account);
-  //     _percent =
-  //         _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
-  //   } else {
-  //     _user = _api.getUserByUsername(_token, _username);
-  //     _tasksAPI = _api.getAllTasksByAccountId(_token, widget.account);
-  //     _percent =
-  //         _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
-  //   }
-  //   super.didChangeDependencies();
-  // }
-
   void didChangeAppLifecycleState(AppLifecycleState state) {
     setState(() {
       _percent =
@@ -75,6 +59,7 @@ class AccountDetailState extends State<AccountDetail> {
     return Scaffold(
         resizeToAvoidBottomPadding: false,
         appBar: AppBar(
+          
           title: Text(widget.account.name),
           // actions: <Widget>[      // Add 3 lines from here...
           //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
@@ -129,7 +114,7 @@ class AccountDetailState extends State<AccountDetail> {
         ));
   }
 
-  _updatePercentageIndicator(){
+  _updatePercentageIndicator() {
     setState(() {
       _percent =
           _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
@@ -176,56 +161,48 @@ class AccountDetailState extends State<AccountDetail> {
   }
 
   Widget _buildRow(Task task, int i) {
-    // print(task.status);
-    // print(task.id);
-    return new Slidable(
-      delegate: new SlidableDrawerDelegate(),
-      actionExtentRatio: 0.25,
-      child: new Container(
-        decoration: BoxDecoration(
-          color: Colors.transparent,
-        ),
-        child: new ListTile(
-          leading: new CircleAvatar(
-            backgroundColor: KorePrimaryColor,
-            child: new Text((i + 1).toString()),
-            foregroundColor: Colors.white,
+    return new Row(
+      children: <Widget>[
+        new Expanded(
+          child: new ListTile(
+            leading: new CircleAvatar(
+              backgroundColor: KorePrimaryColor,
+              child: new Text((i + 1).toString()),
+              foregroundColor: Colors.white,
+            ),
+            trailing: Icon(completeIcon),
+            title: new Text(task.description),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TaskDetail(
+                        task: task,
+                        userRepository: widget.userRepository,
+                        role: widget.role,
+                        updatePercentCallBack: _updatePercentageIndicator),
+                  ));
+            },
           ),
-          trailing: Icon(completeIcon),
-          title: new Text(task.description),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TaskDetail(
-                      task: task, userRepository: widget.userRepository, role: widget.role, updatePercentCallBack: _updatePercentageIndicator),
-                ));
-          },
-        ),
-      ),
-      secondaryActions: <Widget>[
-        // new IconSlideAction(
-        //   caption: 'Upload',
-        //   color: Colors.blueAccent,
-        //   icon: Icons.file_upload,
-        // ),
-        new IconSlideAction(
-          caption: task.label,
-          color: task.color,
-          icon: task.icon,
-          onTap: () {
-            // task.isCompleted ? markNotCompleted(task) : markCompleted(task);
-            _percent = _api.getPercentageOfTasksCompleted(
-                _token, _user, widget.account);
-            if (task.status == 0) {
-              markCompleted(task);
-            } else {
-              markNotCompleted(task);
-            }
-          },
         ),
       ],
     );
+
+// Possible implementation: Button to Check Status 
+
+    //   new RawMaterialButton(
+    //     onPressed: () {},
+    //     child: new Icon(
+    //       task.icon,
+    //       color: Colors.white,
+    //       size: 30.0,
+    //     ),
+    //     shape: new CircleBorder(),
+    //     elevation: 0,
+    //     fillColor: task.color,
+    //     padding: const EdgeInsets.all(5.0),
+    //   ),
+    // ]);
   }
 
   void markCompleted(Task task) {

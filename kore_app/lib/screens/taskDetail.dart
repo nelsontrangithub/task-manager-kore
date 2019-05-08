@@ -88,6 +88,7 @@ class TaskDetailState extends State<TaskDetail> {
       body: new ListView(
         children: <Widget>[
           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(padding: EdgeInsets.only(top: 12)),
               // _assignTask(),
@@ -110,6 +111,7 @@ class TaskDetailState extends State<TaskDetail> {
 
   _updateUserListCallback() {
     setState(() {
+      Future.delayed(const Duration(seconds: 1), () => "1");
       _users = _api.getUsersByTaskId(_token, widget.task);
     });
   }

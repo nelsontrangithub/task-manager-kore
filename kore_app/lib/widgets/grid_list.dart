@@ -53,7 +53,7 @@ class GridListState extends State<GridList> {
       margin: new EdgeInsets.only(left: 15.0, top: 10),
       child: user != null
           ? Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                   CircleAvatar(
                       radius: 35,
