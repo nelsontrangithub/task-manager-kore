@@ -146,7 +146,7 @@ class TaskDetailState extends State<TaskDetail> {
         todayTextStyle: TextStyle(fontSize: 20),
         selectedDayTextStyle: TextStyle(fontSize: 20),
         todayButtonColor: KorePrimaryColor,
-      //  selectedDateTime: this.dueDate,
+        selectedDateTime: widget.task.dueDate,
         selectedDayButtonColor: Colors.red,
       ),
     ));
