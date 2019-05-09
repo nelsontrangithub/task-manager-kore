@@ -10,17 +10,12 @@ class AccountTitleHeader extends StatelessWidget {
 
   AccountTitleHeader({Key key, @required this.organization}) : super(key: key);
   final _orgTitleFont = THEME_TEXTSTYLE.copyWith(fontSize: 48, color: Colors.white, fontWeight: FontWeight.w600);
-  // const TextStyle(color: Colors.white, fontSize: 38);
 
   @override
   Widget build(BuildContext context) {
     return Container(
         height: 280.0,
-        // margin: const EdgeInsets.symmetric(vertical: 0.0),
-        // padding: const EdgeInsets.symmetric(vertical: 10.0),
         decoration: BoxDecoration(
-          // borderRadius:
-          //     BorderRadius.only(bottomLeft: const Radius.circular(30.0)),
           image: new DecorationImage(
             image: new AssetImage("assets/header_background2.jpg"),
             fit: BoxFit.cover,
@@ -39,11 +34,6 @@ class AccountTitleHeader extends StatelessWidget {
                       organization.name,
                       style: _orgTitleFont,
                     )),
-                // Container(
-                //   margin: const EdgeInsets.only(top: 5.0),
-                //   child: Text(organization.status.toString(),
-                //       style: TextStyle(color: Colors.white, fontSize: 16)),
-                // ),
               ],
             ),
           ],

@@ -43,9 +43,7 @@ class AssetListState extends State<AssetList> {
     _assets = _api.getAssets(_token, widget.task.id.toString());
 
     _nameFieldController.addListener(() {
-      print("CONTROLLER: $_nameFieldController");
       _nameField = _nameFieldController.text;
-      print("_nameField" + _nameField);
     });
   }
 
@@ -224,7 +222,6 @@ class AssetListState extends State<AssetList> {
             bool s3Success = await _api.deleteAssetS3(_token, asset);
             if (s3Success) {
               bool dbSuccess = await _api.deleteAssetDb(_token, asset);
-              print(dbSuccess);
               if (dbSuccess) {
                 getAssets();
               }
@@ -312,7 +309,6 @@ class AssetListState extends State<AssetList> {
       try {
         file = await FilePicker.getFile(type: FileType.ANY);
       } on PlatformException catch (e) {
-        print("Unsupported operation" + e.toString());
       }
       if (!mounted) return;
     }
@@ -334,9 +330,6 @@ class AssetListState extends State<AssetList> {
           int dbSuccess = await _api.postAsset(_token, asset, user);
 
           if (dbSuccess > 0) {
-            dbSuccess == 1
-                ? print("Added asset successfully")
-                : print("Updated asset successfully");
             getAssets();
           }
         }

@@ -51,7 +51,6 @@ class Task {
         description: json['description'] as String,
         dueDate: DateTime.tryParse(json['dueDate'])
     );
-    print(json['status']);
     
     if (task.status == 0) {
       task.color = Colors.green;

@@ -19,7 +19,6 @@ class S3bucketUploader {
     const _region = 'us-east-2';
     const _s3Endpoint = 'https://koretaskmanagermediabucket.s3.amazonaws.com';
 
-    // final file = File(path.join(pathToFile, fileName));
     final stream = http.ByteStream(DelegatingStream.typed(file.openRead()));
     final length = await file.length();
 
@@ -49,7 +48,6 @@ class S3bucketUploader {
     try {
       final res = await req.send();
       await for (var value in res.stream.transform(utf8.decoder)) {
-        print(value);
       }
       if (res.statusCode == HttpStatus.noContent) {
         return true;
@@ -70,8 +68,6 @@ class S3bucketUploader {
         File file = new File('$dir/$filename');
         await file.writeAsBytes(bytes);
         OpenFile.open(file.path);
-        print(dir);
-        print("RUN COMPLETE");
         return file;
     }
   

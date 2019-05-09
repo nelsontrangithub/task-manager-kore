@@ -90,7 +90,6 @@ class _MyHomePageState extends State<MyHomePage> {
           padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
           // Here is coming the funcion to login
           onPressed: () {
-            // Navigator.pushNamed(context, '/contractList');
             if (_formKey.currentState.validate()) {
               state is! LoginLoading ? _onLoginButtonPressed() : null;
             }
@@ -136,12 +135,6 @@ class _MyHomePageState extends State<MyHomePage> {
       ) {
         if (state is LoginFailure) {
           _onWidgetDidBuild(() {
-            // Scaffold.of(context).showSnackBar(
-            //   SnackBar(
-            //     content: Text('${state.error}'),
-            //     backgroundColor: Colors.red,
-            //   ),
-            // );
             if(firstRender == true){
             _showAlertDialog(context);
             firstRender = false;

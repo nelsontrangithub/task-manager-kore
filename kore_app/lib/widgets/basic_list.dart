@@ -51,10 +51,6 @@ class BasicListState extends State<BasicList> {
         item.name,
         style: _biggerFont,
       ),
-      // trailing: Icon(
-      //   // Add the lines from here...
-      //   account.percentage >= 100 ? Icons.done : null,
-      // ),
       onTap: () {
         if(item is Account){
         Navigator.push(

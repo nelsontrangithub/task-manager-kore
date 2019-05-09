@@ -18,7 +18,6 @@ class AuthenticationBloc
 
   @override
   Stream<AuthenticationState> mapEventToState(
-    // AuthenticationState currentState,
     AuthenticationEvent event,
   ) async* {
       Map<String, dynamic> _claims = Map<String, dynamic>();

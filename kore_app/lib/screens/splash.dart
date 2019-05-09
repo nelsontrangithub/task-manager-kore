@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
 class Splash extends StatefulWidget {
-  // LoadingIndicator({Key key}),
-  //       super(key: key);
 
   @override
   _SplashIndicatorState createState() => _SplashIndicatorState();
