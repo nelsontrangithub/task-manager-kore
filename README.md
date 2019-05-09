@@ -5,6 +5,8 @@ A mobile application built with Flutter that integrates with a Task Managing API
 * [Google Drive](https://drive.google.com/open?id=152iXPBzXkmBrEiGeA1CxkhKxQQXTxXR6)
 * [KORE Project Requirements](https://drive.google.com/drive/folders/152iXPBzXkmBrEiGeA1CxkhKxQQXTxXR6)
 * [Design Document](https://docs.google.com/document/d/1OOhsAdpf2sLjm5drSU1pfyU3SWm1O0hKQgxbko0kGcc/edit#)
+* [ERD](project-files/task-manager.erd.pdf)
+* [Project Architecture](https://github.com/nelsontrangithub/task-manager-kore/tree/documentation/project-files/architecture-diagram)
 
 ## Getting Started
 * Git clone or download the repo

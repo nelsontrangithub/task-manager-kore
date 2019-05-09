@@ -62,13 +62,13 @@ class TaskDetailState extends State<TaskDetail> {
     _users = _api.getUsersByTaskId(_token, widget.task);
 
     if (widget.task.status == 0) {
+       icon = Icons.block;
+      iconColor = Colors.redAccent;
+      text = "Not Completed!";
+    } else {
       icon = Icons.check;
       iconColor = Colors.green;
-      text = "Not Completed";
-    } else {
-      icon = Icons.block;
-      iconColor = Colors.redAccent;
-      text = "Completed";
+      text = "Completed!";    
     }
     _controller.addListener(() => _extension = _controller.text);
     _nameFieldController.addListener(() {
@@ -146,7 +146,7 @@ class TaskDetailState extends State<TaskDetail> {
         todayTextStyle: TextStyle(fontSize: 20),
         selectedDayTextStyle: TextStyle(fontSize: 20),
         todayButtonColor: KorePrimaryColor,
-      //  selectedDateTime: this.dueDate,
+        selectedDateTime: widget.task.dueDate,
         selectedDayButtonColor: Colors.red,
       ),
     ));
@@ -244,7 +244,10 @@ class TaskDetailState extends State<TaskDetail> {
       child: MaterialButton(
           minWidth: 100,
           onPressed: () {
-            showAlertDialog(context);
+            toggleCompleted(widget.task);
+         //    Navigator.of(context).pop();
+            widget.updatePercentCallBack();
+          //  showAlertDialog(context);
           },
           child: Icon(
             icon,
@@ -477,17 +480,18 @@ class TaskDetailState extends State<TaskDetail> {
     }
     setState(() {
       if (task.status == 0) {
-        icon = Icons.check;
-        iconColor = Colors.green;
-        text = "Completed";
-        _buildDoneButton();
-      } else {
-        icon = Icons.block;
+         icon = Icons.block;
         iconColor = Colors.redAccent;
         text = "Not Completed!";
-        _buildDoneButton();
+        
+     //   _buildDoneButton();
+      } else {
+       icon = Icons.check;
+        iconColor = Colors.green;
+        text = "Completed!";
+     //   _buildDoneButton();
       }
-      // task.setStatus(_api);
+      
     });
   }
 
