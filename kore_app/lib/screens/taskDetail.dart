@@ -27,6 +27,7 @@ class TaskDetailState extends State<TaskDetail> {
   // 1, "Tina","https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
   var icon;
   var iconColor;
+  String text;
   final _biggerFont = const TextStyle(fontSize: 18.0);
 
   //file picker
@@ -61,11 +62,13 @@ class TaskDetailState extends State<TaskDetail> {
     _users = _api.getUsersByTaskId(_token, widget.task);
 
     if (widget.task.status == 0) {
+       icon = Icons.block;
+      iconColor = Colors.redAccent;
+      text = "Not Completed!";
+    } else {
       icon = Icons.check;
       iconColor = Colors.green;
-    } else {
-      icon = Icons.block;
-      iconColor = Colors.redAccent;
+      text = "Completed!";    
     }
     _controller.addListener(() => _extension = _controller.text);
     _nameFieldController.addListener(() {
@@ -73,6 +76,7 @@ class TaskDetailState extends State<TaskDetail> {
       _nameField = _nameFieldController.text;
       print("_nameField" + _nameField);
     });
+
   }
 
   @override
@@ -157,20 +161,30 @@ class TaskDetailState extends State<TaskDetail> {
         child: Column(
           children: <Widget>[
             ListTile(
-              title: Text(
-                "Description: ",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                title: Text(
+                  "Description: ",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              subtitle: Text(
-                widget.task.description,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      widget.task.description,
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    Padding(padding: EdgeInsets.only(top: 10),),
+                    Text("Status: " + text, style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: iconColor
+                    ),
+                    )
+                  ],
+                )),
           ],
         ),
       ),
@@ -230,7 +244,10 @@ class TaskDetailState extends State<TaskDetail> {
       child: MaterialButton(
           minWidth: 100,
           onPressed: () {
-            showAlertDialog(context);
+            toggleCompleted(widget.task);
+         //    Navigator.of(context).pop();
+            widget.updatePercentCallBack();
+          //  showAlertDialog(context);
           },
           child: Icon(
             icon,
@@ -463,15 +480,18 @@ class TaskDetailState extends State<TaskDetail> {
     }
     setState(() {
       if (task.status == 0) {
-        icon = Icons.check;
-        iconColor = Colors.green;
-        _buildDoneButton();
-      } else {
-        icon = Icons.block;
+         icon = Icons.block;
         iconColor = Colors.redAccent;
-        _buildDoneButton();
+        text = "Not Completed!";
+        
+     //   _buildDoneButton();
+      } else {
+       icon = Icons.check;
+        iconColor = Colors.green;
+        text = "Completed!";
+     //   _buildDoneButton();
       }
-      // task.setStatus(_api);
+      
     });
   }
 
@@ -490,6 +510,7 @@ class TaskDetailState extends State<TaskDetail> {
         toggleCompleted(widget.task);
         Navigator.of(context).pop();
         widget.updatePercentCallBack();
+        // widget.task.setStatus(_api, _token, widget.task);
       },
     );
     // set up the AlertDialog
