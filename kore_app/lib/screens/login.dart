@@ -153,7 +153,7 @@ class _MyHomePageState extends State<MyHomePage> {
           body: ListView(
             children: <Widget>[
               Container(
-                  color: Colors.white,
+                  color: Colors.transparent,
                   child: Padding(
                     padding: const EdgeInsets.all(36.0),
                     child: Form(

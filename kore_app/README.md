@@ -1,16 +1,19 @@
-# kore_app
+# Task Manager - Mobile Application
 
-A new Flutter project.
+A Flutter mobile application that integrates with a RESTful API and AWS Cognito.
+
+![](../project-files/flutter-1.gif)
+![](../project-files/flutter-2.gif)
+![](../project-files/flutter-3.gif)
+![](../project-files/flutter-4.gif)
+![](../project-files/flutter-5.gif)
 
 ## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
 
 For help getting started with Flutter, view our 
 [online documentation](https://flutter.io/docs), which offers tutorials, 
 samples, guidance on mobile development, and a full API reference.
+
+## Installation
+
+For installation instructions please refer to [Install Flutter](https://flutter.dev/docs/get-started/install)

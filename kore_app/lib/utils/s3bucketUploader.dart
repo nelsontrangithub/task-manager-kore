@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:kore_app/utils/appConfiguration.dart';
+import 'package:kore_app/utils/appConfig.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path/path.dart' as path;
 import 'package:async/async.dart';
@@ -18,7 +18,7 @@ class S3bucketUploader {
     const _accessKeyId = AppConfig.aws_access_key;
     const _secretKeyId = AppConfig.aws_secret_key;
     const _region = 'us-east-2';
-    const _s3Endpoint = 'https://koretaskmanagermediabucket.s3.amazonaws.com';
+    const _s3Endpoint = AppConfig.aws_s3_endpoint;
 
     // final file = File(path.join(pathToFile, fileName));
     final stream = http.ByteStream(DelegatingStream.typed(file.openRead()));

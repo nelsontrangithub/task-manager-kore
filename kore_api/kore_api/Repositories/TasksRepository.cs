@@ -26,61 +26,32 @@ namespace kore_api.Repositories
             return _context.Task;
         }
 
-        ////Get tasks by accountID
-        //public IEnumerable<TaskVM> GetTasksByAccount(int accountID)
-        //{
-        //    var query = from x in _context.Taskmembership
-        //                join y in _context.Task on x.TaskId equals y.Id
-        //                where x.AccountId.Equals(accountID)
-        //                select new TaskVM
-        //                {
-        //                    Id = x.Id,
-        //                    TaskId = x.TaskId,
-        //                    AccountId = x.AccountId,
-        //                    UserId = x.UserId,
-        //                    OrgId = x.OrgId,
-        //                    DateCreated = x.DateCreated,
-        //                    DateModified = x.DateModified,
-        //                    Status = x.Status,
-        //                    CreatedBy = x.CreatedBy,
-        //                    ModifiedBy = x.ModifiedBy,
-        //                    OwnerId = y.OwnerId,
-        //                    TaskStatus = y.Status,
-        //                    Description = y.Description,
-        //                    DueDate = y.DueDate,
-        //                    CompletedOn = y.CompletedOn,
-        //                    Subject = y.Subject,
-        //                    Department = y.Department
-        //                };
-
-        //    return query;
-        //}
-
         //Get tasks by accountID
         public IEnumerable<TaskVM> GetTasksByAccount(int accountID)
         {
-            var query = from x in _context.Taskmembership
-                        join y in _context.Task on x.TaskId equals y.Id
+            var query = from x in _context.Task
+                        join y in _context.Taskmembership on x.Id equals y.TaskId into xy
+                        from subtask in xy.DefaultIfEmpty()
                         where x.AccountId.Equals(accountID)
                         select new TaskVM
                         {
                             Id = x.Id,
-                            TaskId = x.TaskId,
+                            TaskId = x.Id,
                             AccountId = x.AccountId,
-                            UserId = x.UserId,
+                            UserId = xy == null ? 0 : (subtask.UserId ?? 0),
                             OrgId = x.OrgId,
                             DateCreated = x.DateCreated,
                             DateModified = x.DateModified,
                             Status = x.Status,
                             CreatedBy = x.CreatedBy,
                             ModifiedBy = x.ModifiedBy,
-                            OwnerId = y.OwnerId,
-                            TaskStatus = y.Status,
-                            Description = y.Description,
-                            DueDate = y.DueDate,
-                            CompletedOn = y.CompletedOn,
-                            Subject = y.Subject,
-                            Department = y.Department
+                            OwnerId = x.OwnerId,
+                            TaskStatus = x.Status,
+                            Description = x.Description,
+                            DueDate = x.DueDate,
+                            CompletedOn = x.CompletedOn,
+                            Subject = x.Subject,
+                            Department = x.Department
                         };
 
             return query.GroupBy(x => x.TaskId).Select(x => x.FirstOrDefault());
