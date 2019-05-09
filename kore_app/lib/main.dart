@@ -16,11 +16,9 @@ class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Transition transition) {
     super.onTransition(transition);
-    print(transition.toString());
   }
 }
 
-// void main() => runApp(MyApp());
 void main() {
   BlocSupervisor().delegate = SimpleBlocDelegate();
   runApp(MyApp(userRepository: UserRepository()));
@@ -50,25 +48,11 @@ class _AppState extends State<MyApp> {
     super.dispose();
   }
 
-  // This widget is the root of your application.
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MaterialApp(
-  //     title: 'Flutter login UI',
-  //     theme: ThemeData(
-  //       // This is the theme of your application.
-
-  //     ),
-  //     initialRoute: '/',
-  //     routes: routes,
-  //   );
-  // }
   @override
   Widget build(BuildContext context) {
     return BlocProvider<AuthenticationBloc>(
       bloc: authenticationBloc,
       child: MaterialApp(
-        // theme: koreThemeData,
         home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
           bloc: authenticationBloc,
           builder: (BuildContext context, AuthenticationState state) {

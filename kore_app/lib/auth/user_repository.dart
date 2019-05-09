@@ -1,22 +1,18 @@
 import 'package:kore_app/data/api.dart';
-// import 'package:kore_app/utils/cognito.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:meta/meta.dart';
 
 class UserRepository {
   final storage = new FlutterSecureStorage();
   String token;
-  // RestDatasource source = new RestDatasource();
   static Map<String, dynamic> claims;
   Future<String> authenticate({
     @required String username,
     @required String password,
   }) async {
-    // token = await Cognito.getToken(username, password);
     token = await Api().login(username, password);
     await storage.write(key: 'username', value: username);
     return token;
-    // return 'token';
   }
 
   Future<void> deleteToken() async {
