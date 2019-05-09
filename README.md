@@ -8,7 +8,7 @@ A mobile application built with Flutter that integrates with a Task Managing API
 
 ## Architecture
 
-![](../project-files/architecture-diagram.jpg)
+![](project-files/architecture-diagram.jpg)
 
 ## Getting Started
 * Git clone or download the repo
