@@ -1,12 +1,3 @@
-# Task Manager - Mobile Application
-
-A Flutter mobile application that integrates with a RESTful API and AWS Cognito.
-
-![](../project-files/flutter-1.gif)
-![](../project-files/flutter-2.gif)
-![](../project-files/flutter-3.gif)
-![](../project-files/flutter-4.gif)
-![](../project-files/flutter-5.gif)
 
 ## Getting Started
 
@@ -17,3 +8,15 @@ samples, guidance on mobile development, and a full API reference.
 ## Installation
 
 For installation instructions please refer to [Install Flutter](https://flutter.dev/docs/get-started/install)
+
+
+# Task Manager - Mobile Application
+
+A Flutter mobile application that integrates with a RESTful API and AWS Cognito.
+
+![](../project-files/flutter-1.gif)
+![](../project-files/flutter-2.gif)
+![](../project-files/flutter-3.gif)
+![](../project-files/flutter-4.gif)
+![](../project-files/flutter-5.gif)
+
