@@ -49,7 +49,7 @@ class Task {
         isCompleted: true,
         status: json['status'] as int,
         description: json['description'] as String,
-        dueDate: json['DueDate'] as DateTime 
+        dueDate: DateTime.tryParse(json['dueDate'])
     );
     print(json['status']);
     
