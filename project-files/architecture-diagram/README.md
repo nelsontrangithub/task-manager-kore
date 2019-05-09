@@ -1,4 +1,0 @@
-
-## Architecture
-
-![](architecture-diagram.jpg)
