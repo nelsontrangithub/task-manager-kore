@@ -21,6 +21,10 @@ Task Managing RESTful API built with ASP.NET Core 2.1
 5. Press F5 to launch the sln
 6. Navigate to http://localhost:56203/swagger/ for API documentation and testing
 
+### Cognito Configuration
+* Add your own Cognito Pool Id and App Client Id to the AuthenticationController class.
+![](../project-files/cognitoconfig.png)
+
 ### API Testing
 - Production API documentation with testing available [HERE](https://w4c7snxw32.execute-api.us-east-2.amazonaws.com/Prod/swagger/)
 
