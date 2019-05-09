@@ -6,9 +6,9 @@ A mobile application built with Flutter that integrates with a Task Managing API
 * [KORE Project Requirements](https://drive.google.com/drive/folders/152iXPBzXkmBrEiGeA1CxkhKxQQXTxXR6)
 * [Design Document](https://docs.google.com/document/d/1OOhsAdpf2sLjm5drSU1pfyU3SWm1O0hKQgxbko0kGcc/edit#)
 
-##Architecture
+## Architecture
 
-![](/project-files/architecture-diagram.gif)
+![](../project-files/architecture-diagram.gif)
 
 ## Getting Started
 * Git clone or download the repo
