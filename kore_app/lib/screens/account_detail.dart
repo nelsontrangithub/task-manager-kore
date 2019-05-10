@@ -110,10 +110,12 @@ class AccountDetailState extends State<AccountDetail> {
   }
 
   _updatePercentageIndicator() {
-    setState(() {
-      _percent =
+    Future.delayed(
+        const Duration(milliseconds: 300),
+        () => setState(() {
+               _percent =
           _api.getPercentageOfTasksCompleted(_token, _user, widget.account);
-    });
+            }));
   }
 
   Widget _buildPercentIndicator(double _percent) {

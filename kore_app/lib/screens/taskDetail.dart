@@ -60,19 +60,18 @@ class TaskDetailState extends State<TaskDetail> {
     _users = _api.getUsersByTaskId(_token, widget.task);
 
     if (widget.task.status == 0) {
-       icon = Icons.block;
+      icon = Icons.block;
       iconColor = Colors.redAccent;
       text = "Not Completed!";
     } else {
       icon = Icons.check;
       iconColor = Colors.green;
-      text = "Completed!";    
+      text = "Completed!";
     }
     _controller.addListener(() => _extension = _controller.text);
     _nameFieldController.addListener(() {
       _nameField = _nameFieldController.text;
     });
-
   }
 
   @override
@@ -105,10 +104,11 @@ class TaskDetailState extends State<TaskDetail> {
   }
 
   _updateUserListCallback() {
-    setState(() {
-      Future.delayed(const Duration(seconds: 1), () => "1");
-      _users = _api.getUsersByTaskId(_token, widget.task);
-    });
+    Future.delayed(
+        const Duration(milliseconds: 500),
+        () => setState(() {
+              _users = _api.getUsersByTaskId(_token, widget.task);
+            }));
   }
 
   Widget _assignTask() {
@@ -171,11 +171,13 @@ class TaskDetailState extends State<TaskDetail> {
                         fontSize: 16,
                       ),
                     ),
-                    Padding(padding: EdgeInsets.only(top: 10),),
-                    Text("Status: " + text, style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: iconColor
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
                     ),
+                    Text(
+                      "Status: " + text,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: iconColor),
                     )
                   ],
                 )),
@@ -257,16 +259,14 @@ class TaskDetailState extends State<TaskDetail> {
     }
     setState(() {
       if (task.status == 0) {
-         icon = Icons.block;
+        icon = Icons.block;
         iconColor = Colors.redAccent;
         text = "Not Completed!";
-        
       } else {
-       icon = Icons.check;
+        icon = Icons.check;
         iconColor = Colors.green;
         text = "Completed!";
       }
-      
     });
   }
 
