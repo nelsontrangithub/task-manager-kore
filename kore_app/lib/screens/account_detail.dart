@@ -58,12 +58,8 @@ class AccountDetailState extends State<AccountDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomPadding: false,
-        appBar: AppBar(
-          
+        appBar: AppBar(        
           title: Text(widget.account.name),
-          // actions: <Widget>[      // Add 3 lines from here...
-          //     IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
-          //   ],
         ),
         body: FutureBuilder<List<Task>>(
           future: _tasksAPI,
@@ -84,7 +80,6 @@ class AccountDetailState extends State<AccountDetail> {
 
   Widget _buildHeader() {
     return Container(
-        // margin: const EdgeInsets.symmetric(vertical: 0.0),
         padding: const EdgeInsets.symmetric(vertical: 10.0),
         decoration: BoxDecoration(
           borderRadius:
@@ -188,21 +183,6 @@ class AccountDetailState extends State<AccountDetail> {
       ],
     );
 
-// Possible implementation: Button to Check Status 
-
-    //   new RawMaterialButton(
-    //     onPressed: () {},
-    //     child: new Icon(
-    //       task.icon,
-    //       color: Colors.white,
-    //       size: 30.0,
-    //     ),
-    //     shape: new CircleBorder(),
-    //     elevation: 0,
-    //     fillColor: task.color,
-    //     padding: const EdgeInsets.all(5.0),
-    //   ),
-    // ]);
   }
 
   void markCompleted(Task task) {

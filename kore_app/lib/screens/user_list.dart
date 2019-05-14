@@ -14,10 +14,9 @@ class AssignTaskState extends State<AssignTask> {
   Future<List<User>> _allUsers;
   Future<String> _username;
   Future<String> _token;
-//  Future<String> value;
   Api _api;
   String val;
-  // Future<List<User>> searchUser;
+
 
   @override
   void initState() {

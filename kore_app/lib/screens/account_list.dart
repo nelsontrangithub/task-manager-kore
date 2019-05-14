@@ -16,7 +16,7 @@ import 'package:after_layout/after_layout.dart';
 
 class AccountListState extends State<AccountList> with AfterLayoutMixin<AccountList> {
   Future<User>
-      _user; // = User("Tina", "https://image.flaticon.com/icons/png/128/201/201570.png", "satus");
+      _user;
   Future<List<Account>> _contracts;
   Future<String> _username;
   Future<String> _token;
@@ -74,9 +74,6 @@ class AccountListState extends State<AccountList> with AfterLayoutMixin<AccountL
                       icon: Icon(Icons.exit_to_app),
                       onPressed: () {
                         authenticationBloc.dispatch(LoggedOut());
-                        //               Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(
-                        // builder: (BuildContext context) =>
-                        // new MyHomePage(userRepository: widget.userRepository)), (Route<dynamic> route) => false);
                       },
                     )
                   : Container(

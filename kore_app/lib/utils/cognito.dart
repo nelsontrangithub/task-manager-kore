@@ -28,7 +28,6 @@ try {
 } catch (e) {
   print(e);
 }
-print(session.getAccessToken().getJwtToken());
 return session.getAccessToken().getJwtToken();
 }
 

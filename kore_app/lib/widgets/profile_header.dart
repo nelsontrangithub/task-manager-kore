@@ -14,13 +14,10 @@ class ProfileHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        // margin: const EdgeInsets.symmetric(vertical: 0.0),
-        // padding: const EdgeInsets.symmetric(vertical: 10.0),
         height: 280,
         decoration: BoxDecoration(
           borderRadius:
               BorderRadius.only(bottomLeft: const Radius.circular(60.0)),
-          // color: KorePrimaryColor,
           image: new DecorationImage(
             image: new AssetImage("assets/header_background2.jpg"),
             fit: BoxFit.cover,
@@ -31,14 +28,12 @@ class ProfileHeader extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return new Row(
-                  // crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     //Using expanded to ensure the image is always sized with contraint
                     Expanded(
                       child: new Container(
                           margin: const EdgeInsets.only(top: 80.0),
                           height: 150.0,
-                          // margin: const EdgeInsets.only(left: 20.0, right: 20.0),
                           child: CircleAvatar(
                               backgroundColor: Colors.transparent,
                               child: ClipOval(

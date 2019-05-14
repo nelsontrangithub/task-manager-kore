@@ -25,8 +25,6 @@ class Api {
   static final S3_URL = BASE_URL + "S3Bucket/";
   static final ALLUSERS_URL = BASE_URL + "Users/";
   static final SEARCH_USER_URL = BASE_URL + "Users/api/search/";
-  // static String token;
-  // static final _API_KEY = "somerandomkey";
 
 //make it a sigleton
   static Api _instance = new Api.internal();
@@ -77,7 +75,6 @@ class Api {
                 _user.id.toString(),
             _token)
         .then((dynamic res) {
-      print(res.toString());
       return res;
     });
   }
@@ -95,7 +92,6 @@ class Api {
                 _user.id.toString(),
             _token)
         .then((dynamic res) {
-      print(res.toString());
       return res.map<Task>((json) => new Task.fromJson(json)).toList();
     });
   }
@@ -142,7 +138,6 @@ class Api {
     return _netUtil
         .get(SEARCH_USER_URL + _username, _token)
         .then((dynamic res) {
-      print(res.toString());
       return res.map<User>((json) => new User.fromJson(json)).toList();
     });
   }
@@ -152,7 +147,6 @@ class Api {
     return await _netUtil
         .get(ASSET_URL + "task/" + taskId, _token)
         .then((dynamic res) {
-      print("File Get Result: " + res.toString());
       return res.map<Asset>((json) => new Asset.fromJson(json)).toList();
     });
   }
@@ -175,7 +169,6 @@ class Api {
           .post(ASSET_URL, false,
               headers: headers, body: bodyEncoded, returnResponse: true)
           .then((dynamic res) {
-        print("File Post Result: " + res.toString());
         if (res.statusCode == 200) {
           updateTrue = true;
         }
@@ -200,10 +193,7 @@ class Api {
       await _netUtil
           .delete(S3_URL + asset.location + "/" + asset.fileName, _token)
           .then((dynamic res) {
-        print("File S3 Delete Result: " + res.toString());
         s3Success = true;
-        print("S3 Success v");
-        print(s3Success);
       });
     } catch (e) {
       print(e);
@@ -217,7 +207,6 @@ class Api {
 
     try {
       await _netUtil.delete(ASSET_URL + asset.id, _token).then((dynamic res) {
-        print("File MySql Delete Result: " + res.toString());
       });
     } catch (e) {
       print(e);
@@ -225,15 +214,6 @@ class Api {
     }
     return true;
   }
-
-  // Future<Task> getTaskById(Future<String> token, Future<Task> task) async {
-  //   String _token = await token;
-  //   Task _task = await task;
-  //   return _netUtil.get(USER_URL + _task.id.toString(), _token).then((dynamic res) {
-  //     print(res.toString());
-  //     return User.fromJson(res);
-  //   });
-  // }
 
   Future<List<Account>> getAccountsByOrgId(
       Future<String> token, Organization org) async {
@@ -250,7 +230,6 @@ class Api {
     return _netUtil
         .get(USER_URL + 'api/task/' + task.id.toString(), _token)
         .then((dynamic res) {
-      print(res.toString());
       return res.map<User>((json) => new User.fromJson(json)).toList();
     });
   }
@@ -269,7 +248,6 @@ class Api {
           .post(TASK_URL + "user/" + taskId, false,
               headers: headers, body: bodyEncoder)
           .then((dynamic res) {
-        print("task membership res" + res.toString());
       });
       return true;
     } catch (e) {
@@ -285,11 +263,9 @@ class Api {
       await _netUtil
           .delete(TASK_URL + "task/" + taskId.toString() + "/user/" + userId.toString(), _token)
           .then((dynamic res) {
-        print("task membership res" + res.toString());
       });
       return true;
     } catch (e) {
-      print(false);
       return false;
     }
   }
@@ -308,7 +284,6 @@ class Api {
         .put(TASK_URL + task.id.toString(), false,
             headers: headers, body: bodyEncoded)
         .then((dynamic res) {
-      print(res);
       return res;
     });
   }
@@ -316,7 +291,6 @@ class Api {
   Future<Task> getTask(Future<String> token, int id) async {
     String _token = await token;
     return _netUtil.get(TASK_URL + id.toString(), _token).then((dynamic res) {
-      print(res.toString());
       return res;
     });
   }
